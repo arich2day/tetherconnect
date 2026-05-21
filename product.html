@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Product — Tether Connect</title>
+  <meta name="description" content="Tether Connect: endpoint-native AI egress enforcement. Controlled IDE environment, system-wide intercept, on-device AI analysis, and tamper-evident policy distribution."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    /* Product page specifics */
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+    .two-col-rev{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+
+    .detail-block{border-top:2px solid var(--ink);padding-top:32px;margin-bottom:40px;}
+    .detail-block:last-child{margin-bottom:0;}
+    .detail-block-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+    .detail-block h3{font-family:var(--cond);font-weight:700;font-size:22px;text-transform:uppercase;margin-bottom:12px;}
+    .detail-block p{font-size:14px;color:var(--muted);font-weight:300;line-height:1.75;margin-bottom:12px;}
+    .detail-block p:last-child{margin-bottom:0;}
+
+    .spec-table{width:100%;border-collapse:collapse;font-size:13px;}
+    .spec-table tr{border-bottom:1px solid var(--border);}
+    .spec-table tr:first-child{border-top:1px solid var(--border);}
+    .spec-table td{padding:12px 0;}
+    .spec-table td:first-child{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);width:40%;padding-right:20px;}
+    .spec-table td:last-child{color:var(--ink);font-weight:400;}
+
+    .policy-modes{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
+    .mode-card{background:var(--surface);padding:20px;}
+    .mode-name{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;font-weight:600;}
+    .mode-desc{font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;}
+    .mode-allow{color:var(--green);}
+    .mode-warn{color:var(--amber);}
+    .mode-block{color:var(--red);}
+
+    .compare-table{width:100%;border-collapse:collapse;}
+    .compare-table thead tr{border-bottom:2px solid var(--ink);}
+    .compare-table th{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:14px 16px;font-weight:500;}
+    .compare-table th.hl{color:var(--ink);background:var(--surface2);border-left:2px solid var(--ink);border-right:2px solid var(--ink);}
+    .compare-table td{font-size:13px;padding:14px 16px;border-bottom:1px solid var(--border);color:var(--muted);font-weight:300;}
+    .compare-table td:first-child{color:var(--ink);font-weight:400;}
+    .compare-table td.hl{background:var(--surface2);border-left:2px solid var(--ink);border-right:2px solid var(--ink);}
+    .compare-table tr:last-child td.hl{border-bottom:2px solid var(--ink);}
+
+    .component-row{display:grid;grid-template-columns:200px 1fr;gap:0;border-top:1px solid var(--border);}
+    .component-row:last-child{border-bottom:1px solid var(--border);}
+    .component-label{padding:28px 24px 28px 0;border-right:1px solid var(--border);}
+    .component-label-name{font-family:var(--cond);font-weight:700;font-size:14px;text-transform:uppercase;margin-bottom:6px;}
+    .component-label-badge{display:flex;gap:6px;flex-wrap:wrap;}
+    .component-body{padding:28px 0 28px 32px;}
+    .component-body p{font-size:14px;color:var(--muted);font-weight:300;line-height:1.7;margin-bottom:12px;}
+    .component-body p:last-child{margin-bottom:0;}
+    .component-bullets{list-style:none;margin-top:8px;}
+    .component-bullets li{font-size:13px;color:var(--muted);font-weight:300;padding:4px 0;display:flex;align-items:flex-start;gap:8px;}
+    .component-bullets li::before{content:'▸';color:var(--red);font-size:10px;flex-shrink:0;margin-top:3px;}
+
+    .cta-band{background:var(--ink);color:var(--surface);border-top:1px solid var(--border);}
+    .cta-inner{max-width:1200px;margin:0 auto;padding:64px 40px;display:flex;align-items:center;justify-content:space-between;gap:40px;}
+    .cta-text h2{font-family:var(--cond);font-weight:700;font-size:32px;text-transform:uppercase;letter-spacing:-.01em;margin-bottom:8px;}
+    .cta-text p{font-size:14px;color:#9a9088;font-weight:300;max-width:420px;}
+    .cta-actions{display:flex;gap:12px;flex-shrink:0;flex-wrap:wrap;}
+    .btn-primary-inv{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--ink);background:var(--surface);padding:11px 22px;text-decoration:none;border:1px solid var(--surface);transition:opacity .15s;}
+    .btn-primary-inv:hover{opacity:.85;}
+    .btn-outline-inv{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:#9a9088;background:transparent;padding:11px 22px;text-decoration:none;border:1px solid #555048;transition:border-color .15s,color .15s;}
+    .btn-outline-inv:hover{border-color:#9a9088;color:var(--surface);}
+
+    @media(max-width:960px){
+      .two-col,.two-col-rev{grid-template-columns:1fr;gap:40px;}
+      .policy-modes{grid-template-columns:1fr 1fr;}
+      .component-row{grid-template-columns:1fr;}
+      .component-label{border-right:none;border-bottom:1px solid var(--border);padding:20px 0;}
+      .component-body{padding:20px 0;}
+      .cta-inner{flex-direction:column;align-items:flex-start;padding:48px 20px;}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="tc-nav">
+  <a href="index.html" class="nav-logo">
+    <svg viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#c8001e" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#c8001e"/></svg>
+    <span class="nav-wordmark">Tether<span>Connect</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="product.html" class="active">Product</a></li>
+    <li><a href="security.html">Security</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="company.html">Company</a></li>
+    <li class="nav-cta-li"><a href="contact.html" class="nav-cta">Request Demo</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-hero-eyebrow">Product Overview</div>
+    <h1>AI egress control<br/>built for <em>engineering teams.</em></h1>
+    <p class="page-hero-sub">Three integrated components — a controlled developer environment, a local enforcement agent, and a centralized admin console — form a complete AI governance layer for your engineering org.</p>
+  </div>
+</div>
+
+<!-- COMPONENTS -->
+<section style="border-bottom:1px solid var(--border);">
+  <div class="wrap section-pad">
+    <div class="section-label">Components</div>
+    <h2 class="section-title">Three layers.<br/>One enforcement pipeline.</h2>
+    <p class="section-sub">Each component is designed to operate independently and fail safely. Together they provide end-to-end visibility and control over every AI interaction.</p>
+
+    <div>
+      <div class="component-row">
+        <div class="component-label">
+          <div class="component-label-name">Developer Environment</div>
+          <div class="component-label-badge">
+            <span class="badge badge-muted">Component 01</span>
+          </div>
+        </div>
+        <div class="component-body">
+          <p>A hardened, policy-governed IDE built on a stable open-source foundation. Developers get the full coding experience they expect — syntax highlighting, AI completions, terminal, debugging — within a controlled surface area that your security team manages.</p>
+          <p>Extension and integration access is defined by policy. Unapproved tools simply aren't available. There's no configuration drift, no shadow plugins, and no user-installed workarounds.</p>
+          <ul class="component-bullets">
+            <li>Approved extension allowlist — enforced, not suggested</li>
+            <li>Clipboard and data transfer controls built in</li>
+            <li>Idle lock and session management</li>
+            <li>Policy-controlled external link access</li>
+            <li>Consistent environment across all enrolled developer machines</li>
+          </ul>
+        </div>
+      </div>
+      <div class="component-row">
+        <div class="component-label">
+          <div class="component-label-name">Enforcement Agent</div>
+          <div class="component-label-badge">
+            <span class="badge badge-muted">Component 02</span>
+          </div>
+        </div>
+        <div class="component-body">
+          <p>A lightweight background service installed on each developer machine. It operates system-wide — not as an IDE plugin — which means it intercepts AI traffic from <em>any</em> application on the machine, not only the controlled IDE.</p>
+          <p>The agent evaluates each outbound AI request against the active policy: allow, warn, redact, or block. Every decision is logged with a risk classification and reasoning. When no policy can be retrieved, the agent fails closed — blocking by default until a verified policy is available.</p>
+          <ul class="component-bullets">
+            <li>System-wide HTTPS intercept — all AI API traffic, all tools</li>
+            <li>On-device AI risk analysis — no payload leaves for cloud evaluation</li>
+            <li>Fail-closed posture — blocks when policy is unavailable</li>
+            <li>Tamper-resistant design — policy changes require cryptographic verification</li>
+            <li>Heartbeat and posture reporting back to admin console</li>
+          </ul>
+        </div>
+      </div>
+      <div class="component-row">
+        <div class="component-label">
+          <div class="component-label-name">Admin Console</div>
+          <div class="component-label-badge">
+            <span class="badge badge-muted">Component 03</span>
+          </div>
+        </div>
+        <div class="component-body">
+          <p>A web-based management interface for your security and IT teams. Create and manage tenants (teams, business units, or customer organizations), author and publish policy, and review the complete audit trail across your fleet.</p>
+          <p>Policy is organized into functional groups — AI egress, clipboard and data transfer, terminal and extension access, session management, and more — giving you granular control without requiring you to understand implementation internals.</p>
+          <ul class="component-bullets">
+            <li>Multi-tenant — manage dozens of groups from one console</li>
+            <li>Policy editor with grouped controls and live preview</li>
+            <li>Fleet health dashboard — enrollment status, policy version, last check-in</li>
+            <li>Audit log with full decision history and export</li>
+            <li>Policy versioning — roll back to any previous configuration</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POLICY MODES -->
+<section style="background:var(--surface);border-bottom:1px solid var(--border);">
+  <div class="wrap section-pad">
+    <div class="section-label">Policy Engine</div>
+    <h2 class="section-title">Six enforcement modes.<br/>Applied per axis.</h2>
+    <p class="section-sub">Every policy axis — AI egress, clipboard, terminal access, external links, and more — can be configured independently to one of six enforcement modes.</p>
+    <div class="policy-modes">
+      <div class="mode-card">
+        <div class="mode-name mode-allow">▸ Allow</div>
+        <div class="mode-desc">Permits the action. No user interruption. Logged for audit purposes.</div>
+      </div>
+      <div class="mode-card">
+        <div class="mode-name mode-warn">▸ Warn</div>
+        <div class="mode-desc">Permits the action but surfaces a policy notification to the developer. Logged with elevated attention.</div>
+      </div>
+      <div class="mode-card">
+        <div class="mode-name" style="color:var(--blue);">▸ Coach</div>
+        <div class="mode-desc">Interrupts the action with contextual guidance before allowing the developer to proceed. Promotes deliberate decisions.</div>
+      </div>
+      <div class="mode-card">
+        <div class="mode-name" style="color:var(--muted);">▸ Request</div>
+        <div class="mode-desc">Requires the developer to provide a business justification before the action is permitted. Justification is logged.</div>
+      </div>
+      <div class="mode-card">
+        <div class="mode-name" style="color:var(--ink2);">▸ Watermark</div>
+        <div class="mode-desc">Permits the action but embeds a silent identity marker in the output for traceability. Used for clipboard and export controls.</div>
+      </div>
+      <div class="mode-card">
+        <div class="mode-name mode-block">▸ Block</div>
+        <div class="mode-desc">Denies the action entirely. Returns an error to the requesting application. Logged with full context.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POLICY AXES -->
+<section style="border-bottom:1px solid var(--border);">
+  <div class="wrap section-pad">
+    <div class="section-label">Policy Coverage</div>
+    <h2 class="section-title">Every control surface.<br/>Managed from one place.</h2>
+    <p class="section-sub">Policy applies across seven functional groups. Each group is independently configurable and can be set to different modes per tenant.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border);">
+      <div style="padding:24px 28px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin-bottom:10px;">AI Egress</div>
+        <div style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;margin-bottom:8px;">AI Request Control</div>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;">Intercept, evaluate, and enforce policy on all outbound requests to AI APIs — completions, chat, embeddings, and custom endpoints.</p>
+      </div>
+      <div style="padding:24px 28px;border-bottom:1px solid var(--border);">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Data Transfer</div>
+        <div style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;margin-bottom:8px;">Clipboard & DLP</div>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;">Control clipboard operations — copy, cut, paste — and apply content detection rules to prevent sensitive data from being copied out of controlled contexts.</p>
+      </div>
+      <div style="padding:24px 28px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Terminal</div>
+        <div style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;margin-bottom:8px;">Command Controls</div>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;">Define command blocklists and allowlists for the integrated terminal. Prevent data exfiltration via curl, wget, and other transfer utilities.</p>
+      </div>
+      <div style="padding:24px 28px;border-bottom:1px solid var(--border);">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Extensions</div>
+        <div style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;margin-bottom:8px;">Extension Allowlist</div>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;">Define which IDE extensions are permitted. Unapproved extensions are unavailable — preventing shadow AI tools from being installed by individual developers.</p>
+      </div>
+      <div style="padding:24px 28px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Session</div>
+        <div style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;margin-bottom:8px;">Session Management</div>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;">Configure idle timeout, session lock, and reauthentication requirements. Ensure unattended machines don't remain accessible.</p>
+      </div>
+      <div style="padding:24px 28px;border-bottom:1px solid var(--border);">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">External Access</div>
+        <div style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;margin-bottom:8px;">Link & OS Controls</div>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;">Gate external link opening, developer tools access, print and screen capture operations to prevent data from leaving via OS-level paths.</p>
+      </div>
+      <div style="padding:24px 28px;border-right:1px solid var(--border);">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Drag & Drop</div>
+        <div style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;margin-bottom:8px;">Drag & Drop Policy</div>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;">Control drag-and-drop operations between the IDE and other applications. Prevent file and content exfiltration via UI drag operations.</p>
+      </div>
+      <div style="padding:24px 28px;">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Whitelabel</div>
+        <div style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;margin-bottom:8px;">Tenant Branding</div>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;">Configure per-tenant branding and UI customization for enterprise deployments. Present the controlled environment under your organization's identity.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section style="background:var(--surface);border-bottom:1px solid var(--border);">
+  <div class="wrap section-pad">
+    <div class="section-label">Competitive Landscape</div>
+    <h2 class="section-title">How Tether fits the<br/>enterprise security stack.</h2>
+    <p class="section-sub">Purpose-built for developer AI egress control — a gap that CASB platforms, endpoint DLP, and code scanners don't close on their own.</p>
+    <div style="border:1px solid var(--border);">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="width:30%">Capability</th>
+            <th class="hl">Tether Connect</th>
+            <th>CASB / Cloud Proxy</th>
+            <th>Endpoint DLP</th>
+            <th>Code Scanners</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>System-wide AI egress interception</td><td class="hl"><span class="chk">✓</span> All tools, all traffic</td><td><span class="prt">~</span> Routed traffic only</td><td><span class="prt">~</span> Partial</td><td class="crs">✗</td></tr>
+          <tr><td>On-device AI payload analysis</td><td class="hl"><span class="chk">✓</span> Local, no cloud</td><td class="crs">✗ Cloud-dependent</td><td class="crs">✗</td><td class="crs">✗</td></tr>
+          <tr><td>Air-gap / offline capable</td><td class="hl"><span class="chk">✓</span> By design</td><td class="crs">✗</td><td><span class="prt">~</span> Partial</td><td><span class="prt">~</span> Partial</td></tr>
+          <tr><td>Tamper-evident policy distribution</td><td class="hl"><span class="chk">✓</span> Cryptographically verified</td><td><span class="prt">~</span> Config-based</td><td><span class="prt">~</span> Varies</td><td class="crs">✗</td></tr>
+          <tr><td>Flat-rate, no per-seat cost</td><td class="hl"><span class="chk">✓</span> Self-hosted</td><td class="crs">✗</td><td class="crs">✗</td><td><span class="prt">~</span> Some</td></tr>
+          <tr><td>Controlled developer IDE</td><td class="hl"><span class="chk">✓</span> Included</td><td class="crs">✗</td><td class="crs">✗</td><td><span class="chk">✓</span> Plugins only</td></tr>
+          <tr><td>Multi-tenant policy management</td><td class="hl"><span class="chk">✓</span> Admin console</td><td><span class="chk">✓</span></td><td><span class="chk">✓</span></td><td class="crs">✗</td></tr>
+          <tr><td>Immutable audit trail</td><td class="hl"><span class="chk">✓</span> Every decision</td><td><span class="chk">✓</span></td><td><span class="chk">✓</span></td><td><span class="prt">~</span> Scan results only</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h2>See Tether in your environment.</h2>
+      <p>We'll walk through your specific threat model, deployment requirements, and integration questions.</p>
+    </div>
+    <div class="cta-actions">
+      <a href="contact.html" class="btn-primary-inv">Request a Demo ↗</a>
+      <a href="security.html" class="btn-outline-inv">Security Architecture →</a>
+    </div>
+  </div>
+</div>
+
+<footer class="tc-footer">
+  <div class="footer-inner">
+    <div class="footer-brand"><div class="footer-brand-name">Tether<span>Connect</span></div><p>AI security enforcement for enterprise developer teams.</p><div class="footer-domains"><a href="https://tetherconnect.app">tetherconnect.app</a><a href="https://ai-security.app">ai-security.app</a></div></div>
+    <div class="footer-col"><h5>Product</h5><ul><li><a href="product.html">Overview</a></li><li><a href="security.html">Security Architecture</a></li><li><a href="pricing.html">Pricing</a></li></ul></div>
+    <div class="footer-col"><h5>Company</h5><ul><li><a href="company.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h5>Legal</h5><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms of Service</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 Tether Connect. All rights reserved.</p><div class="footer-bottom-links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div>
+</footer>
+</body>
+</html>

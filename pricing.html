@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Pricing — Tether Connect</title>
+  <meta name="description" content="Tether Connect pricing: flat-rate self-hosted licensing. No per-seat fees. Enterprise pricing for unlimited endpoints."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .pricing-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;background:var(--border);border:2px solid var(--ink);}
+    .pricing-card{background:var(--surface);padding:40px;}
+    .pricing-card.featured{background:var(--ink);color:var(--surface);}
+    .pricing-tier{font-family:var(--cond);font-weight:700;font-size:24px;text-transform:uppercase;letter-spacing:.02em;margin-bottom:6px;}
+    .pricing-desc{font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;margin-bottom:28px;}
+    .pricing-card.featured .pricing-desc{color:#9a9088;}
+    .pricing-divider{height:1px;background:var(--border);margin:24px 0;}
+    .pricing-card.featured .pricing-divider{background:#2a2520;}
+    .pricing-price{font-family:var(--cond);font-weight:700;font-size:44px;text-transform:uppercase;letter-spacing:-.02em;line-height:1;margin-bottom:6px;}
+    .pricing-price-note{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;margin-bottom:8px;}
+    .pricing-card.featured .pricing-price-note{color:#6b6259;}
+    .pricing-billing{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.06em;margin-bottom:28px;}
+    .pricing-card.featured .pricing-billing{color:#555048;}
+    .pricing-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:32px;}
+    .pricing-features li{font-size:13px;color:var(--ink2);font-weight:300;display:flex;align-items:flex-start;gap:8px;}
+    .pricing-card.featured .pricing-features li{color:#c8c0b4;}
+    .pricing-features li::before{content:'▸';color:var(--red);font-size:10px;flex-shrink:0;margin-top:3px;}
+    .pricing-card.featured .pricing-features li::before{color:#ff6080;}
+    .pricing-section-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:20px 0 10px;padding-top:16px;border-top:1px solid var(--border);}
+    .pricing-card.featured .pricing-section-label{color:#555048;border-top-color:#2a2520;}
+
+    .faq-item{border-top:1px solid var(--border);padding:24px 0;}
+    .faq-item:last-child{border-bottom:1px solid var(--border);}
+    .faq-q{font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;}
+    .faq-a{font-size:14px;color:var(--muted);font-weight:300;line-height:1.75;max-width:720px;}
+
+    .cost-compare{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border);}
+    .cc-header{background:var(--surface2);padding:16px 24px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+    .cc-header.hl{color:var(--ink);background:var(--surface3);}
+    .cc-row{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);}
+    .cc-row:last-child{border-bottom:none;}
+    .cc-cell{padding:16px 24px;font-size:13px;border-right:1px solid var(--border);}
+    .cc-cell:last-child{border-right:none;}
+    .cc-cell.label{color:var(--ink);font-weight:400;}
+    .cc-cell.bad{color:var(--red);}
+    .cc-cell.good{color:var(--green);font-weight:500;}
+
+    .cta-band{background:var(--ink);color:var(--surface);}
+    .cta-inner{max-width:1200px;margin:0 auto;padding:64px 40px;display:flex;align-items:center;justify-content:space-between;gap:40px;}
+    .cta-text h2{font-family:var(--cond);font-weight:700;font-size:32px;text-transform:uppercase;letter-spacing:-.01em;margin-bottom:8px;}
+    .cta-text p{font-size:14px;color:#9a9088;font-weight:300;max-width:420px;}
+    .cta-actions{display:flex;gap:12px;flex-shrink:0;flex-wrap:wrap;}
+    .btn-primary-inv{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--ink);background:var(--surface);padding:11px 22px;text-decoration:none;border:1px solid var(--surface);transition:opacity .15s;}
+    .btn-primary-inv:hover{opacity:.85;}
+
+    @media(max-width:960px){
+      .pricing-grid{grid-template-columns:1fr;}
+      .cost-compare{grid-template-columns:1fr;}
+      .cc-row{grid-template-columns:1fr;}
+      .cc-cell{border-right:none;}
+      .cta-inner{flex-direction:column;align-items:flex-start;padding:48px 20px;}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="tc-nav">
+  <a href="index.html" class="nav-logo">
+    <svg viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#c8001e" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#c8001e"/></svg>
+    <span class="nav-wordmark">Tether<span>Connect</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="product.html">Product</a></li>
+    <li><a href="security.html">Security</a></li>
+    <li><a href="pricing.html" class="active">Pricing</a></li>
+    <li><a href="company.html">Company</a></li>
+    <li class="nav-cta-li"><a href="contact.html" class="nav-cta">Request Demo</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-hero-eyebrow">Pricing</div>
+    <h1>Flat-rate licensing.<br/><em>Not per-seat billing.</em></h1>
+    <p class="page-hero-sub">Tether Connect is self-hosted. You pay for the software license — not per developer. As your team grows, your enforcement cost doesn't.</p>
+  </div>
+</div>
+
+<!-- PRICING CARDS -->
+<section style="border-bottom:1px solid var(--border);">
+  <div class="wrap section-pad">
+    <div class="pricing-grid">
+      <!-- Startup -->
+      <div class="pricing-card">
+        <div class="pricing-tier">Startup</div>
+        <p class="pricing-desc">For engineering teams getting AI governance in place before scale demands it.</p>
+        <div class="pricing-divider"></div>
+        <div class="pricing-price">Talk<br/>to us</div>
+        <div class="pricing-price-note">Startup-friendly pricing</div>
+        <div class="pricing-billing">Annual license · self-hosted · flat rate</div>
+        <ul class="pricing-features">
+          <li>Up to 50 developer endpoints</li>
+          <li>System-wide egress enforcement</li>
+          <li>On-device AI payload analysis</li>
+          <li>Signed policy bundle distribution</li>
+          <li>Admin console &amp; audit logs</li>
+          <li>Multi-tenant (up to 3 tenants)</li>
+          <li>Email support</li>
+          <li>Deployment documentation</li>
+        </ul>
+        <a href="contact.html" class="btn-secondary" style="width:100%;justify-content:center;">Get in Touch →</a>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="pricing-card featured">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <div class="pricing-tier">Enterprise</div>
+          <span class="badge" style="color:#f0ebe3;border-color:#555048;background:transparent;font-size:10px;">Recommended</span>
+        </div>
+        <p class="pricing-desc">For organizations that need unlimited scale, compliance tooling, and dedicated support.</p>
+        <div class="pricing-divider"></div>
+        <div class="pricing-price">Custom</div>
+        <div class="pricing-price-note">Volume licensing available</div>
+        <div class="pricing-billing">Annual license · unlimited endpoints · flat rate</div>
+        <ul class="pricing-features">
+          <li>Unlimited developer endpoints</li>
+          <li>Everything in Startup</li>
+        </ul>
+        <div class="pricing-section-label">Advanced Features</div>
+        <ul class="pricing-features">
+          <li>Unlimited tenants</li>
+          <li>SSO / SAML integration</li>
+          <li>Custom policy development support</li>
+          <li>Compliance report exports (SOC 2, ISO 27001)</li>
+          <li>Fleet health dashboards &amp; alerting</li>
+          <li>Policy rollback &amp; version history</li>
+          <li>Whitelabel per-tenant branding</li>
+        </ul>
+        <div class="pricing-section-label">Support</div>
+        <ul class="pricing-features">
+          <li>Dedicated implementation engineer</li>
+          <li>SLA-backed support</li>
+          <li>Quarterly security review</li>
+          <li>Custom integration assistance</li>
+        </ul>
+        <a href="contact.html" class="btn-primary" style="width:100%;justify-content:center;background:var(--surface);color:var(--ink);">Request a Demo ↗</a>
+      </div>
+
+      <!-- Air-Gap -->
+      <div class="pricing-card">
+        <div class="pricing-tier">Air-Gap</div>
+        <p class="pricing-desc">For defense, intelligence, and regulated industries where no external connectivity is permitted.</p>
+        <div class="pricing-divider"></div>
+        <div class="pricing-price">Custom</div>
+        <div class="pricing-price-note">Specialized deployment</div>
+        <div class="pricing-billing">Annual license · fully offline · flat rate</div>
+        <ul class="pricing-features">
+          <li>Fully offline deployment</li>
+          <li>No external connectivity required</li>
+          <li>Everything in Enterprise</li>
+        </ul>
+        <div class="pricing-section-label">Air-Gap Specifics</div>
+        <ul class="pricing-features">
+          <li>Offline AI analysis model included</li>
+          <li>Offline policy update delivery</li>
+          <li>Air-gapped admin console deployment</li>
+          <li>Classified environment deployment guide</li>
+          <li>ITAR / export control consideration support</li>
+          <li>On-site deployment assistance available</li>
+        </ul>
+        <a href="contact.html" class="btn-secondary" style="width:100%;justify-content:center;">Contact Us →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COST COMPARISON -->
+<section style="background:var(--surface);border-bottom:1px solid var(--border);">
+  <div class="wrap section-pad">
+    <div class="section-label">Cost Model</div>
+    <h2 class="section-title">Why flat-rate matters<br/>at scale.</h2>
+    <p class="section-sub">Per-seat SaaS pricing punishes growth. Tether's flat-rate model means your security cost doesn't grow with your headcount.</p>
+    <div style="max-width:700px;">
+      <div class="cost-compare">
+        <div class="cc-header">Scenario</div>
+        <div class="cc-header hl">Tether Connect (flat)</div>
+        <div class="cc-row">
+          <div class="cc-cell label">50 developers</div>
+          <div class="cc-cell good">Startup tier — contact for price</div>
+        </div>
+        <div class="cc-row">
+          <div class="cc-cell label">200 developers</div>
+          <div class="cc-cell good">Enterprise tier — same flat rate</div>
+        </div>
+        <div class="cc-row">
+          <div class="cc-cell label">500 developers</div>
+          <div class="cc-cell good">Same license — no per-seat charge</div>
+        </div>
+        <div class="cc-row">
+          <div class="cc-cell label">1,000+ developers</div>
+          <div class="cc-cell good">Volume pricing available — still flat</div>
+        </div>
+      </div>
+      <p style="font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em;margin-top:12px;">Enterprise AI security tools are typically priced per seat. A large engineering org's per-seat costs scale linearly with headcount. Tether's flat-rate model means that cost stays constant regardless of team size.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="border-bottom:1px solid var(--border);">
+  <div class="wrap section-pad">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">Common pricing questions.</h2>
+
+    <div class="faq-item">
+      <div class="faq-q">What counts as an "endpoint"?</div>
+      <div class="faq-a">An endpoint is any developer machine with the Tether enforcement agent installed. The Startup tier covers up to 50 concurrent enrolled machines. Enterprise and Air-Gap are unlimited.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Is there a free trial or evaluation period?</div>
+      <div class="faq-a">Yes. We offer a time-limited evaluation for qualified organizations. Contact us and we'll set up a scoped deployment in your environment so you can validate the integration before committing to a license.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What infrastructure do I need to self-host?</div>
+      <div class="faq-a">Tether requires a server to host the admin console and policy distribution endpoint, and agent installation on each developer machine. Requirements are modest — a single VM or container is sufficient for most deployments. We provide detailed infrastructure documentation with every license.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Does the flat rate include the AI analysis model?</div>
+      <div class="faq-a">Yes. The on-device AI analysis capability is included in the license. You run it locally on each endpoint — no separate API subscription or cloud service is required. For organizations that want to supplement with cloud AI analysis for higher-risk decisions, that configuration is available and uses your own API credentials.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What's the contract term?</div>
+      <div class="faq-a">Standard licensing is annual. Multi-year terms are available at preferred pricing. We don't require long-term commitments for initial deployments — we'd rather earn the renewal.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Do you offer MSP or reseller pricing?</div>
+      <div class="faq-a">Yes. If you're a managed security service provider or reseller looking to offer Tether Connect to your customers, contact us to discuss our partner program and multi-customer licensing options.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h2>Get pricing for your org.</h2>
+      <p>Tell us your team size and environment and we'll come back with a specific number — no vague "it depends" without context.</p>
+    </div>
+    <div class="cta-actions">
+      <a href="contact.html" class="btn-primary-inv">Request Pricing ↗</a>
+    </div>
+  </div>
+</div>
+
+<footer class="tc-footer">
+  <div class="footer-inner">
+    <div class="footer-brand"><div class="footer-brand-name">Tether<span>Connect</span></div><p>AI security enforcement for enterprise developer teams.</p><div class="footer-domains"><a href="https://tetherconnect.app">tetherconnect.app</a><a href="https://ai-security.app">ai-security.app</a></div></div>
+    <div class="footer-col"><h5>Product</h5><ul><li><a href="product.html">Overview</a></li><li><a href="security.html">Security Architecture</a></li><li><a href="pricing.html">Pricing</a></li></ul></div>
+    <div class="footer-col"><h5>Company</h5><ul><li><a href="company.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h5>Legal</h5><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms of Service</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 Tether Connect. All rights reserved.</p><div class="footer-bottom-links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div>
+</footer>
+</body>
+</html>

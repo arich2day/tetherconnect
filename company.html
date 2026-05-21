@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Company — Tether Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .mission-block{padding:64px 0;border-bottom:1px solid var(--border);}
+    .mission-layout{display:grid;grid-template-columns:1fr 1.8fr;gap:80px;align-items:start;}
+    .mission-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+    .mission-heading{font-family:var(--cond);font-weight:700;font-size:clamp(24px,3vw,36px);text-transform:uppercase;line-height:1.05;margin-bottom:0;}
+    .mission-body p{font-size:15px;color:var(--muted);font-weight:300;line-height:1.8;margin-bottom:20px;}
+    .mission-body p:last-child{margin-bottom:0;}
+    .mission-body strong{color:var(--ink);font-weight:500;}
+
+    .value-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
+    .value-card{background:var(--surface);padding:32px 28px;}
+    .value-num{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:12px;}
+    .value-card h3{font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;}
+    .value-card p{font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;}
+
+    .market-row{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+    .stat-large{margin-bottom:32px;}
+    .stat-large-num{font-family:var(--cond);font-weight:700;font-size:56px;text-transform:uppercase;letter-spacing:-.02em;line-height:1;margin-bottom:6px;}
+    .stat-large-num .accent{color:var(--red);}
+    .stat-large-label{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em;}
+    .stat-large-sub{font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;margin-top:6px;}
+
+    .timeline{display:flex;flex-direction:column;gap:0;}
+    .timeline-item{display:grid;grid-template-columns:100px 1fr;gap:24px;padding:20px 0;border-top:1px solid var(--border);}
+    .timeline-item:last-child{border-bottom:1px solid var(--border);}
+    .timeline-date{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;padding-top:3px;}
+    .timeline-content h4{font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;margin-bottom:4px;}
+    .timeline-content p{font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;}
+
+    .cta-band{background:var(--ink);color:var(--surface);}
+    .cta-inner{max-width:1200px;margin:0 auto;padding:64px 40px;display:flex;align-items:center;justify-content:space-between;gap:40px;}
+    .cta-text h2{font-family:var(--cond);font-weight:700;font-size:32px;text-transform:uppercase;letter-spacing:-.01em;margin-bottom:8px;}
+    .cta-text p{font-size:14px;color:#9a9088;font-weight:300;max-width:420px;}
+    .cta-actions{display:flex;gap:12px;flex-shrink:0;flex-wrap:wrap;}
+    .btn-primary-inv{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--ink);background:var(--surface);padding:11px 22px;text-decoration:none;border:1px solid var(--surface);transition:opacity .15s;}
+    .btn-primary-inv:hover{opacity:.85;}
+    .btn-outline-inv{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:#9a9088;background:transparent;padding:11px 22px;text-decoration:none;border:1px solid #555048;transition:border-color .15s,color .15s;}
+    .btn-outline-inv:hover{border-color:#9a9088;color:var(--surface);}
+
+    @media(max-width:960px){
+      .mission-layout,.market-row{grid-template-columns:1fr;gap:40px;}
+      .value-grid{grid-template-columns:1fr;}
+      .timeline-item{grid-template-columns:80px 1fr;gap:12px;}
+      .cta-inner{flex-direction:column;align-items:flex-start;padding:48px 20px;}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="tc-nav">
+  <a href="index.html" class="nav-logo">
+    <svg viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#c8001e" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#c8001e"/></svg>
+    <span class="nav-wordmark">Tether<span>Connect</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="product.html">Product</a></li>
+    <li><a href="security.html">Security</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="company.html" class="active">Company</a></li>
+    <li class="nav-cta-li"><a href="contact.html" class="nav-cta">Request Demo</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-hero-eyebrow">Company</div>
+    <h1>We built what<br/>the market needed<br/><em>but didn't have.</em></h1>
+    <p class="page-hero-sub">Tether Connect exists because the organizations we spoke with kept describing the same problem: developers were using AI tools, security teams had no visibility, and the available solutions didn't fit.</p>
+  </div>
+</div>
+
+<!-- MISSION -->
+<section class="mission-block">
+  <div class="wrap">
+    <div class="mission-layout">
+      <div>
+        <div class="mission-label">Our Mission</div>
+        <h2 class="mission-heading">Make AI use in enterprise engineering both safe and fast.</h2>
+      </div>
+      <div class="mission-body">
+        <p>The assumption in most enterprise security is that you have to choose between <strong>developer productivity</strong> and <strong>organizational security</strong>. Block AI tools entirely, or accept that you can't see what's being shared. Neither is acceptable.</p>
+        <p>We built Tether Connect on a different premise: that you can enforce rigorous policy without degrading the developer experience. Compliant developers notice nothing. Non-compliant requests are caught before they cause harm.</p>
+        <p>The approach is endpoint-native because that's where the control has to live. A cloud proxy you can walk around isn't a control — it's a policy document with a certificate attached. We're not interested in building those. We're interested in building controls that actually work when an adversarial developer is trying to get around them.</p>
+        <p>We're a small, technical team. We're not trying to build a broad platform — we're trying to build the best solution to one specific, hard problem. That focus is intentional.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section style="background:var(--surface);border-bottom:1px solid var(--border);">
+  <div class="wrap section-pad">
+    <div class="section-label">How We Work</div>
+    <h2 class="section-title">What we believe about<br/>security products.</h2>
+    <div class="value-grid">
+      <div class="value-card">
+        <div class="value-num">01</div>
+        <h3>Honest About Scope</h3>
+        <p>We're direct about what Tether does and doesn't cover. A clear threat model is more useful than marketing that implies total protection. We'd rather you understand the boundaries and trust what's inside them.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-num">02</div>
+        <h3>Controls That Actually Control</h3>
+        <p>A security control that can be trivially bypassed isn't a control — it's liability. Every design decision we make is tested against an adversarial assumption. Can a motivated developer get around this? If yes, it's not done.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-num">03</div>
+        <h3>Developer Experience Matters</h3>
+        <p>Security tools that create excessive friction get disabled, worked around, or abandoned. We design for the compliant developer first. When the experience is good for them, adoption succeeds and the controls hold.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-num">04</div>
+        <h3>Self-Hosted by Default</h3>
+        <p>Your developers' code and AI interactions are sensitive. We don't think a cloud intermediary should touch that data. Self-hosted deployment is our default recommendation — not an afterthought for regulated industries.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-num">05</div>
+        <h3>Air-Gap Isn't a Niche</h3>
+        <p>The assumption that "cloud is fine" excludes defense contractors, intelligence community work, and an increasing number of regulated industries with strict data residency requirements. We build for those environments too.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-num">06</div>
+        <h3>Pricing That Scales With You</h3>
+        <p>Per-seat billing creates perverse incentives — it makes security more expensive as you hire. We believe enforcement cost should be infrastructure cost, not a tax on team growth. Our licensing model reflects that.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET CONTEXT -->
+<section style="border-bottom:1px solid var(--border);">
+  <div class="wrap section-pad">
+    <div class="section-label">Market Context</div>
+    <h2 class="section-title">Why this problem<br/>matters now.</h2>
+    <div class="market-row">
+      <div>
+        <div class="stat-large">
+          <div class="stat-large-num">92<span class="accent">%</span></div>
+          <div class="stat-large-label">of developers use AI coding tools</div>
+          <div class="stat-large-sub">Multiple industry surveys (GitHub, Stack Overflow, JetBrains) point to majority AI tool adoption among developers, with figures accelerating year over year. Exact numbers vary by methodology and role definition.</div>
+        </div>
+        <div class="stat-large">
+          <div class="stat-large-num">Few<span class="accent"> orgs</span></div>
+          <div class="stat-large-label">have technical AI egress controls in place</div>
+          <div class="stat-large-sub">Most organizations have acceptable use policies. Very few have technical enforcement that actually intercepts and evaluates AI requests before transmission.</div>
+        </div>
+        <div class="stat-large">
+          <div class="stat-large-num">$4.88<span class="accent">M</span></div>
+          <div class="stat-large-label">average cost of an enterprise data breach (IBM Cost of a Data Breach Report, 2024)</div>
+          <div class="stat-large-sub">AI-assisted data exfiltration is an emerging vector that existing DLP and CASB tools weren't designed to address.</div>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:15px;color:var(--muted);font-weight:300;line-height:1.8;margin-bottom:24px;">The combination of near-universal AI tool adoption and near-zero technical enforcement creates a window of exposure that is growing faster than enterprise security programs can respond to.</p>
+        <p style="font-size:15px;color:var(--muted);font-weight:300;line-height:1.8;margin-bottom:24px;">Regulatory frameworks are beginning to catch up. The EU AI Act, NIST AI RMF, and enterprise AI governance programs are creating documented requirements for controls over AI data handling. The organizations that have technical controls in place now will be ahead of compliance requirements as they crystallize.</p>
+        <p style="font-size:15px;color:var(--muted);font-weight:300;line-height:1.8;">We believe the endpoint is the right place to close this gap — not because it's easier, but because it's where enforcement needs to be for the controls to be meaningful.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section style="background:var(--surface);border-bottom:1px solid var(--border);">
+  <div class="wrap section-pad">
+    <div class="section-label">Company</div>
+    <h2 class="section-title">Where we are.</h2>
+    <div style="max-width:700px;">
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">2025</div>
+          <div class="timeline-content">
+            <h4>Founded</h4>
+            <p>Tether Connect incorporated. Core enforcement architecture designed and initial development begun.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">Q1–Q2 2026</div>
+          <div class="timeline-content">
+            <h4>Build Phase</h4>
+            <p>Core enforcement pipeline in active development. Architecture validated across all five components.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">H2 2026</div>
+          <div class="timeline-content">
+            <h4>Early Access</h4>
+            <p>First deployments under evaluation agreements with design partners. Active development driven by real-environment feedback.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2027</div>
+          <div class="timeline-content">
+            <h4>General Availability</h4>
+            <p>Production-ready release targeting Startup and Enterprise tiers. Compliance reporting features complete.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h2>Interested in working with us?</h2>
+      <p>Whether you're evaluating Tether for your org, exploring a partnership, or just want to understand the space better — we're happy to talk.</p>
+    </div>
+    <div class="cta-actions">
+      <a href="contact.html" class="btn-primary-inv">Get in Touch ↗</a>
+      <a href="product.html" class="btn-outline-inv">See the Product →</a>
+    </div>
+  </div>
+</div>
+
+<footer class="tc-footer">
+  <div class="footer-inner">
+    <div class="footer-brand"><div class="footer-brand-name">Tether<span>Connect</span></div><p>AI security enforcement for enterprise developer teams.</p><div class="footer-domains"><a href="https://tetherconnect.app">tetherconnect.app</a><a href="https://ai-security.app">ai-security.app</a></div></div>
+    <div class="footer-col"><h5>Product</h5><ul><li><a href="product.html">Overview</a></li><li><a href="security.html">Security Architecture</a></li><li><a href="pricing.html">Pricing</a></li></ul></div>
+    <div class="footer-col"><h5>Company</h5><ul><li><a href="company.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h5>Legal</h5><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms of Service</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 Tether Connect. All rights reserved.</p><div class="footer-bottom-links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Contact — Tether Connect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .contact-layout{display:grid;grid-template-columns:1fr 1.4fr;gap:80px;align-items:start;}
+    .contact-info h2{font-family:var(--cond);font-weight:700;font-size:28px;text-transform:uppercase;margin-bottom:20px;}
+    .contact-info p{font-size:14px;color:var(--muted);font-weight:300;line-height:1.75;margin-bottom:24px;}
+    .contact-item{margin-bottom:20px;padding:16px 0;border-top:1px solid var(--border);}
+    .contact-item:last-child{border-bottom:1px solid var(--border);}
+    .contact-item-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+    .contact-item-value{font-family:var(--mono);font-size:13px;color:var(--ink);}
+    .contact-item-value a{color:var(--ink);text-decoration:none;}
+    .contact-item-value a:hover{color:var(--red);}
+
+    .contact-form{background:var(--surface);border:1px solid var(--border);padding:40px;}
+    .form-row{margin-bottom:20px;}
+    .form-row label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+    .form-row input,.form-row select,.form-row textarea{
+      width:100%;font-family:var(--sans);font-size:14px;color:var(--ink);
+      background:var(--bg);border:1px solid var(--border);padding:11px 14px;
+      outline:none;transition:border-color .15s;-webkit-appearance:none;
+    }
+    .form-row input:focus,.form-row select:focus,.form-row textarea:focus{border-color:var(--ink);}
+    .form-row textarea{resize:vertical;min-height:120px;font-weight:300;}
+    .form-row select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a9088' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
+    .form-note{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em;margin-top:16px;line-height:1.5;}
+    .form-two{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
+    .what-to-expect{margin-top:40px;padding:28px;background:var(--surface2);border:1px solid var(--border);}
+    .wte-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+    .wte-step{display:flex;gap:16px;margin-bottom:12px;}
+    .wte-step:last-child{margin-bottom:0;}
+    .wte-step-num{font-family:var(--mono);font-size:11px;color:var(--red);flex-shrink:0;width:20px;}
+    .wte-step-text{font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;}
+
+    @media(max-width:960px){
+      .contact-layout{grid-template-columns:1fr;gap:40px;}
+      .form-two{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="tc-nav">
+  <a href="index.html" class="nav-logo">
+    <svg viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#c8001e" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#c8001e"/></svg>
+    <span class="nav-wordmark">Tether<span>Connect</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="product.html">Product</a></li>
+    <li><a href="security.html">Security</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="company.html">Company</a></li>
+    <li class="nav-cta-li"><a href="contact.html" class="nav-cta active">Request Demo</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-hero-eyebrow">Contact</div>
+    <h1>Let's talk about<br/><em>your environment.</em></h1>
+    <p class="page-hero-sub">Every deployment is different. Tell us about your team size, tech stack, and key concerns — we'll come prepared with something relevant.</p>
+  </div>
+</div>
+
+<section style="border-bottom:1px solid var(--border);">
+  <div class="wrap section-pad">
+    <div class="contact-layout">
+      <div>
+        <div class="contact-info">
+          <h2>Talk to us directly.</h2>
+          <p>We're a small team and we respond personally. No auto-responder sequences, no SDR handoff. You'll hear from someone technical, not a sales sequence.</p>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-item-label">General Inquiries</div>
+          <div class="contact-item-value"><a href="mailto:hello@tetherconnect.app">hello@tetherconnect.app</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-label">Security Disclosure</div>
+          <div class="contact-item-value"><a href="mailto:security@tetherconnect.app">security@tetherconnect.app</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-label">Primary Domain</div>
+          <div class="contact-item-value"><a href="https://tetherconnect.app">tetherconnect.app</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-label">Also At</div>
+          <div class="contact-item-value"><a href="https://ai-security.app">ai-security.app</a></div>
+        </div>
+
+        <div class="what-to-expect">
+          <div class="wte-label">What to expect after you reach out</div>
+          <div class="wte-step"><div class="wte-step-num">01</div><div class="wte-step-text">We aim to respond within one business day.</div></div>
+          <div class="wte-step"><div class="wte-step-num">02</div><div class="wte-step-text">A 30-minute call to understand your environment, team size, and primary concerns.</div></div>
+          <div class="wte-step"><div class="wte-step-num">03</div><div class="wte-step-text">A tailored demo scoped to your specific threat model and stack.</div></div>
+          <div class="wte-step"><div class="wte-step-num">04</div><div class="wte-step-text">If it's a fit, an evaluation agreement to deploy in your environment and validate.</div></div>
+        </div>
+      </div>
+
+      <div class="contact-form">
+        <div style="font-family:var(--cond);font-weight:700;font-size:20px;text-transform:uppercase;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border);">Request a Demo</div>
+        <form action="mailto:hello@tetherconnect.app" method="post" enctype="text/plain">
+          <div class="form-two">
+            <div class="form-row">
+              <label for="fname">First Name</label>
+              <input type="text" id="fname" name="first_name" placeholder="Alex"/>
+            </div>
+            <div class="form-row">
+              <label for="lname">Last Name</label>
+              <input type="text" id="lname" name="last_name" placeholder="Johnson"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="email">Work Email</label>
+            <input type="email" id="email" name="email" placeholder="alex@company.com"/>
+          </div>
+          <div class="form-row">
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company" placeholder="Acme Corp"/>
+          </div>
+          <div class="form-two">
+            <div class="form-row">
+              <label for="team_size">Engineering Team Size</label>
+              <select id="team_size" name="team_size">
+                <option value="">Select range</option>
+                <option>1–10</option>
+                <option>11–50</option>
+                <option>51–200</option>
+                <option>201–500</option>
+                <option>500+</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="interest">Primary Interest</label>
+              <select id="interest" name="interest">
+                <option value="">Select one</option>
+                <option>AI egress enforcement</option>
+                <option>Compliance / audit readiness</option>
+                <option>Air-gap deployment</option>
+                <option>General evaluation</option>
+                <option>Pricing information</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="message">Tell us about your environment or key questions</label>
+            <textarea id="message" name="message" placeholder="We're a 150-person engineering org in fintech. Main concern is preventing proprietary code from reaching external AI APIs…"></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="width:100%;justify-content:center;border:none;cursor:pointer;font-size:12px;">Send Request ↗</button>
+          <p class="form-note">We respond to every inquiry personally. Your information is not shared with third parties — see our <a href="privacy.html" style="color:var(--ink);">privacy policy</a>.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="tc-footer">
+  <div class="footer-inner">
+    <div class="footer-brand"><div class="footer-brand-name">Tether<span>Connect</span></div><p>AI security enforcement for enterprise developer teams.</p><div class="footer-domains"><a href="https://tetherconnect.app">tetherconnect.app</a><a href="https://ai-security.app">ai-security.app</a></div></div>
+    <div class="footer-col"><h5>Product</h5><ul><li><a href="product.html">Overview</a></li><li><a href="security.html">Security Architecture</a></li><li><a href="pricing.html">Pricing</a></li></ul></div>
+    <div class="footer-col"><h5>Company</h5><ul><li><a href="company.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h5>Legal</h5><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms of Service</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 Tether Connect. All rights reserved.</p><div class="footer-bottom-links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div>
+</footer>
+</body>
+</html>
