@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Security Architecture — Tether Connect</title>
-  <meta name="description" content="Tether Connect's security model: endpoint-native enforcement, cryptographically verified policy distribution, two-tier AI judging (on-device + cloud escalation), and fail-closed design. Tether Connect is not itself certified under any of these frameworks."/>
+  <meta name="description" content="Tether Connect's security model: endpoint-native enforcement, cryptographically verified policy distribution, two-tier AI judging (on-device + cloud escalation), fail-closed design, and a CISA ZTMM 2.0 pillar mapping for the AI-usage attack surface. Tether Connect is not itself certified under any of these frameworks."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="shared.css"/>
@@ -45,6 +45,23 @@
     .compliance-items li{font-size:12px;color:var(--muted);font-weight:300;display:flex;align-items:flex-start;gap:6px;}
     .compliance-items li::before{content:'✓';color:var(--green);flex-shrink:0;font-size:11px;}
 
+    .pillar-row{display:grid;grid-template-columns:220px 1fr 300px;gap:0;border-top:1px solid var(--border);background:var(--surface);}
+    .pillar-row:last-child{border-bottom:1px solid var(--border);}
+    .pillar-label{padding:28px 24px;border-right:1px solid var(--border);}
+    .pillar-name{font-family:var(--cond);font-weight:700;font-size:18px;text-transform:uppercase;letter-spacing:.02em;margin-bottom:12px;}
+    .pillar-stage{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border:1px solid;display:inline-block;}
+    .pillar-stage.initial{color:var(--amber);border-color:var(--amber-bd);background:var(--amber-bg);}
+    .pillar-stage.advanced{color:var(--green);border-color:var(--green-bd);background:var(--green-bg);}
+    .pillar-body{padding:28px 24px;border-right:1px solid var(--border);}
+    .pillar-bullets{list-style:none;display:flex;flex-direction:column;gap:8px;}
+    .pillar-bullets li{font-size:13px;color:var(--ink2);font-weight:300;line-height:1.6;padding-left:18px;position:relative;}
+    .pillar-bullets li::before{content:'▸';color:var(--red);position:absolute;left:0;top:0;font-size:11px;}
+    .pillar-not{padding:28px 24px;background:var(--surface2);}
+    .pillar-not-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+    .pillar-not p{font-size:12px;color:var(--muted);font-weight:300;line-height:1.6;}
+    .ztmm-closer{margin-top:32px;padding:20px 24px;background:var(--surface2);border:1px solid var(--border);font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;max-width:none;}
+    .ztmm-closer strong{color:var(--ink);font-weight:500;}
+
     .cta-band{background:var(--ink);color:var(--surface);}
     .cta-inner{max-width:1200px;margin:0 auto;padding:64px 40px;display:flex;align-items:center;justify-content:space-between;gap:40px;}
     .cta-text h2{font-family:var(--cond);font-weight:700;font-size:32px;text-transform:uppercase;letter-spacing:-.01em;margin-bottom:8px;}
@@ -62,6 +79,9 @@
       .policy-lifecycle{flex-direction:column;gap:1px;}
       .lifecycle-step::after{display:none;}
       .compliance-grid{grid-template-columns:1fr;}
+      .pillar-row{grid-template-columns:1fr;}
+      .pillar-label{border-right:none;border-bottom:1px solid var(--border);}
+      .pillar-body{border-right:none;border-bottom:1px solid var(--border);}
       .cta-inner{flex-direction:column;align-items:flex-start;padding:48px 20px;}
     }
   </style>
@@ -279,6 +299,146 @@
           <li>Employee awareness and policy enforcement</li>
         </ul>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ZERO TRUST MATURITY -->
+<section id="ztmm" style="border-bottom:1px solid var(--border);">
+  <div class="wrap section-pad">
+    <div class="section-label">Zero Trust Maturity</div>
+    <h2 class="section-title">Contributes to your<br/>ZTMM 2.0 program.</h2>
+    <p class="section-sub">CISA's Zero Trust Maturity Model 2.0 is a framework — not a certification — for measuring how far your organization has moved from perimeter-based to zero-trust security across five pillars. Tether covers the AI-usage slice: the Data, Applications &amp; Workloads, and Devices pillars where developer AI flows live. Use the mapping below in your ZTMM self-assessment.</p>
+
+    <div style="margin-bottom:48px;">
+      <div class="pillar-row">
+        <div class="pillar-label">
+          <div class="pillar-name">Identity</div>
+          <span class="pillar-stage initial">Stage · Initial</span>
+        </div>
+        <div class="pillar-body">
+          <ul class="pillar-bullets">
+            <li>Tenant- and group-scoped policy via SSO / SAML integration</li>
+            <li>Per-decision audit log tied to the authenticated developer</li>
+            <li>Session controls and idle lock in the managed IDE</li>
+          </ul>
+        </div>
+        <div class="pillar-not">
+          <div class="pillar-not-label">Not in scope</div>
+          <p>SCIM provisioning, continuous user re-authorization, IdP risk-signal ingestion. Pair with your existing Okta / Entra deployment for those.</p>
+        </div>
+      </div>
+
+      <div class="pillar-row">
+        <div class="pillar-label">
+          <div class="pillar-name">Devices</div>
+          <span class="pillar-stage advanced">Stage · Advanced</span>
+        </div>
+        <div class="pillar-body">
+          <ul class="pillar-bullets">
+            <li>Tamper-resistant enforcement agent on every developer endpoint</li>
+            <li>MDM-distributed signed installer (Jamf, Intune, etc.)</li>
+            <li>Fail-closed posture — blocks AI egress when policy can't be verified</li>
+            <li>Heartbeat and posture reporting back to the admin console</li>
+          </ul>
+        </div>
+        <div class="pillar-not">
+          <div class="pillar-not-label">Not in scope</div>
+          <p>Hardware attestation (TPM-bound identity), native EDR integration (CrowdStrike, Defender for Endpoint). Surface device posture to your EDR or IdP via the audit feed.</p>
+        </div>
+      </div>
+
+      <div class="pillar-row">
+        <div class="pillar-label">
+          <div class="pillar-name">Networks</div>
+          <span class="pillar-stage initial">Stage · Initial</span>
+        </div>
+        <div class="pillar-body">
+          <ul class="pillar-bullets">
+            <li>System-wide HTTPS intercept on the endpoint catches all AI egress</li>
+            <li>VPN, hotspot, and split-tunnel routes don't bypass the agent</li>
+            <li>Air-gap mode operates with the cloud judge unreachable</li>
+          </ul>
+        </div>
+        <div class="pillar-not">
+          <div class="pillar-not-label">Not in scope</div>
+          <p>Network-layer micro-segmentation, ZTNA tunneling. Tether is endpoint-side by design — pair with your Cloudflare Zero Trust / Zscaler / Netskope stack for the network half.</p>
+        </div>
+      </div>
+
+      <div class="pillar-row">
+        <div class="pillar-label">
+          <div class="pillar-name">Applications &amp; Workloads</div>
+          <span class="pillar-stage advanced">Stage · Advanced</span>
+        </div>
+        <div class="pillar-body">
+          <ul class="pillar-bullets">
+            <li>Per-application policy across browser extension, IDE plugin, and OS-level intercept</li>
+            <li>Two-tier AI judging — on-device first, cloud escalation on ambiguous cases</li>
+            <li>Controlled IDE extension allowlist — unapproved AI tools aren't available</li>
+            <li>Deny-by-default for unrecognized AI endpoints</li>
+          </ul>
+        </div>
+        <div class="pillar-not">
+          <div class="pillar-not-label">Not in scope</div>
+          <p>Workload identity for east-west service traffic, application discovery beyond AI. Tether's app scope is AI-usage specifically.</p>
+        </div>
+      </div>
+
+      <div class="pillar-row">
+        <div class="pillar-label">
+          <div class="pillar-name">Data</div>
+          <span class="pillar-stage advanced">Stage · Advanced</span>
+        </div>
+        <div class="pillar-body">
+          <ul class="pillar-bullets">
+            <li>On-device payload inspection before any data leaves the endpoint</li>
+            <li>PII, PHI, PCI, credential, and trade-secret pattern detection</li>
+            <li>Clipboard and data-transfer controls in the managed IDE</li>
+            <li>Watermarking mode for traceable allowed transfers</li>
+            <li>Immutable audit log of every data-movement decision</li>
+          </ul>
+        </div>
+        <div class="pillar-not">
+          <div class="pillar-not-label">Not in scope</div>
+          <p>Native data classification taxonomy (tags), integration with enterprise DLP (Microsoft Purview, Symantec). Use Tether's classifications as upstream input to your existing DLP.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-bottom:14px;">Cross-Cutting Capabilities</div>
+    <div class="compliance-grid">
+      <div class="compliance-card">
+        <div class="compliance-framework">Visibility &amp; Analytics</div>
+        <p class="compliance-desc"><strong style="color:var(--green);">Stage · Advanced</strong> — per-decision audit with risk classification, fleet posture in real time, evidence-ready exports.</p>
+        <ul class="compliance-items">
+          <li>Immutable audit log for every block / coach / warn / allow</li>
+          <li>Fleet health: enrollment, policy version, last check-in</li>
+          <li>Compliance exports (SOC 2, ISO 27001 evidence formats)</li>
+        </ul>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-framework">Automation &amp; Orchestration</div>
+        <p class="compliance-desc"><strong style="color:var(--amber);">Stage · Initial</strong> — policy distribution and rollback are automated; SIEM, SOAR, and webhook integrations are on the roadmap.</p>
+        <ul class="compliance-items">
+          <li>Cryptographically signed policy auto-distributes on heartbeat</li>
+          <li>One-click policy rollback to any prior version</li>
+          <li>Roadmap: native Splunk / Sentinel / Datadog connectors and per-decision webhooks</li>
+        </ul>
+      </div>
+      <div class="compliance-card">
+        <div class="compliance-framework">Governance</div>
+        <p class="compliance-desc"><strong style="color:var(--green);">Stage · Advanced</strong> — cryptographically signed policy, full version history, multi-tenant separation, fail-closed defaults.</p>
+        <ul class="compliance-items">
+          <li>Signature verified on every request — not just on fetch</li>
+          <li>Versioned policy with full rollback history</li>
+          <li>Multi-tenant — dozens of groups managed from one console</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ztmm-closer">
+      <strong>Tether is the AI-usage slice of a Zero Trust stack — not the whole stack.</strong> ZTMM 2.0 is a maturity model, not a certification, so there is nothing for a vendor to be "compliant with." Treat the mapping above as evidence for your own program. Tether integrates alongside your existing IdP (Okta, Entra), ZTNA / SASE (Cloudflare, Zscaler, Netskope), EDR (CrowdStrike, Defender), and SIEM (Splunk, Sentinel, Datadog).
     </div>
   </div>
 </section>
