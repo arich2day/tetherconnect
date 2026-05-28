@@ -111,7 +111,7 @@ body{display:flex;flex-direction:column;}
 
 /* ══ ARCHITECTURE / PIPELINE ══ */
 .pipeline-row{
-  display:grid;grid-template-columns:repeat(5,1fr);
+  display:grid;grid-template-columns:repeat(6,1fr);
   border:1px solid var(--border);background:var(--surface);margin-bottom:32px;
 }
 .pipe-node{
@@ -533,7 +533,7 @@ body{display:flex;flex-direction:column;}
 /* responsive — collapse the simulator on small screens */
 @media(max-width:1100px){
   .sim-wrap{grid-template-columns:200px 1fr 220px;}
-  .pipeline-row{grid-template-columns:repeat(5,minmax(0,1fr));}
+  .pipeline-row{grid-template-columns:repeat(6,minmax(0,1fr));}
 }
 @media(max-width:860px){
   .pipeline-row{grid-template-columns:1fr 1fr;}
@@ -611,12 +611,18 @@ body{display:flex;flex-direction:column;}
         </div>
         <div class="pipe-node">
           <div class="pipe-num">04</div><div class="pipe-icon">🧠</div>
-          <div class="pipe-name">AI Risk Analysis</div>
-          <div class="pipe-desc">On-device model evaluates payload before transmission. Request bodies never leave the machine for analysis.</div>
+          <div class="pipe-name">On-Device Judge</div>
+          <div class="pipe-desc">Local model judges every request in realtime. High-confidence allows and blocks resolve here — payload never leaves the machine.</div>
           <span class="badge badge-green">On-Device</span>
         </div>
         <div class="pipe-node">
-          <div class="pipe-num">05</div><div class="pipe-icon">📋</div>
+          <div class="pipe-num">05</div><div class="pipe-icon">☁</div>
+          <div class="pipe-name">Cloud Judge</div>
+          <div class="pipe-desc">Second opinion for ambiguous cases the local judge can't resolve confidently. Optional, configurable, off entirely in air-gap mode.</div>
+          <span class="badge badge-blue">Escalation</span>
+        </div>
+        <div class="pipe-node">
+          <div class="pipe-num">06</div><div class="pipe-icon">📋</div>
           <div class="pipe-name">Policy Engine</div>
           <div class="pipe-desc">Cryptographically signed rules distributed as versioned bundles. Verified every request.</div>
           <span class="badge badge-red">Verified</span>
@@ -649,7 +655,7 @@ body{display:flex;flex-direction:column;}
     <div class="slide-inner" style="padding-bottom:24px;">
       <div class="slide-eyebrow">02 · Live Simulator</div>
       <h2 class="slide-title">Enforcement Simulator<span class="live-pill"><span class="live-dot"></span>Live</span></h2>
-      <p class="slide-sub">Pick a developer scenario and an enforcement mode, then watch Tether's pipeline play out step by step: intercept the HTTPS handshake → judge the payload on-device → apply your configured response (allow, warn, coach, or block). The right panel shows the audit entry Tether would record.</p>
+      <p class="slide-sub">Pick a developer scenario and an enforcement mode, then watch Tether's pipeline play out: intercept the HTTPS handshake → on-device judge first → escalate to the cloud judge only when the local judge is uncertain → apply your configured response. The right panel shows the audit entry Tether would record.</p>
 
       <div class="sim-wrap">
         <!-- LEFT: scenarios -->
@@ -741,16 +747,16 @@ body{display:flex;flex-direction:column;}
 
       <div class="prompt-explainer">
         <div class="pe-col">
-          <div class="pe-head"><span class="swatch s-allow"></span>Allow</div>
-          <div class="pe-text">No identifying data, credentials, or proprietary context. Pattern looks like a generic technical question — public knowledge, framework docs, or boilerplate.</div>
+          <div class="pe-head"><span class="swatch s-allow"></span>Allow · local only</div>
+          <div class="pe-text">No identifying data or proprietary context. The on-device judge is high-confidence — request never touches the cloud judge.</div>
         </div>
         <div class="pe-col">
-          <div class="pe-head"><span class="swatch s-judge"></span>Coach / Judge</div>
-          <div class="pe-text">No outright leak, but the prompt carries internal context — table names, business jargon, infra config, roadmap signals. A coaching moment makes the developer the second pair of eyes.</div>
+          <div class="pe-head"><span class="swatch s-judge"></span>Coach / Warn · escalated</div>
+          <div class="pe-text">Local judge is uncertain — escalates to the cloud judge for a second opinion. Cloud verdict drives the coaching moment or warning.</div>
         </div>
         <div class="pe-col">
-          <div class="pe-head"><span class="swatch s-block"></span>Block</div>
-          <div class="pe-text">Clear sensitive payload: PII, PHI, PCI data, live credentials, or proprietary code with trade-secret indicators. Hard deny, log, notify.</div>
+          <div class="pe-head"><span class="swatch s-block"></span>Block · local only</div>
+          <div class="pe-text">Clear sensitive payload: PII, PHI, PCI, live credentials, or trade-secret code. On-device judge resolves with high confidence — hard deny, no cloud round-trip.</div>
         </div>
       </div>
 
@@ -1093,15 +1099,16 @@ const MODES = [
     verdict:{cls:'rv-block',icon:'⛔',title:'Blocked',sub:'Connection terminated before data left the machine.'},
     logLines: sc => [
       `<span class="lt">[09:15:04]</span> <span class="t-info">INTERCEPT</span> → ${sc.destination}`,
-      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     analysing payload…`,
+      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     local · analysing payload…`,
       `<span class="lt">[09:15:04]</span> <span class="t-err">RISK</span>      ${sc.riskLabel}`,
+      `<span class="lt">[09:15:04]</span> <span class="t-ok">JUDGE</span>     local · confidence HIGH · resolved`,
       `<span class="lt">[09:15:04]</span> <span class="t-err">BLOCK</span>     risk:HIGH · score:${sc.riskScore}/100`,
       `<span class="lt">[09:15:04]</span> <span class="lt">AUDIT</span>     logged · manager notified`,
     ],
   },
   {
     key:'coach',
-    steps:['Proxy intercepts HTTPS handshake','AI judge evaluates payload','Risk detected · guidance triggered','Developer acknowledges or cancels'],
+    steps:['Proxy intercepts HTTPS handshake','Local judge: low confidence','Escalate to cloud judge for second opinion','Guidance surfaced to developer'],
     banner:null,
     modal:{
       title:'Sensitive Data Detected',
@@ -1114,36 +1121,41 @@ const MODES = [
     verdict:{cls:'rv-coach',icon:'⚑',title:'Coached',sub:'Developer interrupted with guidance. Action logged for review.'},
     logLines: sc => [
       `<span class="lt">[09:15:04]</span> <span class="t-info">INTERCEPT</span> → ${sc.destination}`,
-      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     analysing payload…`,
-      `<span class="lt">[09:15:04]</span> <span class="t-warn">RISK</span>      ${sc.riskLabel}`,
-      `<span class="lt">[09:15:04]</span> <span class="t-info">COACH</span>     guidance surfaced to developer`,
+      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     local · analysing payload…`,
+      `<span class="lt">[09:15:04]</span> <span class="t-warn">JUDGE</span>     local · confidence LOW · escalating ☁`,
+      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     cloud · second opinion…`,
+      `<span class="lt">[09:15:05]</span> <span class="t-warn">RISK</span>      ${sc.riskLabel}`,
+      `<span class="lt">[09:15:05]</span> <span class="t-info">COACH</span>     guidance surfaced to developer`,
       `<span class="lt">[09:15:05]</span> <span class="lt">AWAIT</span>     pending developer decision…`,
     ],
   },
   {
     key:'warn',
-    steps:['Proxy intercepts HTTPS handshake','AI judge evaluates payload','Request permitted · warning issued','Notification surfaced + logged'],
+    steps:['Proxy intercepts HTTPS handshake','Local judge: low confidence','Escalate to cloud judge for second opinion','Allow + warn the developer'],
     banner:{cls:'warn-banner',icon:'⚠',title:'Tether: Policy Warning',msg:'Request allowed but flagged. Sensitive content detected. Your security team will review.'},
     modal:null,
     verdict:{cls:'rv-warn',icon:'⚠',title:'Warned',sub:'Request allowed. Developer notified. Audit entry created.'},
     logLines: sc => [
       `<span class="lt">[09:15:04]</span> <span class="t-info">INTERCEPT</span> → ${sc.destination}`,
-      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     analysing payload…`,
-      `<span class="lt">[09:15:04]</span> <span class="t-warn">RISK</span>      ${sc.riskLabel}`,
-      `<span class="lt">[09:15:04]</span> <span class="t-ok">ALLOW</span>     request forwarded`,
-      `<span class="lt">[09:15:04]</span> <span class="t-warn">WARN</span>      notification sent · audit logged`,
+      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     local · analysing payload…`,
+      `<span class="lt">[09:15:04]</span> <span class="t-warn">JUDGE</span>     local · confidence LOW · escalating ☁`,
+      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     cloud · second opinion…`,
+      `<span class="lt">[09:15:05]</span> <span class="t-warn">RISK</span>      ${sc.riskLabel}`,
+      `<span class="lt">[09:15:05]</span> <span class="t-ok">ALLOW</span>     request forwarded`,
+      `<span class="lt">[09:15:05]</span> <span class="t-warn">WARN</span>      notification sent · audit logged`,
     ],
   },
   {
     key:'allow',
-    steps:['Proxy intercepts HTTPS handshake','AI judge evaluates payload','No sensitive markers detected','Request forwarded · routine audit'],
+    steps:['Proxy intercepts HTTPS handshake','Local judge: no sensitive markers','Confidence HIGH · resolved locally','Request forwarded · routine audit'],
     banner:null,
     modal:null,
     verdict:{cls:'rv-allow',icon:'✓',title:'Allowed',sub:'No sensitive content detected. Request forwarded to destination.'},
     logLines: sc => [
       `<span class="lt">[09:15:04]</span> <span class="t-info">INTERCEPT</span> → ${sc.destination}`,
-      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     analysing payload…`,
+      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     local · analysing payload…`,
       `<span class="lt">[09:15:04]</span> <span class="t-ok">RISK</span>      low · no sensitive markers`,
+      `<span class="lt">[09:15:04]</span> <span class="t-ok">JUDGE</span>     local · confidence HIGH · resolved`,
       `<span class="lt">[09:15:04]</span> <span class="t-ok">ALLOW</span>     request forwarded`,
       `<span class="lt">[09:15:04]</span> <span class="lt">AUDIT</span>     logged · routine`,
     ],
