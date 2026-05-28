@@ -111,7 +111,7 @@ body{display:flex;flex-direction:column;}
 
 /* ══ ARCHITECTURE / PIPELINE ══ */
 .pipeline-row{
-  display:grid;grid-template-columns:repeat(5,1fr);
+  display:grid;grid-template-columns:repeat(6,1fr);
   border:1px solid var(--border);background:var(--surface);margin-bottom:32px;
 }
 .pipe-node{
@@ -364,17 +364,39 @@ body{display:flex;flex-direction:column;}
 .prompt-item{
   padding:11px 13px;background:var(--bg);
   border:1px solid var(--border);border-left:3px solid var(--border-dk);
-  margin-bottom:9px;
+  margin-bottom:9px;width:100%;text-align:left;cursor:pointer;
+  font-family:var(--sans);transition:background .15s,border-color .15s,transform .12s;
+  display:block;
 }
+.prompt-item:hover{background:var(--surface);border-color:var(--border-dk);transform:translateX(2px);}
+.prompt-item:active{transform:translateX(0);}
 .prompt-item:last-child{margin-bottom:0;}
 .prompt-text{font-family:var(--mono);font-size:11px;color:var(--ink);line-height:1.55;margin-bottom:7px;}
 .prompt-why{
   font-size:11px;color:var(--muted);font-weight:300;line-height:1.5;
   padding-top:7px;border-top:1px dashed var(--border);
 }
+.prompt-run{
+  display:inline-block;margin-top:6px;
+  font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;
+  padding:2px 7px;border:1px solid;
+}
+.prompt-run.r-allow{color:var(--green);border-color:var(--green-bd);background:var(--green-bg);}
+.prompt-run.r-coach{color:var(--blue);border-color:var(--blue-bd);background:var(--blue-bg);}
+.prompt-run.r-warn{color:var(--amber);border-color:var(--amber-bd);background:var(--amber-bg);}
+.prompt-run.r-block{color:var(--red);border-color:var(--red-bd);background:var(--red-bg);}
 .prompts-col.allow .prompt-item{border-left-color:var(--green);}
 .prompts-col.judge .prompt-item{border-left-color:var(--blue);}
 .prompts-col.block .prompt-item{border-left-color:var(--red);}
+
+/* "Custom prompt from library" indicator in simulator scenario panel */
+.custom-loaded{
+  padding:11px 13px;background:var(--surface2);
+  border:1px solid var(--ink);border-left:3px solid var(--red);
+  margin-bottom:10px;
+}
+.custom-loaded .cl-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin-bottom:6px;}
+.custom-loaded .cl-text{font-family:var(--mono);font-size:11px;color:var(--ink);line-height:1.5;}
 
 /* ══ POLICY ══ */
 .mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:32px;}
@@ -511,7 +533,7 @@ body{display:flex;flex-direction:column;}
 /* responsive — collapse the simulator on small screens */
 @media(max-width:1100px){
   .sim-wrap{grid-template-columns:200px 1fr 220px;}
-  .pipeline-row{grid-template-columns:repeat(5,minmax(0,1fr));}
+  .pipeline-row{grid-template-columns:repeat(6,minmax(0,1fr));}
 }
 @media(max-width:860px){
   .pipeline-row{grid-template-columns:1fr 1fr;}
@@ -589,12 +611,18 @@ body{display:flex;flex-direction:column;}
         </div>
         <div class="pipe-node">
           <div class="pipe-num">04</div><div class="pipe-icon">🧠</div>
-          <div class="pipe-name">AI Risk Analysis</div>
-          <div class="pipe-desc">On-device model evaluates payload before transmission. Request bodies never leave the machine for analysis.</div>
+          <div class="pipe-name">On-Device Judge</div>
+          <div class="pipe-desc">Local model judges every request in realtime. High-confidence allows and blocks resolve here — payload never leaves the machine.</div>
           <span class="badge badge-green">On-Device</span>
         </div>
         <div class="pipe-node">
-          <div class="pipe-num">05</div><div class="pipe-icon">📋</div>
+          <div class="pipe-num">05</div><div class="pipe-icon">☁</div>
+          <div class="pipe-name">Cloud Judge</div>
+          <div class="pipe-desc">Second opinion for ambiguous cases the local judge can't resolve confidently. Optional, configurable, off entirely in air-gap mode.</div>
+          <span class="badge badge-blue">Escalation</span>
+        </div>
+        <div class="pipe-node">
+          <div class="pipe-num">06</div><div class="pipe-icon">📋</div>
           <div class="pipe-name">Policy Engine</div>
           <div class="pipe-desc">Cryptographically signed rules distributed as versioned bundles. Verified every request.</div>
           <span class="badge badge-red">Verified</span>
@@ -627,7 +655,7 @@ body{display:flex;flex-direction:column;}
     <div class="slide-inner" style="padding-bottom:24px;">
       <div class="slide-eyebrow">02 · Live Simulator</div>
       <h2 class="slide-title">Enforcement Simulator<span class="live-pill"><span class="live-dot"></span>Live</span></h2>
-      <p class="slide-sub">Pick a developer scenario and an enforcement mode, then watch Tether's pipeline play out step by step: intercept the HTTPS handshake → judge the payload on-device → apply your configured response (allow, warn, coach, or block). The right panel shows the audit entry Tether would record.</p>
+      <p class="slide-sub">Pick a developer scenario and an enforcement mode, then watch Tether's pipeline play out: intercept the HTTPS handshake → on-device judge first → escalate to the cloud judge only when the local judge is uncertain → apply your configured response. The right panel shows the audit entry Tether would record.</p>
 
       <div class="sim-wrap">
         <!-- LEFT: scenarios -->
@@ -694,6 +722,10 @@ body{display:flex;flex-direction:column;}
                 <div class="mt-dot" style="background:var(--amber)"></div>
                 <div><div class="mt-name">Warn</div><div class="mt-sub">Allow + notify</div></div>
               </div>
+              <div class="mode-tab" onclick="setMode(3,this)">
+                <div class="mt-dot" style="background:var(--green)"></div>
+                <div><div class="mt-name">Allow</div><div class="mt-sub">Forward + log</div></div>
+              </div>
             </div>
             <div id="resultArea">
               <div class="result-empty">
@@ -711,96 +743,36 @@ body{display:flex;flex-direction:column;}
     <div class="slide-inner">
       <div class="slide-eyebrow">03 · Prompt Library</div>
       <h2 class="slide-title">How the judge thinks.<br/><em>Fifty real prompts.</em></h2>
-      <p class="slide-sub">Tether's on-device judge inspects every outbound AI request body before it hits the wire. It pattern-matches against PII, credentials, regulated data, proprietary code, and ambiguous internal business context — then routes the request through one of your configured policy modes. Below is the kind of judgement it produces, across fifty representative developer prompts.</p>
+      <p class="slide-sub">Tether's on-device judge inspects every outbound AI request body before it hits the wire. It pattern-matches against PII, credentials, regulated data, proprietary code, and ambiguous internal business context — then routes the request through one of your configured policy modes. Fifty representative prompts below — <strong style="color:var(--ink)">click any one</strong> to run it live through the simulator with the matching enforcement mode pre-selected.</p>
 
       <div class="prompt-explainer">
         <div class="pe-col">
-          <div class="pe-head"><span class="swatch s-allow"></span>Allow</div>
-          <div class="pe-text">No identifying data, credentials, or proprietary context. Pattern looks like a generic technical question — public knowledge, framework docs, or boilerplate.</div>
+          <div class="pe-head"><span class="swatch s-allow"></span>Allow · local only</div>
+          <div class="pe-text">No identifying data or proprietary context. The on-device judge is high-confidence — request never touches the cloud judge.</div>
         </div>
         <div class="pe-col">
-          <div class="pe-head"><span class="swatch s-judge"></span>Coach / Judge</div>
-          <div class="pe-text">No outright leak, but the prompt carries internal context — table names, business jargon, infra config, roadmap signals. A coaching moment makes the developer the second pair of eyes.</div>
+          <div class="pe-head"><span class="swatch s-judge"></span>Coach / Warn · escalated</div>
+          <div class="pe-text">Local judge is uncertain — escalates to the cloud judge for a second opinion. Cloud verdict drives the coaching moment or warning.</div>
         </div>
         <div class="pe-col">
-          <div class="pe-head"><span class="swatch s-block"></span>Block</div>
-          <div class="pe-text">Clear sensitive payload: PII, PHI, PCI data, live credentials, or proprietary code with trade-secret indicators. Hard deny, log, notify.</div>
+          <div class="pe-head"><span class="swatch s-block"></span>Block · local only</div>
+          <div class="pe-text">Clear sensitive payload: PII, PHI, PCI, live credentials, or trade-secret code. On-device judge resolves with high confidence — hard deny, no cloud round-trip.</div>
         </div>
       </div>
 
       <div class="prompts-grid">
-
-        <!-- ALLOW -->
         <div class="prompts-col allow">
-          <div class="prompts-head"><span class="badge badge-green">▸ Allow</span><span class="prompts-count">17 examples</span></div>
-          <div class="prompts-body">
-            <div class="prompt-item"><div class="prompt-text">"How do I implement a debounce function in JavaScript?"</div><div class="prompt-why">Pure language question — no code or data from your environment.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Explain the difference between let, var, and const."</div><div class="prompt-why">Public documentation territory.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"What's the time complexity of quicksort?"</div><div class="prompt-why">CS fundamentals. No sensitive context.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Write a regex for validating ISO 8601 dates."</div><div class="prompt-why">Generic pattern matching, no PII or schemas.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"How do I set up a Redis cluster on Kubernetes?"</div><div class="prompt-why">Public tooling question. No internal infra details.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"What are common React performance pitfalls?"</div><div class="prompt-why">Generic framework knowledge.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Convert 'Jan 5 2024' to ISO format in Python."</div><div class="prompt-why">Library usage. No production data.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Recommend a library for parsing PDFs in Go."</div><div class="prompt-why">Tooling recommendation. Public ecosystem.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Explain the CAP theorem with examples."</div><div class="prompt-why">Educational. Distributed systems theory.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"How does the TLS 1.3 handshake work?"</div><div class="prompt-why">Protocol explanation. No environment specifics.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Give me a Dockerfile for a basic Node 20 app."</div><div class="prompt-why">Boilerplate scaffolding. No proprietary code.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Difference between TCP and UDP at the protocol level?"</div><div class="prompt-why">Networking fundamentals.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Bash one-liner to find duplicate files by hash."</div><div class="prompt-why">Generic scripting. No env-specific paths.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Explain SOLID principles with simple examples."</div><div class="prompt-why">Educational. Object-oriented design.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Pros and cons of GraphQL vs REST?"</div><div class="prompt-why">Architecture discussion at a generic level.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"What's a good rate-limiting algorithm for an API?"</div><div class="prompt-why">General design pattern question.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"How does PostgreSQL MVCC handle concurrent writes?"</div><div class="prompt-why">Database internals. No schemas leaked.</div></div>
-          </div>
+          <div class="prompts-head"><span class="badge badge-green">▸ Allow</span><span class="prompts-count" id="count-allow">17 examples</span></div>
+          <div class="prompts-body" id="prompts-allow"></div>
         </div>
-
-        <!-- JUDGE -->
         <div class="prompts-col judge">
-          <div class="prompts-head"><span class="badge badge-blue">▸ Coach</span><span class="prompts-count">16 examples</span></div>
-          <div class="prompts-body">
-            <div class="prompt-item"><div class="prompt-text">"Optimize this query against our payments table: SELECT * FROM payments WHERE…"</div><div class="prompt-why">Internal table name. Generic SQL otherwise — coach the dev to abstract before sending.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Refactor this React component from our admin console — &lt;UserPermissionGrid&gt;"</div><div class="prompt-why">Component name hints at internal product surface area.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Write tests for our checkout flow."</div><div class="prompt-why">Business-context phrasing without payload. Confirm scope before sending.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Explain what this internal endpoint does: GET /v3/orders/internal-status"</div><div class="prompt-why">Internal URL pattern reveals API surface.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Summarize this Jira ticket: 'Implement automatic ACH retry for failed payments…'"</div><div class="prompt-why">Roadmap signal — public-facing once shipped, internal until then.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Compare these two Terraform configs for our staging cluster."</div><div class="prompt-why">Infra config can leak network layout and service inventory.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Help me write a SQL migration for the users table to add a tier column."</div><div class="prompt-why">Schema and product-tier modeling exposed.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Translate these error messages: 'Invalid SSO refresh token', 'Org seat limit reached'."</div><div class="prompt-why">Reveals auth model and licensing structure.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Generate a Python script to parse our customer export CSV (columns: id, email, plan, mrr)."</div><div class="prompt-why">Customer-record schema. No real data, but reveals what you collect.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Review this design doc for our new tiered pricing engine."</div><div class="prompt-why">Strategic document. Coach the dev to decide what's safe to share.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Convert these business requirements into user stories: 'self-serve trial → paid conversion'."</div><div class="prompt-why">Go-to-market strategy signal.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Suggest indexes for a query joining users, orders, and payment_methods."</div><div class="prompt-why">Real schema implied. Coach before sending.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Write a runbook for our blue/green deployment process."</div><div class="prompt-why">Internal ops process exposure.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Help me design a feature flag system tied to our existing Account model."</div><div class="prompt-why">Domain model leak. Generic if abstracted.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"What's the right cache TTL for our pricing API responses?"</div><div class="prompt-why">Internal service behavior. Coach to ask in the abstract.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Convert this Slack thread into a meeting summary."</div><div class="prompt-why">Slack content is highly variable — likely confidential by default.</div></div>
-          </div>
+          <div class="prompts-head"><span class="badge badge-blue">▸ Coach / Warn</span><span class="prompts-count" id="count-coach">16 examples</span></div>
+          <div class="prompts-body" id="prompts-coach"></div>
         </div>
-
-        <!-- BLOCK -->
         <div class="prompts-col block">
-          <div class="prompts-head"><span class="badge badge-red">▸ Block</span><span class="prompts-count">17 examples</span></div>
-          <div class="prompts-body">
-            <div class="prompt-item"><div class="prompt-text">"Here's our customer export: john@x.com, 123-45-6789, 1981-03-12, $847,233. Find patterns."</div><div class="prompt-why">PII — SSN, DOB, financial records.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Debug this — AWS_SECRET_ACCESS_KEY=AKIA1234XYZ…"</div><div class="prompt-why">Live AWS credential.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Summarize this patient record: 47M, T2DM, A1C 8.2, prescribed metformin…"</div><div class="prompt-why">PHI — HIPAA-protected medical data.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Our private fraud scoring algorithm — optimize: def score(txn): if velocity &gt; 5…"</div><div class="prompt-why">Proprietary algorithm. Trade-secret indicator.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Internal compensation spreadsheet: Anna Patel $187k, perf 4.2…"</div><div class="prompt-why">HR-confidential salary and review data.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Translate our M&amp;A target list — Acquihire: Mendel Labs $42M, Riftshore $12M."</div><div class="prompt-why">Confidential corporate development.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Critique our unreleased Q4 roadmap: 'launch enterprise tier, deprecate v1 API…'"</div><div class="prompt-why">Material non-public strategy.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Validate these payment cards: 4532 1234 5678 9012, exp 12/26, CVV 421."</div><div class="prompt-why">PCI data — cardholder information.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Our internal bearer token sk-proj-x4Kp9mN2tQ8… — what's wrong with this flow?"</div><div class="prompt-why">Live API token in payload.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Login creds are admin / Tr0ub4dor&amp;3 — write a better password policy."</div><div class="prompt-why">Active credentials disclosed.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Diagnose from this transcript: '54F presenting with chest pain, BP 148/96, history of…'"</div><div class="prompt-why">PHI — clinical encounter detail.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Optimize our proprietary trading engine: 'class MarketMaker { spread = 0.0023; …'"</div><div class="prompt-why">Trade-secret algorithm parameters.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Refactor this — AES_KEY = \"a5b4c3d2e1f0…\""</div><div class="prompt-why">Hardcoded encryption key.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Pre-IPO financials: Q3 ARR $42.7M, gross margin 87%, churn 1.2%…"</div><div class="prompt-why">Material non-public financial data.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Clean up our user PII export — name, dob, ssn, email, phone."</div><div class="prompt-why">Bulk PII upload.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Review this NDA-protected vendor contract clause by clause."</div><div class="prompt-why">NDA-bound material — explicit confidentiality.</div></div>
-            <div class="prompt-item"><div class="prompt-text">"Classified network topology — bastion → 10.42.0.0/16 → internal VPN…"</div><div class="prompt-why">Infrastructure secrets and attack-surface map.</div></div>
-          </div>
+          <div class="prompts-head"><span class="badge badge-red">▸ Block</span><span class="prompts-count" id="count-block">17 examples</span></div>
+          <div class="prompts-body" id="prompts-block"></div>
         </div>
-
       </div>
     </div>
   </div>
@@ -1127,15 +1099,16 @@ const MODES = [
     verdict:{cls:'rv-block',icon:'⛔',title:'Blocked',sub:'Connection terminated before data left the machine.'},
     logLines: sc => [
       `<span class="lt">[09:15:04]</span> <span class="t-info">INTERCEPT</span> → ${sc.destination}`,
-      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     analysing payload…`,
+      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     local · analysing payload…`,
       `<span class="lt">[09:15:04]</span> <span class="t-err">RISK</span>      ${sc.riskLabel}`,
+      `<span class="lt">[09:15:04]</span> <span class="t-ok">JUDGE</span>     local · confidence HIGH · resolved`,
       `<span class="lt">[09:15:04]</span> <span class="t-err">BLOCK</span>     risk:HIGH · score:${sc.riskScore}/100`,
       `<span class="lt">[09:15:04]</span> <span class="lt">AUDIT</span>     logged · manager notified`,
     ],
   },
   {
     key:'coach',
-    steps:['Proxy intercepts HTTPS handshake','AI judge evaluates payload','Risk detected · guidance triggered','Developer acknowledges or cancels'],
+    steps:['Proxy intercepts HTTPS handshake','Local judge: low confidence','Escalate to cloud judge for second opinion','Guidance surfaced to developer'],
     banner:null,
     modal:{
       title:'Sensitive Data Detected',
@@ -1148,29 +1121,55 @@ const MODES = [
     verdict:{cls:'rv-coach',icon:'⚑',title:'Coached',sub:'Developer interrupted with guidance. Action logged for review.'},
     logLines: sc => [
       `<span class="lt">[09:15:04]</span> <span class="t-info">INTERCEPT</span> → ${sc.destination}`,
-      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     analysing payload…`,
-      `<span class="lt">[09:15:04]</span> <span class="t-warn">RISK</span>      ${sc.riskLabel}`,
-      `<span class="lt">[09:15:04]</span> <span class="t-info">COACH</span>     guidance surfaced to developer`,
+      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     local · analysing payload…`,
+      `<span class="lt">[09:15:04]</span> <span class="t-warn">JUDGE</span>     local · confidence LOW · escalating ☁`,
+      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     cloud · second opinion…`,
+      `<span class="lt">[09:15:05]</span> <span class="t-warn">RISK</span>      ${sc.riskLabel}`,
+      `<span class="lt">[09:15:05]</span> <span class="t-info">COACH</span>     guidance surfaced to developer`,
       `<span class="lt">[09:15:05]</span> <span class="lt">AWAIT</span>     pending developer decision…`,
     ],
   },
   {
     key:'warn',
-    steps:['Proxy intercepts HTTPS handshake','AI judge evaluates payload','Request permitted · warning issued','Notification surfaced + logged'],
+    steps:['Proxy intercepts HTTPS handshake','Local judge: low confidence','Escalate to cloud judge for second opinion','Allow + warn the developer'],
     banner:{cls:'warn-banner',icon:'⚠',title:'Tether: Policy Warning',msg:'Request allowed but flagged. Sensitive content detected. Your security team will review.'},
     modal:null,
     verdict:{cls:'rv-warn',icon:'⚠',title:'Warned',sub:'Request allowed. Developer notified. Audit entry created.'},
     logLines: sc => [
       `<span class="lt">[09:15:04]</span> <span class="t-info">INTERCEPT</span> → ${sc.destination}`,
-      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     analysing payload…`,
-      `<span class="lt">[09:15:04]</span> <span class="t-warn">RISK</span>      ${sc.riskLabel}`,
+      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     local · analysing payload…`,
+      `<span class="lt">[09:15:04]</span> <span class="t-warn">JUDGE</span>     local · confidence LOW · escalating ☁`,
+      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     cloud · second opinion…`,
+      `<span class="lt">[09:15:05]</span> <span class="t-warn">RISK</span>      ${sc.riskLabel}`,
+      `<span class="lt">[09:15:05]</span> <span class="t-ok">ALLOW</span>     request forwarded`,
+      `<span class="lt">[09:15:05]</span> <span class="t-warn">WARN</span>      notification sent · audit logged`,
+    ],
+  },
+  {
+    key:'allow',
+    steps:['Proxy intercepts HTTPS handshake','Local judge: no sensitive markers','Confidence HIGH · resolved locally','Request forwarded · routine audit'],
+    banner:null,
+    modal:null,
+    verdict:{cls:'rv-allow',icon:'✓',title:'Allowed',sub:'No sensitive content detected. Request forwarded to destination.'},
+    logLines: sc => [
+      `<span class="lt">[09:15:04]</span> <span class="t-info">INTERCEPT</span> → ${sc.destination}`,
+      `<span class="lt">[09:15:04]</span> <span class="t-info">JUDGE</span>     local · analysing payload…`,
+      `<span class="lt">[09:15:04]</span> <span class="t-ok">RISK</span>      low · no sensitive markers`,
+      `<span class="lt">[09:15:04]</span> <span class="t-ok">JUDGE</span>     local · confidence HIGH · resolved`,
       `<span class="lt">[09:15:04]</span> <span class="t-ok">ALLOW</span>     request forwarded`,
-      `<span class="lt">[09:15:04]</span> <span class="t-warn">WARN</span>      notification sent · audit logged`,
+      `<span class="lt">[09:15:04]</span> <span class="lt">AUDIT</span>     logged · routine`,
     ],
   },
 ];
+const MODE_KEYS = ['block','coach','warn','allow'];
+
+let customScenario = null;
+function currentScenario(){ return customScenario || SCENARIOS[simScenario]; }
 
 function setScenario(idx, el){
+  customScenario = null;
+  const ind = document.querySelector('.custom-loaded');
+  if(ind) ind.remove();
   document.querySelectorAll('.scenario-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
   simScenario = idx;
@@ -1183,7 +1182,7 @@ function setMode(idx, el){
   resetPlayback();
 }
 function resetPlayback(){
-  const sc = SCENARIOS[simScenario];
+  const sc = currentScenario();
   document.getElementById('stageAppLabel').textContent = sc.label;
   renderStageView(sc, false);
   document.getElementById('bannerSlot').innerHTML = '';
@@ -1265,7 +1264,7 @@ function renderStageView(sc, withHighlight){
 async function runPlayback(){
   if(playing) return;
   playing = true;
-  const sc = SCENARIOS[simScenario];
+  const sc = currentScenario();
   const mode = MODES[simMode];
   const pb = document.getElementById('playBtn');
   pb.disabled = true;
@@ -1319,19 +1318,143 @@ async function runPlayback(){
 function closeModal(){ document.getElementById('overlayModal').classList.remove('show'); }
 function cancelCoach(){
   closeModal();
-  renderStageView(SCENARIOS[simScenario], false);
+  renderStageView(currentScenario(), false);
   document.getElementById('bannerSlot').innerHTML =
     `<div class="tether-banner block-banner"><span class="bicon">⛔</span><div><strong>Request Cancelled</strong>Developer chose to cancel after policy guidance was shown.</div></div>`;
 }
 function proceedCoach(){
   closeModal();
-  renderStageView(SCENARIOS[simScenario], true);
+  renderStageView(currentScenario(), true);
   document.getElementById('bannerSlot').innerHTML =
     `<div class="tether-banner warn-banner"><span class="bicon">⚑</span><div><strong>Tether: Request Proceeded After Coaching</strong>Developer acknowledged policy guidance. Action logged for review.</div></div>`;
 }
 
 function delay(ms){ return new Promise(r=>setTimeout(r,ms)); }
 
+/* ═══════════════════════════════════════
+   PROMPT LIBRARY — clickable, jumps to simulator
+═══════════════════════════════════════ */
+const LIBRARY = {
+  allow: [
+    { text:"How do I implement a debounce function in JavaScript?", why:"Pure language question — no code or data from your environment." },
+    { text:"Explain the difference between let, var, and const.", why:"Public documentation territory." },
+    { text:"What's the time complexity of quicksort?", why:"CS fundamentals. No sensitive context." },
+    { text:"Write a regex for validating ISO 8601 dates.", why:"Generic pattern matching, no PII or schemas." },
+    { text:"How do I set up a Redis cluster on Kubernetes?", why:"Public tooling question. No internal infra details." },
+    { text:"What are common React performance pitfalls?", why:"Generic framework knowledge." },
+    { text:"Convert 'Jan 5 2024' to ISO format in Python.", why:"Library usage. No production data." },
+    { text:"Recommend a library for parsing PDFs in Go.", why:"Tooling recommendation. Public ecosystem." },
+    { text:"Explain the CAP theorem with examples.", why:"Educational. Distributed systems theory." },
+    { text:"How does the TLS 1.3 handshake work?", why:"Protocol explanation. No environment specifics." },
+    { text:"Give me a Dockerfile for a basic Node 20 app.", why:"Boilerplate scaffolding. No proprietary code." },
+    { text:"Difference between TCP and UDP at the protocol level?", why:"Networking fundamentals." },
+    { text:"Bash one-liner to find duplicate files by hash.", why:"Generic scripting. No env-specific paths." },
+    { text:"Explain SOLID principles with simple examples.", why:"Educational. Object-oriented design." },
+    { text:"Pros and cons of GraphQL vs REST?", why:"Architecture discussion at a generic level." },
+    { text:"What's a good rate-limiting algorithm for an API?", why:"General design pattern question." },
+    { text:"How does PostgreSQL MVCC handle concurrent writes?", why:"Database internals. No schemas leaked." },
+  ],
+  coach: [
+    { text:"Optimize this query against our payments table: SELECT * FROM payments WHERE…", why:"Internal table name. Generic SQL otherwise — coach the dev to abstract before sending.", mode:"coach" },
+    { text:"Refactor this React component from our admin console — <UserPermissionGrid>", why:"Component name hints at internal product surface area.", mode:"warn" },
+    { text:"Write tests for our checkout flow.", why:"Business-context phrasing without payload. Confirm scope before sending.", mode:"coach" },
+    { text:"Explain what this internal endpoint does: GET /v3/orders/internal-status", why:"Internal URL pattern reveals API surface.", mode:"warn" },
+    { text:"Summarize this Jira ticket: 'Implement automatic ACH retry for failed payments…'", why:"Roadmap signal — public-facing once shipped, internal until then.", mode:"coach" },
+    { text:"Compare these two Terraform configs for our staging cluster.", why:"Infra config can leak network layout and service inventory.", mode:"warn" },
+    { text:"Help me write a SQL migration for the users table to add a tier column.", why:"Schema and product-tier modeling exposed.", mode:"coach" },
+    { text:"Translate these error messages: 'Invalid SSO refresh token', 'Org seat limit reached'.", why:"Reveals auth model and licensing structure.", mode:"warn" },
+    { text:"Generate a Python script to parse our customer export CSV (columns: id, email, plan, mrr).", why:"Customer-record schema. No real data, but reveals what you collect.", mode:"coach" },
+    { text:"Review this design doc for our new tiered pricing engine.", why:"Strategic document. Coach the dev to decide what's safe to share.", mode:"coach" },
+    { text:"Convert these business requirements into user stories: 'self-serve trial → paid conversion'.", why:"Go-to-market strategy signal.", mode:"warn" },
+    { text:"Suggest indexes for a query joining users, orders, and payment_methods.", why:"Real schema implied. Coach before sending.", mode:"coach" },
+    { text:"Write a runbook for our blue/green deployment process.", why:"Internal ops process exposure.", mode:"warn" },
+    { text:"Help me design a feature flag system tied to our existing Account model.", why:"Domain model leak. Generic if abstracted.", mode:"coach" },
+    { text:"What's the right cache TTL for our pricing API responses?", why:"Internal service behavior. Coach to ask in the abstract.", mode:"warn" },
+    { text:"Convert this Slack thread into a meeting summary.", why:"Slack content is highly variable — likely confidential by default.", mode:"coach" },
+  ],
+  block: [
+    { text:"Here's our customer export: john@x.com, 123-45-6789, 1981-03-12, $847,233. Find patterns.", why:"PII — SSN, DOB, financial records." },
+    { text:"Debug this — AWS_SECRET_ACCESS_KEY=AKIA1234XYZ…", why:"Live AWS credential." },
+    { text:"Summarize this patient record: 47M, T2DM, A1C 8.2, prescribed metformin…", why:"PHI — HIPAA-protected medical data." },
+    { text:"Our private fraud scoring algorithm — optimize: def score(txn): if velocity > 5…", why:"Proprietary algorithm. Trade-secret indicator." },
+    { text:"Internal compensation spreadsheet: Anna Patel $187k, perf 4.2…", why:"HR-confidential salary and review data." },
+    { text:"Translate our M&A target list — Acquihire: Mendel Labs $42M, Riftshore $12M.", why:"Confidential corporate development." },
+    { text:"Critique our unreleased Q4 roadmap: 'launch enterprise tier, deprecate v1 API…'", why:"Material non-public strategy." },
+    { text:"Validate these payment cards: 4532 1234 5678 9012, exp 12/26, CVV 421.", why:"PCI data — cardholder information." },
+    { text:"Our internal bearer token sk-proj-x4Kp9mN2tQ8… — what's wrong with this flow?", why:"Live API token in payload." },
+    { text:"Login creds are admin / Tr0ub4dor&3 — write a better password policy.", why:"Active credentials disclosed." },
+    { text:"Diagnose from this transcript: '54F presenting with chest pain, BP 148/96, history of…'", why:"PHI — clinical encounter detail." },
+    { text:"Optimize our proprietary trading engine: 'class MarketMaker { spread = 0.0023; …'", why:"Trade-secret algorithm parameters." },
+    { text:'Refactor this — AES_KEY = "a5b4c3d2e1f0…"', why:"Hardcoded encryption key." },
+    { text:"Pre-IPO financials: Q3 ARR $42.7M, gross margin 87%, churn 1.2%…", why:"Material non-public financial data." },
+    { text:"Clean up our user PII export — name, dob, ssn, email, phone.", why:"Bulk PII upload." },
+    { text:"Review this NDA-protected vendor contract clause by clause.", why:"NDA-bound material — explicit confidentiality." },
+    { text:"Classified network topology — bastion → 10.42.0.0/16 → internal VPN…", why:"Infrastructure secrets and attack-surface map." },
+  ],
+};
+
+const RISK_SCORES = { allow: 6, coach: 54, warn: 68, block: 94 };
+
+function escHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderPromptLibrary(){
+  const cats = [
+    { key:'allow', col:'allow', runCls:'r-allow' },
+    { key:'coach', col:'coach', runCls:null /* per-item */ },
+    { key:'block', col:'block', runCls:'r-block' },
+  ];
+  cats.forEach(({key,col,runCls}) => {
+    const items = LIBRARY[key];
+    const html = items.map((p,i) => {
+      const itemMode = p.mode || key;
+      const cls = 'r-' + itemMode;
+      const tag = itemMode.toUpperCase();
+      return `<button class="prompt-item" onclick="selectPrompt('${key}',${i})">
+        <div class="prompt-text">"${escHtml(p.text)}"</div>
+        <div class="prompt-why">${escHtml(p.why)}<br><span class="prompt-run ${cls}">▸ Run as ${tag}</span></div>
+      </button>`;
+    }).join('');
+    document.getElementById('prompts-' + col).innerHTML = html;
+    document.getElementById('count-' + col).textContent = items.length + ' examples';
+  });
+}
+
+function selectPrompt(cat, idx){
+  const p = LIBRARY[cat][idx];
+  const modeKey = p.mode || cat;
+  const modeIdx = MODE_KEYS.indexOf(modeKey);
+  customScenario = {
+    label: 'ChatGPT · loaded from prompt library',
+    view: 'browser',
+    payload: p.text,
+    riskLabel: p.why,
+    riskScore: RISK_SCORES[modeKey],
+    destination: 'api.openai.com',
+  };
+  goTo(2);
+  document.querySelectorAll('.scenario-btn').forEach(b=>b.classList.remove('active'));
+  simMode = modeIdx;
+  document.querySelectorAll('.mode-tab').forEach((t,i)=>t.classList.toggle('active', i===modeIdx));
+  resetPlayback();
+  showCustomIndicator(p);
+  setTimeout(runPlayback, 600);
+}
+
+function showCustomIndicator(p){
+  const head = document.querySelector('.sim-col.left .sim-col-body');
+  if(!head) return;
+  const existing = head.querySelector('.custom-loaded');
+  const html = `<div class="custom-loaded">
+    <div class="cl-eyebrow">From Prompt Library</div>
+    <div class="cl-text">"${escHtml(p.text.length > 90 ? p.text.slice(0,90)+'…' : p.text)}"</div>
+  </div>`;
+  if(existing){ existing.outerHTML = html; }
+  else{ head.insertAdjacentHTML('afterbegin', html); }
+}
+
+renderPromptLibrary();
 resetPlayback();
 </script>
 </body>
