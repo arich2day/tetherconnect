@@ -396,7 +396,14 @@ body{display:flex;flex-direction:column;}
   margin-bottom:10px;
 }
 .custom-loaded .cl-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin-bottom:6px;}
-.custom-loaded .cl-text{font-family:var(--mono);font-size:11px;color:var(--ink);line-height:1.5;}
+.custom-loaded .cl-text{font-family:var(--mono);font-size:11px;color:var(--ink);line-height:1.5;margin-bottom:10px;}
+.custom-loaded .cl-back{
+  display:block;width:100%;
+  font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--ink);background:transparent;border:1px solid var(--ink);
+  padding:7px 10px;cursor:pointer;transition:background .15s,color .15s;
+}
+.custom-loaded .cl-back:hover{background:var(--ink);color:var(--surface);}
 
 /* ══ POLICY ══ */
 .mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:32px;}
@@ -738,10 +745,10 @@ body{display:flex;flex-direction:column;}
     </div>
   </div>
 
-  <!-- ══ 3: PROMPT LIBRARY ══ -->
-  <div class="demo-slide" id="slide-3">
+  <!-- ══ 4: PROMPT LIBRARY ══ -->
+  <div class="demo-slide" id="slide-4">
     <div class="slide-inner">
-      <div class="slide-eyebrow">03 · Prompt Library</div>
+      <div class="slide-eyebrow">04 · Prompt Library</div>
       <h2 class="slide-title">How the judge thinks.<br/><em>Fifty real prompts.</em></h2>
       <p class="slide-sub">Tether's on-device judge inspects every outbound AI request body before it hits the wire. It pattern-matches against PII, credentials, regulated data, proprietary code, and ambiguous internal business context — then routes the request through one of your configured policy modes. Fifty representative prompts below — <strong style="color:var(--ink)">click any one</strong> to run it live through the simulator with the matching enforcement mode pre-selected.</p>
 
@@ -777,10 +784,10 @@ body{display:flex;flex-direction:column;}
     </div>
   </div>
 
-  <!-- ══ 4: POLICY STUDIO ══ -->
-  <div class="demo-slide" id="slide-4">
+  <!-- ══ 3: POLICY STUDIO ══ -->
+  <div class="demo-slide" id="slide-3">
     <div class="slide-inner">
-      <div class="slide-eyebrow">04 · Policy Studio</div>
+      <div class="slide-eyebrow">03 · Policy Studio</div>
       <h2 class="slide-title">Six enforcement modes.<br/><em>Applied per axis.</em></h2>
       <p class="slide-sub">Every policy surface — AI egress, clipboard, terminal, extensions, session, external links — can be independently configured on its own enforcement mode.</p>
 
@@ -1015,7 +1022,7 @@ body{display:flex;flex-direction:column;}
    NAV STATE
 ═══════════════════════════════════════ */
 const TOTAL = 7;
-const LABELS = ['Welcome','Architecture','Simulator','Prompts','Policy Studio','Admin Console','Pricing'];
+const LABELS = ['Welcome','Architecture','Simulator','Policy Studio','Prompts','Admin Console','Pricing'];
 let cur = 0;
 
 function buildDots(){
@@ -1449,6 +1456,7 @@ function showCustomIndicator(p){
   const html = `<div class="custom-loaded">
     <div class="cl-eyebrow">From Prompt Library</div>
     <div class="cl-text">"${escHtml(p.text.length > 90 ? p.text.slice(0,90)+'…' : p.text)}"</div>
+    <button class="cl-back" onclick="goTo(4)">← Back to Library</button>
   </div>`;
   if(existing){ existing.outerHTML = html; }
   else{ head.insertAdjacentHTML('afterbegin', html); }
