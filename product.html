@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Product — Tether Connect</title>
-  <meta name="description" content="Tether Connect: endpoint-native AI egress enforcement. Controlled IDE environment, system-wide intercept, on-device AI analysis, and tamper-evident policy distribution."/>
+  <meta name="description" content="Tether Connect: endpoint-native AI egress enforcement. Controlled IDE environment, system-wide intercept, two-tier AI judging (on-device + cloud), and tamper-evident policy distribution."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="shared.css"/>
@@ -137,10 +137,10 @@
         </div>
         <div class="component-body">
           <p>A lightweight background service installed on each developer machine. It operates system-wide — not as an IDE plugin — which means it intercepts AI traffic from <em>any</em> application on the machine, not only the controlled IDE.</p>
-          <p>The agent evaluates each outbound AI request against the active policy: allow, warn, redact, or block. Every decision is logged with a risk classification and reasoning. When no policy can be retrieved, the agent fails closed — blocking by default until a verified policy is available.</p>
+          <p>The agent evaluates each outbound AI request against the active policy: allow, warn, redact, or block. A fast on-device judge handles every request in realtime; when it's not confident, the request escalates to a cloud judge for a second opinion. Every decision is logged with a risk classification and reasoning. When no policy can be retrieved, the agent fails closed — blocking by default until a verified policy is available.</p>
           <ul class="component-bullets">
             <li>System-wide HTTPS intercept — all AI API traffic, all tools</li>
-            <li>On-device AI risk analysis — no payload leaves for cloud evaluation</li>
+            <li>Two-tier judging — on-device judge in realtime; cloud judge for second opinions on ambiguous cases</li>
             <li>Fail-closed posture — blocks when policy is unavailable</li>
             <li>Tamper-resistant design — policy changes require cryptographic verification</li>
             <li>Heartbeat and posture reporting back to admin console</li>
@@ -163,6 +163,78 @@
             <li>Fleet health dashboard — enrollment status, policy version, last check-in</li>
             <li>Audit log with full decision history and export</li>
             <li>Policy versioning — roll back to any previous configuration</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UPDATES & DISTRIBUTION -->
+<section style="border-bottom:1px solid var(--border);">
+  <div class="wrap section-pad">
+    <div class="section-label">Distribution</div>
+    <h2 class="section-title">Versioned binaries.<br/>Signed at every hop.</h2>
+    <p class="section-sub">All Tether components — agent, browser extension, IDE plugin, and policy bundles — ship as signed, versioned artifacts. Update cadence is per-channel and configurable per tenant. Air-gap deployments serve the same artifacts from an internal mirror.</p>
+
+    <div>
+      <div class="component-row">
+        <div class="component-label">
+          <div class="component-label-name">Enforcement Agent</div>
+          <div class="component-label-badge"><span class="badge badge-muted">Native installer</span></div>
+        </div>
+        <div class="component-body">
+          <p>Cryptographically signed installer packages for macOS, Windows, and Linux. Distributed via your existing MDM (Jamf, Intune, etc.) or pulled directly from a per-tenant artifact channel.</p>
+          <p>Auto-update mode is configurable: <strong>immediate</strong> (track latest stable), <strong>staged</strong> (canary fleet then broad rollout), <strong>manual</strong> (pinned version, ops-controlled), or <strong>off</strong> (air-gap, internal mirror only). The on-device judge model ships bundled with the agent — new model versions are signed and verified before activation.</p>
+          <ul class="component-bullets">
+            <li>Signed artifacts — agent refuses to apply an update without matching publisher signature</li>
+            <li>Rollback supported on every channel — pin the previous version at any time</li>
+            <li>Air-gap mirror — same artifact format, served from your internal registry</li>
+          </ul>
+        </div>
+      </div>
+      <div class="component-row">
+        <div class="component-label">
+          <div class="component-label-name">Browser Extension</div>
+          <div class="component-label-badge"><span class="badge badge-muted">Force-install</span></div>
+        </div>
+        <div class="component-body">
+          <p>Distributed via Chrome Enterprise / Edge for Business managed policies — installed silently and unremovably on all enrolled developer endpoints. Updates flow through the standard managed-extension channel.</p>
+          <p>For air-gap and SCIF deployments, the extension is served as a signed CRX/XPI from your internal extension mirror, with auto-update disabled and version-pinning enforced by the agent.</p>
+          <ul class="component-bullets">
+            <li>Enterprise-managed install — no user opt-in / opt-out</li>
+            <li>Pairs with the agent over a local IPC socket — both must be present and version-matched</li>
+            <li>Covers browser-side AI surfaces (ChatGPT, Claude, Copilot Chat, etc.) the system-wide intercept can't see into</li>
+          </ul>
+        </div>
+      </div>
+      <div class="component-row">
+        <div class="component-label">
+          <div class="component-label-name">IDE Plugin</div>
+          <div class="component-label-badge"><span class="badge badge-muted">Marketplace + mirror</span></div>
+        </div>
+        <div class="component-body">
+          <p>Distributed via the native marketplaces for VSCode, Cursor, and JetBrains IDEs. Enterprise customers can pin a specific build or mirror the marketplace through their own registry.</p>
+          <p>The plugin handles the in-IDE coaching UI, the controlled extension allowlist, and the integration with the agent's policy engine. Out-of-date plugin versions degrade gracefully — AI features are blocked until the plugin is in range.</p>
+          <ul class="component-bullets">
+            <li>Marketplace-published with a parallel enterprise channel</li>
+            <li>Version range enforced by the agent — old plugins fail closed</li>
+            <li>Air-gap mirror packages all approved versions for offline install</li>
+          </ul>
+        </div>
+      </div>
+      <div class="component-row">
+        <div class="component-label">
+          <div class="component-label-name">Policy Bundles</div>
+          <div class="component-label-badge"><span class="badge badge-red">Signed bundles</span></div>
+        </div>
+        <div class="component-body">
+          <p>Policy is distributed independently of binary releases. Each bundle is a versioned, cryptographically signed manifest of rules. The agent verifies the signature against your tenant's pinned public key on every fetch — and re-verifies on every request before applying.</p>
+          <p>Typical deployments pull policy on a 60-second heartbeat. Air-gap deployments load policy bundles via approved one-way media into the internal admin console, which then re-signs and distributes within the tenant.</p>
+          <ul class="component-bullets">
+            <li>Cryptographic verification on every request — not just on fetch</li>
+            <li>Versioned with full rollback history</li>
+            <li>Independent of binary update cadence — change policy without redeploying the agent</li>
           </ul>
         </div>
       </div>
