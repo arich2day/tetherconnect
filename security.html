@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Security Architecture — Tether Connect</title>
-  <meta name="description" content="Tether Connect's security model: endpoint-native enforcement, cryptographically verified policy distribution, on-device AI analysis, and fail-closed design. Tether Connect is not itself certified under any of these frameworks."/>
+  <meta name="description" content="Tether Connect's security model: endpoint-native enforcement, cryptographically verified policy distribution, two-tier AI judging (on-device + cloud escalation), and fail-closed design. Tether Connect is not itself certified under any of these frameworks."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="shared.css"/>
@@ -115,7 +115,7 @@
       <div class="principle-card">
         <div class="principle-num">Principle 04</div>
         <h3>Defense in Depth</h3>
-        <p>Tether does not rely on a single control. The controlled IDE, the system-wide intercept, the cryptographic policy verification, and the on-device risk analysis are independent layers — each capable of catching what the others miss.</p>
+        <p>Tether does not rely on a single control. The controlled IDE, the system-wide intercept, the cryptographic policy verification, the on-device judge, and the cloud judge escalation are independent layers — each capable of catching what the others miss.</p>
       </div>
     </div>
   </div>

@@ -227,7 +227,7 @@
     </div>
     <div class="faq-item">
       <div class="faq-q">Does the flat rate include the AI analysis model?</div>
-      <div class="faq-a">Yes. The on-device AI analysis capability is included in the license. You run it locally on each endpoint — no separate API subscription or cloud service is required. For organizations that want to supplement with cloud AI analysis for higher-risk decisions, that configuration is available and uses your own API credentials.</div>
+      <div class="faq-a">Yes. The on-device judge — which runs on every endpoint and handles the high-confidence cases entirely locally — is included in the license. For ambiguous cases that escalate, the cloud judge runs on Tether-hosted infrastructure and is included as well. In air-gap mode the cloud judge is unreachable, and the on-device judge handles every decision using your configured fail-safe policy.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q">What's the contract term?</div>
