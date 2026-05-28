@@ -20,7 +20,7 @@ Static marketing site for [Tether Connect](https://www.tetherconnect.app), the e
 | --- | --- |
 | `index.html` | Homepage — hero, problem framing, architecture, features, differentiators, CTA. |
 | `product.html` | Product overview — pipeline components, enforcement modes, specs, competitive comparison. |
-| `demo.html` | Six-screen interactive product tour with a working enforcement simulator. |
+| `demo.html` | Seven-screen interactive product tour: Welcome → Architecture → Simulator → Prompt Library (50 example prompts classified as Allow / Coach / Block) → Policy Studio → Admin Console → Pricing. |
 | `security.html` | Security architecture and posture. |
 | `pricing.html` | Tier comparison and pricing model. |
 | `company.html` | About the company. |
