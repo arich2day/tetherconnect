@@ -1,5 +1,5 @@
 /* ── TETHER CONNECT · MOTION LAYER ──────────────────────────────────────
-   Scroll reveal · mouse tilt · interactive particle network.
+   Scroll reveal · mouse tilt · flowing wave canvas · aurora drift · counters
    All effects are additive, opt-in via data-attributes, and respect
    prefers-reduced-motion. No copy, color, or font changes.
    ─────────────────────────────────────────────────────────────────────── */
@@ -33,7 +33,6 @@
     if (REDUCE) return;
     var els = document.querySelectorAll('[data-tilt]');
     if (!els.length) return;
-    // Skip on touch / coarse pointers
     if (window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
 
     els.forEach(function (el) {
@@ -59,9 +58,7 @@
           }
         });
       }
-      function onEnter() {
-        el.style.transition = 'transform 120ms linear';
-      }
+      function onEnter() { el.style.transition = 'transform 120ms linear'; }
       function onLeave() {
         el.style.transition = 'transform 600ms cubic-bezier(.2,.7,.2,1)';
         el.style.transform = '';
@@ -73,27 +70,45 @@
     });
   }
 
-  /* ─── 3 · Particle network background ──────────────────────────────── */
-  function initParticles() {
-    if (REDUCE) return;
-    var canvases = document.querySelectorAll('canvas[data-particles]');
+  /* ─── 3 · Flowing wave field + aurora layer ───────────────────────── */
+  function injectAurora(canvas) {
+    var parent = canvas.parentNode;
+    if (!parent || parent.querySelector('.aurora-layer')) return;
+    var aurora = document.createElement('div');
+    aurora.className = 'aurora-layer';
+    aurora.setAttribute('aria-hidden', 'true');
+    aurora.innerHTML =
+      '<div class="aurora-blob a"></div>' +
+      '<div class="aurora-blob b"></div>' +
+      '<div class="aurora-blob c"></div>' +
+      '<div class="aurora-grain"></div>';
+    parent.insertBefore(aurora, canvas);
+  }
+
+  function initWaves() {
+    var canvases = document.querySelectorAll('canvas[data-waves]');
     if (!canvases.length) return;
 
     canvases.forEach(function (canvas) {
+      injectAurora(canvas);
+      if (REDUCE) return;
+
       var ctx = canvas.getContext && canvas.getContext('2d', { alpha: true });
       if (!ctx) return;
 
-      // brand palette (rgba components) — never recolored from theme
-      var NODE = '154, 144, 136';   // border-dk
-      var LINK = '154, 144, 136';
-      var ACCENT = '200, 0, 30';    // brand red
+      // Brand palette wave bands
+      var WAVES = [
+        { amp: 22, freq: 0.0068, speed: 0.012, yPct: 0.30, color: '154,144,136', alpha: 0.22, lw: 1.1, phase: 0.0, harm: 1.7 },
+        { amp: 36, freq: 0.0050, speed: 0.008, yPct: 0.50, color: '154,144,136', alpha: 0.18, lw: 1.4, phase: 1.4, harm: 1.3 },
+        { amp: 28, freq: 0.0075, speed: 0.014, yPct: 0.68, color: '200,0,30',    alpha: 0.20, lw: 1.0, phase: 2.6, harm: 1.9 },
+        { amp: 50, freq: 0.0038, speed: 0.006, yPct: 0.86, color: '108,98,89',   alpha: 0.13, lw: 1.6, phase: 0.7, harm: 1.1 }
+      ];
 
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
       var W = 0, H = 0;
-      var nodes = [];
-      var mouse = { x: -9999, y: -9999, in: false };
-      var running = false;
-      var rafId = null;
+      var t = 0;
+      var mouse = { x: -9999, y: -9999, active: false };
+      var running = false, rafId = null;
 
       function size() {
         var r = canvas.getBoundingClientRect();
@@ -102,95 +117,62 @@
         canvas.height = Math.max(1, Math.floor(H * dpr));
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       }
-      function seed() {
-        var density = parseFloat(canvas.getAttribute('data-density') || '14000');
-        var target = Math.min(90, Math.max(24, Math.floor((W * H) / density)));
-        nodes = [];
-        for (var i = 0; i < target; i++) {
-          nodes.push({
-            x: Math.random() * W,
-            y: Math.random() * H,
-            vx: (Math.random() - 0.5) * 0.20,
-            vy: (Math.random() - 0.5) * 0.20,
-            r: 1.0 + Math.random() * 0.9,
-            a: 0.30 + Math.random() * 0.25
-          });
-        }
-      }
-      function frame() {
+
+      function draw() {
         if (!running) { rafId = null; return; }
         ctx.clearRect(0, 0, W, H);
-        var linkDist = 130;
 
-        // node-to-node links
-        for (var i = 0; i < nodes.length; i++) {
-          var a = nodes[i];
-          for (var j = i + 1; j < nodes.length; j++) {
-            var b = nodes[j];
-            var dx = a.x - b.x, dy = a.y - b.y;
-            var d = Math.sqrt(dx * dx + dy * dy);
-            if (d < linkDist) {
-              var al = (1 - d / linkDist) * 0.16;
-              ctx.strokeStyle = 'rgba(' + LINK + ',' + al + ')';
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.moveTo(a.x, a.y);
-              ctx.lineTo(b.x, b.y);
-              ctx.stroke();
-            }
-          }
-        }
-
-        // mouse links (red accent, gentle pull)
-        if (mouse.in) {
-          var mRadius = 170;
-          for (var k = 0; k < nodes.length; k++) {
-            var n = nodes[k];
-            var mx = n.x - mouse.x, my = n.y - mouse.y;
-            var md = Math.sqrt(mx * mx + my * my);
-            if (md < mRadius) {
-              var ma = (1 - md / mRadius) * 0.42;
-              ctx.strokeStyle = 'rgba(' + ACCENT + ',' + ma + ')';
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.moveTo(n.x, n.y);
-              ctx.lineTo(mouse.x, mouse.y);
-              ctx.stroke();
-              // gentle attraction
-              var pull = 0.0009 * (1 - md / mRadius);
-              n.vx += -mx * pull;
-              n.vy += -my * pull;
-            }
-          }
-        }
-
-        // nodes
-        for (var p = 0; p < nodes.length; p++) {
-          var nd = nodes[p];
-          nd.x += nd.vx;
-          nd.y += nd.vy;
-          nd.vx *= 0.985; nd.vy *= 0.985;
-          // small organic drift
-          if (Math.abs(nd.vx) < 0.04) nd.vx += (Math.random() - 0.5) * 0.02;
-          if (Math.abs(nd.vy) < 0.04) nd.vy += (Math.random() - 0.5) * 0.02;
-          // soft bounds
-          if (nd.x < 0) { nd.x = 0; nd.vx *= -1; }
-          if (nd.x > W) { nd.x = W; nd.vx *= -1; }
-          if (nd.y < 0) { nd.y = 0; nd.vy *= -1; }
-          if (nd.y > H) { nd.y = H; nd.vy *= -1; }
-          ctx.fillStyle = 'rgba(' + NODE + ',' + nd.a + ')';
+        for (var w = 0; w < WAVES.length; w++) {
+          var def = WAVES[w];
+          ctx.strokeStyle = 'rgba(' + def.color + ',' + def.alpha + ')';
+          ctx.lineWidth = def.lw;
           ctx.beginPath();
-          ctx.arc(nd.x, nd.y, nd.r, 0, Math.PI * 2);
+          var baseY = H * def.yPct;
+          var step = 5;
+          for (var x = 0; x <= W; x += step) {
+            var arg = x * def.freq + t * def.speed + def.phase;
+            // Local mouse deformation — gentle upward pull
+            var dent = 0;
+            if (mouse.active) {
+              var dx = x - mouse.x;
+              var dy = baseY - mouse.y;
+              var d = Math.sqrt(dx * dx + dy * dy);
+              if (d < 220) dent = -((1 - d / 220) * 26);
+            }
+            var y = baseY
+                  + Math.sin(arg) * def.amp
+                  + Math.sin(arg * def.harm) * def.amp * 0.28
+                  + dent;
+            if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        }
+
+        // Mouse glow — soft red halo where the cursor hovers
+        if (mouse.active) {
+          var grad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 70);
+          grad.addColorStop(0, 'rgba(200,0,30,0.22)');
+          grad.addColorStop(0.6, 'rgba(200,0,30,0.05)');
+          grad.addColorStop(1, 'rgba(200,0,30,0)');
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.arc(mouse.x, mouse.y, 70, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = 'rgba(200,0,30,0.55)';
+          ctx.beginPath();
+          ctx.arc(mouse.x, mouse.y, 2.5, 0, Math.PI * 2);
           ctx.fill();
         }
 
-        rafId = requestAnimationFrame(frame);
+        t += 1;
+        rafId = requestAnimationFrame(draw);
       }
 
       function start() {
         if (running) return;
         running = true;
-        if (!rafId) rafId = requestAnimationFrame(frame);
+        if (!rafId) rafId = requestAnimationFrame(draw);
       }
       function stop() { running = false; }
 
@@ -198,38 +180,67 @@
         var r = canvas.getBoundingClientRect();
         mouse.x = e.clientX - r.left;
         mouse.y = e.clientY - r.top;
-        mouse.in = mouse.x >= 0 && mouse.x <= W && mouse.y >= 0 && mouse.y <= H;
+        mouse.active = mouse.x >= 0 && mouse.x <= W && mouse.y >= 0 && mouse.y <= H;
       }
-      function onLeave() { mouse.in = false; }
+      function onOut() { mouse.active = false; }
 
-      size(); seed();
+      size();
       window.addEventListener('resize', function () {
         dpr = Math.min(window.devicePixelRatio || 1, 2);
-        size(); seed();
+        size();
       });
       window.addEventListener('mousemove', onMove, { passive: true });
-      window.addEventListener('mouseout', onLeave);
+      window.addEventListener('mouseout', onOut);
 
-      // Only animate when the canvas is in the viewport
       if ('IntersectionObserver' in window) {
-        var visIo = new IntersectionObserver(function (entries) {
+        var io = new IntersectionObserver(function (entries) {
           entries.forEach(function (en) { en.isIntersecting ? start() : stop(); });
         }, { threshold: 0 });
-        visIo.observe(canvas);
+        io.observe(canvas);
       } else {
         start();
       }
-      // Pause when tab is hidden
       document.addEventListener('visibilitychange', function () {
         if (document.hidden) stop(); else start();
       });
     });
   }
 
+  /* ─── 4 · Number counter ──────────────────────────────────────────── */
+  function initCounters() {
+    var els = document.querySelectorAll('[data-counter]');
+    if (!els.length) return;
+    if (REDUCE || !('IntersectionObserver' in window)) {
+      els.forEach(function (el) {
+        el.textContent = el.getAttribute('data-counter');
+      });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var el = en.target;
+        var to = parseFloat(el.getAttribute('data-counter')) || 0;
+        var dur = parseInt(el.getAttribute('data-counter-dur') || '1400', 10);
+        var start = performance.now();
+        function step(now) {
+          var p = Math.min(1, (now - start) / dur);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(to * eased);
+          if (p < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    els.forEach(function (el) { io.observe(el); });
+  }
+
   function boot() {
     initReveal();
     initTilt();
-    initParticles();
+    initWaves();
+    initCounters();
   }
 
   if (document.readyState === 'loading') {

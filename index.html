@@ -145,7 +145,7 @@
 
 <!-- HERO -->
 <section class="hero">
-  <canvas class="particle-canvas" data-particles data-density="13000" aria-hidden="true"></canvas>
+  <canvas class="wave-canvas" data-waves data-density="13000" aria-hidden="true"></canvas>
   <div class="hero-inner">
     <div class="hero-left tc-hero-in">
       <div class="hero-eyebrow">AI Security · Endpoint-Native · Enterprise</div>
@@ -184,11 +184,19 @@
   <div class="proof-inner">
     <span class="proof-label">Trusted for</span>
     <div class="proof-divider"></div>
-    <div class="proof-items">
-      <span class="proof-item">Air-gapped environments</span>
-      <span class="proof-item">SOC 2 compliance programs</span>
-      <span class="proof-item">Regulated industries</span>
-      <span class="proof-item">Multi-tenant enterprise deployments</span>
+    <div class="marquee-track">
+      <div class="marquee-content">
+        <span class="proof-item">Air-gapped environments</span>
+        <span class="proof-item">SOC 2 compliance programs</span>
+        <span class="proof-item">Regulated industries</span>
+        <span class="proof-item">Multi-tenant enterprise deployments</span>
+      </div>
+      <div class="marquee-content" aria-hidden="true">
+        <span class="proof-item">Air-gapped environments</span>
+        <span class="proof-item">SOC 2 compliance programs</span>
+        <span class="proof-item">Regulated industries</span>
+        <span class="proof-item">Multi-tenant enterprise deployments</span>
+      </div>
     </div>
   </div>
 </div>
@@ -197,7 +205,7 @@
 <div class="stats-bar">
   <div class="stats-inner" data-reveal-group>
     <div class="stat-item">
-      <div class="stat-num">100<span class="accent">%</span></div>
+      <div class="stat-num"><span data-counter="100">0</span><span class="accent">%</span></div>
       <div class="stat-label">Egress Coverage</div>
     </div>
     <div class="stat-item">
