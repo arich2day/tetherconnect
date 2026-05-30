@@ -105,7 +105,8 @@
 </nav>
 
 <div class="page-hero">
-  <div class="page-hero-inner">
+  <canvas class="particle-canvas" data-particles data-density="15000" aria-hidden="true"></canvas>
+  <div class="page-hero-inner tc-hero-in">
     <div class="page-hero-eyebrow">Security Architecture</div>
     <h1>Designed to be<br/><em>structurally resistant</em><br/>to bypass.</h1>
     <p class="page-hero-sub">Tether's security model assumes adversarial conditions — including developers who want to work around controls. Every layer is designed with that assumption in mind.</p>
@@ -113,11 +114,11 @@
 </div>
 
 <!-- PRINCIPLES -->
-<section style="border-bottom:1px solid var(--border);">
+<section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Design Principles</div>
     <h2 class="section-title">Four principles that<br/>shape every decision.</h2>
-    <div class="principle-grid">
+    <div class="principle-grid" data-reveal-group>
       <div class="principle-card">
         <div class="principle-num">Principle 01</div>
         <h3>Fail Closed</h3>
@@ -143,7 +144,7 @@
 </section>
 
 <!-- THREAT MODEL -->
-<section style="background:var(--surface);border-bottom:1px solid var(--border);">
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Threat Model</div>
     <h2 class="section-title">What Tether protects against.<br/>And what it doesn't.</h2>
@@ -195,13 +196,13 @@
 </section>
 
 <!-- POLICY DISTRIBUTION SECURITY -->
-<section style="border-bottom:1px solid var(--border);">
+<section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Policy Security</div>
     <h2 class="section-title">How policy is distributed<br/>and verified.</h2>
     <p class="section-sub">Policy distribution is a potential attack surface. Tether is designed so that a compromised distribution channel cannot result in a weakened or malicious policy being applied.</p>
 
-    <div class="policy-lifecycle">
+    <div class="policy-lifecycle" data-reveal-group>
       <div class="lifecycle-step">
         <div class="lifecycle-step-num">01</div>
         <div class="lifecycle-step-name">Author</div>
@@ -261,12 +262,12 @@
 </section>
 
 <!-- COMPLIANCE -->
-<section style="background:var(--surface);border-bottom:1px solid var(--border);">
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Compliance Support</div>
     <h2 class="section-title">Supports your compliance<br/>program.</h2>
     <p class="section-sub">Tether's audit trail and policy controls are designed to provide evidence relevant to leading security frameworks. Tether Connect is not itself SOC 2 or ISO 27001 certified — your organization's certification program will assess controls in your full environment.</p>
-    <div class="compliance-grid">
+    <div class="compliance-grid" data-reveal-group>
       <div class="compliance-card">
         <div class="compliance-framework">SOC 2</div>
         <p class="compliance-desc">Tether produces evidence relevant to Common Criteria and Availability principles. Controls apply within the developer endpoint scope.</p>
@@ -305,7 +306,7 @@
 </section>
 
 <!-- ZERO TRUST MATURITY -->
-<section id="ztmm" style="border-bottom:1px solid var(--border);">
+<section id="ztmm" style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Zero Trust Maturity</div>
     <h2 class="section-title">Contributes to your<br/>ZTMM 2.0 program.</h2>
@@ -445,7 +446,7 @@
 </section>
 
 <!-- CTA -->
-<div class="cta-band">
+<div class="cta-band" data-reveal>
   <div class="cta-inner">
     <div class="cta-text">
       <h2>Security questions?</h2>
@@ -467,5 +468,6 @@
   </div>
   <div class="footer-bottom"><p>© 2026 Tether Connect. All rights reserved.</p><div class="footer-bottom-links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div>
 </footer>
+<script src="motion.js" defer></script>
 </body>
 </html>

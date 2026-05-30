@@ -34,7 +34,7 @@
     .hero-actions { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
 
     /* terminal */
-    .hero-terminal { background:var(--ink); align-self:end; border-top:1px solid var(--border-dk); border-left:1px solid var(--border-dk); border-right:1px solid var(--border-dk); overflow:hidden; }
+    .hero-terminal { background:var(--ink); align-self:end; border-top:1px solid var(--border-dk); border-left:1px solid var(--border-dk); border-right:1px solid var(--border-dk); overflow:hidden; position:relative; }
     .terminal-bar { display:flex; align-items:center; justify-content:space-between; padding:8px 16px; background:#221e1a; border-bottom:1px solid #3d3530; }
     .terminal-title { font-family:var(--mono); font-size:10px; color:#9a9088; letter-spacing:0.08em; }
     .terminal-status { display:flex; align-items:center; gap:6px; }
@@ -145,8 +145,9 @@
 
 <!-- HERO -->
 <section class="hero">
+  <canvas class="particle-canvas" data-particles data-density="13000" aria-hidden="true"></canvas>
   <div class="hero-inner">
-    <div class="hero-left">
+    <div class="hero-left tc-hero-in">
       <div class="hero-eyebrow">AI Security · Endpoint-Native · Enterprise</div>
       <h1>Your developers<br/>use AI.<br/><em>Do you control it?</em></h1>
       <p class="hero-sub">Tether Connect enforces AI usage policy at every developer endpoint — judging, logging, and blocking outbound AI requests before they leave the machine. Air-gap capable. Local AI judging. No per-seat SaaS overhead.</p>
@@ -155,7 +156,8 @@
         <a href="product.html" class="btn-secondary">See the Product →</a>
       </div>
     </div>
-    <div class="hero-terminal">
+    <div class="hero-terminal" data-tilt data-tilt-max="4">
+      <span data-tilt-glare></span>
       <div class="terminal-bar">
         <span class="terminal-title">tether · enforcement agent · live</span>
         <div class="terminal-status">
@@ -193,7 +195,7 @@
 
 <!-- STATS -->
 <div class="stats-bar">
-  <div class="stats-inner">
+  <div class="stats-inner" data-reveal-group>
     <div class="stat-item">
       <div class="stat-num">100<span class="accent">%</span></div>
       <div class="stat-label">Egress Coverage</div>
@@ -214,12 +216,12 @@
 </div>
 
 <!-- PROBLEM -->
-<section style="border-bottom:1px solid var(--border);">
+<section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label red">The Problem</div>
     <h2 class="section-title">AI is already inside<br/>your engineering org.</h2>
     <p class="section-sub">Every developer is using AI coding tools. Most security teams have no visibility into what's being sent — or where.</p>
-    <div class="problems-grid">
+    <div class="problems-grid" data-reveal-group>
       <div class="problem-card">
         <div class="problem-num">01 · Risk</div>
         <h3>Proprietary Code Leaving the Perimeter</h3>
@@ -245,12 +247,12 @@
 </section>
 
 <!-- HOW IT WORKS -->
-<section style="background:var(--surface);border-bottom:1px solid var(--border);">
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Architecture</div>
     <h2 class="section-title">Enforcement at the endpoint.<br/>Not at the edge.</h2>
     <p class="section-sub">Tether's five-layer pipeline is installed directly on the developer machine, intercepts all outbound AI traffic system-wide, and applies your policy before anything leaves.</p>
-    <div class="arch-row" style="border:1px solid var(--border);">
+    <div class="arch-row" style="border:1px solid var(--border);" data-reveal-group>
       <div class="arch-node">
         <div class="arch-num">01</div>
         <div class="arch-icon">🖥</div>
@@ -298,12 +300,12 @@
 </section>
 
 <!-- FEATURES -->
-<section style="border-bottom:1px solid var(--border);">
+<section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Capabilities</div>
     <h2 class="section-title">Every request judged.<br/>Every decision logged.</h2>
     <p class="section-sub">Tether enforces policy across the entire AI attack surface — not just IDE integrations, but any tool that makes an outbound HTTPS call.</p>
-    <div class="features-grid">
+    <div class="features-grid" data-reveal-group>
       <div class="feature-card">
         <div class="feature-tag">Enforcement</div>
         <h3>System-Wide Egress Control</h3>
@@ -339,7 +341,7 @@
 </section>
 
 <!-- DIFFERENTIATORS -->
-<section style="background:var(--surface);border-bottom:1px solid var(--border);">
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="diff-layout">
       <div>
@@ -383,7 +385,7 @@
 </section>
 
 <!-- CTA BAND -->
-<div class="cta-band">
+<div class="cta-band" data-reveal>
   <div class="cta-inner">
     <div class="cta-text">
       <h2>Ready to control your AI surface?</h2>
@@ -416,5 +418,6 @@
     <div class="footer-bottom-links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="mailto:alvin@tetherconnect.app">Security</a></div>
   </div>
 </footer>
+<script src="motion.js" defer></script>
 </body>
 </html>
