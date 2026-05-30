@@ -434,18 +434,101 @@ body {
    All effects are transform/opacity based for 60fps. No copy or palette change.
    ───────────────────────────────────────────────────────────────────── */
 
-/* Particle canvas: sits behind hero content, never receives pointer events */
+/* Wave canvas + aurora layer: sit behind hero content, never receive pointer events */
 .hero, .page-hero { position: relative; overflow: hidden; }
-.hero > *:not(.particle-canvas),
-.page-hero > *:not(.particle-canvas) { position: relative; z-index: 1; }
-.particle-canvas {
+.hero > *:not(.wave-canvas):not(.aurora-layer),
+.page-hero > *:not(.wave-canvas):not(.aurora-layer) { position: relative; z-index: 2; }
+.wave-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   display: block;
   pointer-events: none;
+  z-index: 1;
+}
+.aurora-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
   z-index: 0;
+}
+.aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  will-change: transform;
+  opacity: 0.7;
+  mix-blend-mode: multiply;
+}
+.aurora-blob.a {
+  width: 540px; height: 540px;
+  top: -180px; left: -140px;
+  background: radial-gradient(circle, rgba(253, 232, 236, 0.85) 0%, rgba(253, 232, 236, 0) 65%);
+  animation: aurora-drift-a 26s ease-in-out infinite;
+}
+.aurora-blob.b {
+  width: 640px; height: 640px;
+  bottom: -220px; right: -180px;
+  background: radial-gradient(circle, rgba(237, 232, 224, 0.9) 0%, rgba(237, 232, 224, 0) 70%);
+  animation: aurora-drift-b 32s ease-in-out infinite;
+}
+.aurora-blob.c {
+  width: 420px; height: 420px;
+  top: 35%; left: 40%;
+  background: radial-gradient(circle, rgba(232, 160, 172, 0.55) 0%, rgba(232, 160, 172, 0) 70%);
+  animation: aurora-drift-c 20s ease-in-out infinite;
+}
+.aurora-grain {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 25% 35%, rgba(26,22,18,0.025) 1px, transparent 1.5px),
+    radial-gradient(circle at 75% 60%, rgba(26,22,18,0.018) 1px, transparent 1.5px);
+  background-size: 220px 220px, 180px 180px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+@keyframes aurora-drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(120px, 60px, 0) scale(1.15); }
+}
+@keyframes aurora-drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(-80px, -50px, 0) scale(0.92); }
+}
+@keyframes aurora-drift-c {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  50%      { transform: translate3d(60px, -40px, 0) scale(1.2) rotate(8deg); }
+}
+
+/* Backwards-compat alias for any lingering particle-canvas refs */
+.particle-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 1; }
+.hero > *:not(.particle-canvas):not(.wave-canvas):not(.aurora-layer),
+.page-hero > *:not(.particle-canvas):not(.wave-canvas):not(.aurora-layer) { position: relative; z-index: 2; }
+
+/* ─── Marquee proof bar ──────────────────────────────────────────── */
+.marquee-track {
+  display: flex;
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+  mask-image: linear-gradient(90deg, transparent 0, var(--bg) 28px, var(--bg) calc(100% - 28px), transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, var(--bg) 28px, var(--bg) calc(100% - 28px), transparent 100%);
+}
+.marquee-content {
+  display: flex;
+  gap: 32px;
+  flex-shrink: 0;
+  padding-right: 32px;
+  animation: marquee-slide 36s linear infinite;
+  will-change: transform;
+}
+.marquee-track:hover .marquee-content { animation-play-state: paused; }
+@keyframes marquee-slide {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-100%, 0, 0); }
 }
 
 /* Scroll reveal — single element */
@@ -650,5 +733,5 @@ body {
   [data-reveal],
   [data-reveal-group] > * { opacity: 1 !important; transform: none !important; }
   [data-tilt] { transform: none !important; }
-  .particle-canvas { display: none !important; }
+  .particle-canvas, .wave-canvas, .aurora-layer { display: none !important; }
 }
