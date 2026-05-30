@@ -80,7 +80,8 @@
 </nav>
 
 <div class="page-hero">
-  <div class="page-hero-inner">
+  <canvas class="particle-canvas" data-particles data-density="15000" aria-hidden="true"></canvas>
+  <div class="page-hero-inner tc-hero-in">
     <div class="page-hero-eyebrow">Pricing</div>
     <h1>Flat-rate licensing.<br/><em>Not per-seat billing.</em></h1>
     <p class="page-hero-sub">Tether Connect is self-hosted. You pay for the software license — not per developer. As your team grows, your enforcement cost doesn't.</p>
@@ -88,9 +89,9 @@
 </div>
 
 <!-- PRICING CARDS -->
-<section style="border-bottom:1px solid var(--border);">
+<section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="pricing-grid">
+    <div class="pricing-grid" data-reveal-group>
       <!-- Startup -->
       <div class="pricing-card">
         <div class="pricing-tier">Startup</div>
@@ -176,7 +177,7 @@
 </section>
 
 <!-- COST COMPARISON -->
-<section style="background:var(--surface);border-bottom:1px solid var(--border);">
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Cost Model</div>
     <h2 class="section-title">Why flat-rate matters<br/>at scale.</h2>
@@ -208,7 +209,7 @@
 </section>
 
 <!-- FAQ -->
-<section style="border-bottom:1px solid var(--border);">
+<section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">FAQ</div>
     <h2 class="section-title">Common pricing questions.</h2>
@@ -245,7 +246,7 @@
 </section>
 
 <!-- CTA -->
-<div class="cta-band">
+<div class="cta-band" data-reveal>
   <div class="cta-inner">
     <div class="cta-text">
       <h2>Get pricing for your org.</h2>
@@ -266,5 +267,6 @@
   </div>
   <div class="footer-bottom"><p>© 2026 Tether Connect. All rights reserved.</p><div class="footer-bottom-links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div>
 </footer>
+<script src="motion.js" defer></script>
 </body>
 </html>

@@ -94,7 +94,8 @@
 
 <!-- HERO -->
 <div class="page-hero">
-  <div class="page-hero-inner">
+  <canvas class="particle-canvas" data-particles data-density="15000" aria-hidden="true"></canvas>
+  <div class="page-hero-inner tc-hero-in">
     <div class="page-hero-eyebrow">Product Overview</div>
     <h1>AI egress control<br/>built for <em>engineering teams.</em></h1>
     <p class="page-hero-sub">Three integrated components — a controlled developer environment, a local enforcement agent, and a centralized admin console — form a complete AI governance layer for your engineering org.</p>
@@ -102,7 +103,7 @@
 </div>
 
 <!-- COMPONENTS -->
-<section style="border-bottom:1px solid var(--border);">
+<section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Components</div>
     <h2 class="section-title">Three layers.<br/>One enforcement pipeline.</h2>
@@ -171,7 +172,7 @@
 </section>
 
 <!-- UPDATES & DISTRIBUTION -->
-<section style="border-bottom:1px solid var(--border);">
+<section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Distribution</div>
     <h2 class="section-title">Versioned binaries.<br/>Signed at every hop.</h2>
@@ -243,12 +244,12 @@
 </section>
 
 <!-- POLICY MODES -->
-<section style="background:var(--surface);border-bottom:1px solid var(--border);">
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Policy Engine</div>
     <h2 class="section-title">Six enforcement modes.<br/>Applied per axis.</h2>
     <p class="section-sub">Every policy axis — AI egress, clipboard, terminal access, external links, and more — can be configured independently to one of six enforcement modes.</p>
-    <div class="policy-modes">
+    <div class="policy-modes" data-reveal-group>
       <div class="mode-card">
         <div class="mode-name mode-allow">▸ Allow</div>
         <div class="mode-desc">Permits the action. No user interruption. Logged for audit purposes.</div>
@@ -278,12 +279,12 @@
 </section>
 
 <!-- POLICY AXES -->
-<section style="border-bottom:1px solid var(--border);">
+<section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Policy Coverage</div>
     <h2 class="section-title">Every control surface.<br/>Managed from one place.</h2>
     <p class="section-sub">Policy applies across seven functional groups. Each group is independently configurable and can be set to different modes per tenant.</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border);">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border);" data-reveal-group>
       <div style="padding:24px 28px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);">
         <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin-bottom:10px;">AI Egress</div>
         <div style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;margin-bottom:8px;">AI Request Control</div>
@@ -329,7 +330,7 @@
 </section>
 
 <!-- COMPARE -->
-<section style="background:var(--surface);border-bottom:1px solid var(--border);">
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Competitive Landscape</div>
     <h2 class="section-title">How Tether fits the<br/>enterprise security stack.</h2>
@@ -361,7 +362,7 @@
 </section>
 
 <!-- CTA -->
-<div class="cta-band">
+<div class="cta-band" data-reveal>
   <div class="cta-inner">
     <div class="cta-text">
       <h2>See Tether in your environment.</h2>
@@ -383,5 +384,6 @@
   </div>
   <div class="footer-bottom"><p>© 2026 Tether Connect. All rights reserved.</p><div class="footer-bottom-links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div>
 </footer>
+<script src="motion.js" defer></script>
 </body>
 </html>
