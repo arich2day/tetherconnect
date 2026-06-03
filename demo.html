@@ -334,20 +334,6 @@ body{display:flex;flex-direction:column;}
 .result-log .lt{color:var(--faint);}
 
 /* ══ PROMPT LIBRARY ══ */
-.prompt-explainer{
-  background:var(--surface2);border:1px solid var(--border);
-  padding:16px 20px;margin-bottom:20px;
-  display:grid;grid-template-columns:repeat(3,1fr);gap:0;
-}
-.pe-col{padding:0 18px;border-right:1px solid var(--border);}
-.pe-col:first-child{padding-left:0;}
-.pe-col:last-child{border-right:none;padding-right:0;}
-.pe-head{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
-.pe-head .swatch{width:10px;height:10px;flex-shrink:0;}
-.pe-head .swatch.s-allow{background:var(--green);}
-.pe-head .swatch.s-judge{background:var(--blue);}
-.pe-head .swatch.s-block{background:var(--red);}
-.pe-text{font-size:12px;color:var(--muted);font-weight:300;line-height:1.55;}
 .prompts-grid{
   display:grid;grid-template-columns:repeat(3,1fr);gap:0;
   border:1px solid var(--border);background:var(--surface);
@@ -577,12 +563,11 @@ body{display:flex;flex-direction:column;}
     <div class="demo-hero">
       <div class="demo-hero-eyebrow fade-up">Interactive Product Tour</div>
       <h1 class="fade-up d1">Your developers<br/>use AI.<br/><em>Do you control it?</em></h1>
-      <p class="demo-hero-sub fade-up d2">Walk through Tether's enforcement pipeline end to end — architecture, simulator, policy modes, and admin console. Six screens, about four minutes.</p>
+      <p class="demo-hero-sub fade-up d2">Six screens. About four minutes. You'll see how Tether classifies <em>intent</em> on every outbound AI request, applies your policy, and gets out of the way when intent is clean — and whether it solves a problem you're already paying for in other ways.</p>
       <div class="hero-badges fade-up d2">
-        <span class="badge badge-ink">TLS-MITM Proxy</span>
+        <span class="badge badge-red">Design Partner Program Open</span>
         <span class="badge badge-blue">On-Device AI Judge</span>
         <span class="badge badge-green">Air-Gap Capable</span>
-        <span class="badge badge-red">Signed Policy Bundles</span>
         <span class="badge badge-muted">Flat-Rate Licensing</span>
       </div>
       <button class="btn-red start-cta fade-up d3" onclick="next()">Start the Tour →</button>
@@ -619,7 +604,7 @@ body{display:flex;flex-direction:column;}
         <div class="pipe-node">
           <div class="pipe-num">04</div><div class="pipe-icon">🧠</div>
           <div class="pipe-name">On-Device Judge</div>
-          <div class="pipe-desc">Local model judges every request in realtime. High-confidence allows and blocks resolve here — payload never leaves the machine.</div>
+          <div class="pipe-desc">Classifies intent on every request the rule layer hands through. High-confidence cases resolve locally — payload never leaves the machine.</div>
           <span class="badge badge-green">On-Device</span>
         </div>
         <div class="pipe-node">
@@ -662,7 +647,7 @@ body{display:flex;flex-direction:column;}
     <div class="slide-inner" style="padding-bottom:24px;">
       <div class="slide-eyebrow">02 · Live Simulator</div>
       <h2 class="slide-title">Enforcement Simulator<span class="live-pill"><span class="live-dot"></span>Live</span></h2>
-      <p class="slide-sub">Pick a developer scenario and an enforcement mode, then watch Tether's pipeline play out: intercept the HTTPS handshake → on-device judge first → escalate to the cloud judge only when the local judge is uncertain → apply your configured response. The right panel shows the audit entry Tether would record.</p>
+      <p class="slide-sub">Pick a scenario. Pick how strict you want to be. Hit Run. The right panel shows the audit entry your security team would actually see.</p>
 
       <div class="sim-wrap">
         <!-- LEFT: scenarios -->
@@ -745,27 +730,12 @@ body{display:flex;flex-direction:column;}
     </div>
   </div>
 
-  <!-- ══ 4: PROMPT LIBRARY ══ -->
-  <div class="demo-slide" id="slide-4">
+  <!-- ══ 5: PROMPT LIBRARY ══ -->
+  <div class="demo-slide" id="slide-5">
     <div class="slide-inner">
-      <div class="slide-eyebrow">04 · Prompt Library</div>
-      <h2 class="slide-title">How the judge thinks.<br/><em>Fifty real prompts.</em></h2>
-      <p class="slide-sub">Tether's on-device judge inspects every outbound AI request body before it hits the wire. It pattern-matches against PII, credentials, regulated data, proprietary code, and ambiguous internal business context — then routes the request through one of your configured policy modes. Fifty representative prompts below — <strong style="color:var(--ink)">click any one</strong> to run it live through the simulator with the matching enforcement mode pre-selected.</p>
-
-      <div class="prompt-explainer">
-        <div class="pe-col">
-          <div class="pe-head"><span class="swatch s-allow"></span>Allow · local only</div>
-          <div class="pe-text">No identifying data or proprietary context. The on-device judge is high-confidence — request never touches the cloud judge.</div>
-        </div>
-        <div class="pe-col">
-          <div class="pe-head"><span class="swatch s-judge"></span>Coach / Warn · escalated</div>
-          <div class="pe-text">Local judge is uncertain — escalates to the cloud judge for a second opinion. Cloud verdict drives the coaching moment or warning.</div>
-        </div>
-        <div class="pe-col">
-          <div class="pe-head"><span class="swatch s-block"></span>Block · local only</div>
-          <div class="pe-text">Clear sensitive payload: PII, PHI, PCI, live credentials, or trade-secret code. On-device judge resolves with high confidence — hard deny, no cloud round-trip.</div>
-        </div>
-      </div>
+      <div class="slide-eyebrow">05 · Prompt Library</div>
+      <h2 class="slide-title">Fifty real prompts.<br/><em>Pick any one.</em></h2>
+      <p class="slide-sub">Click any prompt to run it live through the simulator with the matching enforcement mode pre-selected. This is exactly what Tether sees, decides, and logs.</p>
 
       <div class="prompts-grid">
         <div class="prompts-col allow">
@@ -784,12 +754,12 @@ body{display:flex;flex-direction:column;}
     </div>
   </div>
 
-  <!-- ══ 3: POLICY STUDIO ══ -->
-  <div class="demo-slide" id="slide-3">
+  <!-- ══ 4: POLICY STUDIO ══ -->
+  <div class="demo-slide" id="slide-4">
     <div class="slide-inner">
-      <div class="slide-eyebrow">03 · Policy Studio</div>
-      <h2 class="slide-title">Six enforcement modes.<br/><em>Applied per axis.</em></h2>
-      <p class="slide-sub">Every policy surface — AI egress, clipboard, terminal, extensions, session, external links — can be independently configured on its own enforcement mode.</p>
+      <div class="slide-eyebrow">04 · Policy Studio</div>
+      <h2 class="slide-title">Six modes.<br/><em>Applied per surface.</em></h2>
+      <p class="slide-sub">Hard block on live credentials. Coach on proprietary code. Watermark on clipboard exports. Mix and match — build the policy your security team would actually defend.</p>
 
       <div class="mode-grid">
         <div class="policy-mode"><div class="policy-mode-badge"><span class="badge badge-green">▸ Allow</span></div><h4>Allow</h4><p>Permits the action. No user interruption. Logged for audit purposes.</p></div>
@@ -833,12 +803,12 @@ body{display:flex;flex-direction:column;}
     </div>
   </div>
 
-  <!-- ══ 5: DASHBOARD ══ -->
-  <div class="demo-slide" id="slide-5">
+  <!-- ══ 3: ADMIN CONSOLE ══ -->
+  <div class="demo-slide" id="slide-3">
     <div class="slide-inner">
-      <div class="slide-eyebrow">05 · Admin Console</div>
-      <h2 class="slide-title">Fleet health, audit trail,<br/><em>and policy management.</em><span class="live-pill"><span class="live-dot"></span>Live</span></h2>
-      <p class="slide-sub">Across all tenants from one console — request volume, blocked events, coached moments, and compliance posture in real time.</p>
+      <div class="slide-eyebrow">03 · Admin Console</div>
+      <h2 class="slide-title">One console.<br/><em>Every tenant. Every event.</em><span class="live-pill"><span class="live-dot"></span>Live</span></h2>
+      <p class="slide-sub">Real numbers your security team can defend at audit time — request volume, blocks, coaching moments, and fleet posture. Live, not lagging.</p>
 
       <div class="metric-row">
         <div class="metric-cell">
@@ -997,11 +967,11 @@ body{display:flex;flex-direction:column;}
 
       <div style="display:flex;justify-content:space-between;align-items:center;gap:24px;margin-top:36px;padding:28px;background:var(--ink);color:var(--surface);flex-wrap:wrap;">
         <div>
-          <div style="font-family:var(--cond);font-weight:700;font-size:22px;text-transform:uppercase;letter-spacing:-.01em;margin-bottom:6px;">Ready to control your AI surface?</div>
-          <div style="font-size:13px;color:#9a9088;font-weight:300;">We'll walk through your specific environment, threat model, and deployment requirements.</div>
+          <div style="font-family:var(--cond);font-weight:700;font-size:22px;text-transform:uppercase;letter-spacing:-.01em;margin-bottom:6px;">We're picking five design partners.</div>
+          <div style="font-size:13px;color:#9a9088;font-weight:300;max-width:520px;">If you run security for an engineering org and developer-AI is a problem you can't solve with what you have today — talk to us. Discounted pricing, direct line to the founders, real influence over what we ship next.</div>
         </div>
         <div style="display:flex;gap:12px;flex-shrink:0;">
-          <a href="contact.html" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--ink);background:var(--surface);padding:11px 22px;text-decoration:none;">Request a Demo ↗</a>
+          <a href="contact.html" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--ink);background:var(--surface);padding:11px 22px;text-decoration:none;">Apply ↗</a>
           <a href="pricing.html" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:#9a9088;background:transparent;padding:11px 22px;text-decoration:none;border:1px solid #555048;">Full Pricing →</a>
         </div>
       </div>
@@ -1022,7 +992,7 @@ body{display:flex;flex-direction:column;}
    NAV STATE
 ═══════════════════════════════════════ */
 const TOTAL = 7;
-const LABELS = ['Welcome','Architecture','Simulator','Policy Studio','Prompts','Admin Console','Pricing'];
+const LABELS = ['Welcome','Architecture','Simulator','Admin Console','Policy Studio','Prompts','Pricing'];
 let cur = 0;
 
 function buildDots(){
@@ -1456,7 +1426,7 @@ function showCustomIndicator(p){
   const html = `<div class="custom-loaded">
     <div class="cl-eyebrow">From Prompt Library</div>
     <div class="cl-text">"${escHtml(p.text.length > 90 ? p.text.slice(0,90)+'…' : p.text)}"</div>
-    <button class="cl-back" onclick="goTo(4)">← Back to Library</button>
+    <button class="cl-back" onclick="goTo(5)">← Back to Library</button>
   </div>`;
   if(existing){ existing.outerHTML = html; }
   else{ head.insertAdjacentHTML('afterbegin', html); }

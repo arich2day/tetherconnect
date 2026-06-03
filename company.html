@@ -89,7 +89,8 @@
       </div>
       <div class="mission-body">
         <p>The assumption in most enterprise security is that you have to choose between <strong>developer productivity</strong> and <strong>organizational security</strong>. Block AI tools entirely, or accept that you can't see what's being shared. Neither is acceptable.</p>
-        <p>We built Tether Connect on a different premise: that you can enforce rigorous policy without degrading the developer experience. Compliant developers notice nothing. Non-compliant requests are caught before they cause harm.</p>
+        <p>The deeper problem under that one: <strong>rules don't work on a generative surface.</strong> Regex DLP, allowlists, signature scanners — these were built for an enumerable world. Developers using AI don't paste literal "SECRET KEY = "; they paraphrase, refactor, brainstorm. There is no regex for "is this an exfil attempt?" So we built Tether to classify <strong>intent</strong> — what the developer is actually trying to do — and apply the policy response your security team chose for that intent.</p>
+        <p>Rules still matter. They're the deterministic floor — credential patterns, blocked destinations, hard compliance boundaries. The on-device judge sits on top, reasoning about everything regex can't. Compliant developers notice nothing. Non-compliant intent is caught before it causes harm.</p>
         <p>The approach is endpoint-native because that's where the control has to live. A cloud proxy you can walk around isn't a control — it's a policy document with a certificate attached. We're not interested in building those. We're interested in building controls that actually work when an adversarial developer is trying to get around them.</p>
         <p>We're a small, technical team. We're not trying to build a broad platform — we're trying to build the best solution to one specific, hard problem. That focus is intentional.</p>
       </div>

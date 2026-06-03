@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Security Architecture — Tether Connect</title>
-  <meta name="description" content="Tether Connect's security model: endpoint-native enforcement, cryptographically verified policy distribution, two-tier AI judging (on-device + cloud escalation), fail-closed design, and a CISA ZTMM 2.0 pillar mapping for the AI-usage attack surface. Tether Connect is not itself certified under any of these frameworks."/>
+  <meta name="description" content="Tether Connect's security model: endpoint-native enforcement, cryptographically verified policy distribution, deterministic rules layered with an on-device intent-classification judge, fail-closed design, and a CISA ZTMM 2.0 pillar mapping for the AI-usage attack surface. Tether Connect is not itself certified under any of these frameworks."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="shared.css"/>
@@ -132,14 +132,48 @@
       <div class="principle-card">
         <div class="principle-num">Principle 03</div>
         <h3>Payload Never Leaves for Analysis</h3>
-        <p>Risk evaluation of request payloads happens on the developer machine — not in a cloud service. The content of an AI request is never transmitted to a third-party analysis platform. What the developer is about to send stays on the machine until a decision is made.</p>
+        <p>Rules and intent classification both run on the developer machine. The raw content of an AI request is never transmitted to a third-party analysis platform for evaluation. When the on-device judge isn't confident and escalates to the cloud judge, the payload is redacted first — and in air-gap mode the cloud judge is unreachable, so every decision stays local.</p>
       </div>
       <div class="principle-card">
         <div class="principle-num">Principle 04</div>
         <h3>Defense in Depth</h3>
-        <p>Tether does not rely on a single control. The controlled IDE, the system-wide intercept, the cryptographic policy verification, the on-device judge, and the cloud judge escalation are independent layers — each capable of catching what the others miss.</p>
+        <p>Tether does not rely on a single control. The controlled IDE, the system-wide intercept, the cryptographic policy verification, the deterministic rule layer, the on-device intent judge, and the cloud judge escalation are independent layers — each capable of catching what the others miss.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- REASONING LAYER -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Reasoning Layer</div>
+    <h2 class="section-title">We classify intent.<br/>Not just patterns.</h2>
+    <p class="section-sub">Pattern-matching has a known failure mode against a generative input surface: it misses what it wasn't told to look for, and it over-fires on things that share surface features with risk but carry none of the substance. The reasoning layer in Tether exists to close that gap on the AI-usage axis specifically.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border);">
+      <div style="padding:28px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Layer 01</div>
+        <h3 style="font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;">Deterministic Rules</h3>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;">Cryptographically signed, versioned, fast. Credential signatures, blocked destinations, allowlisted domains, hard policy floors. Rules are how Tether handles the cases where there is no ambiguity to reason about — and how the system stays predictable in incident review.</p>
+      </div>
+      <div style="padding:28px;border-bottom:1px solid var(--border);">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Layer 02</div>
+        <h3 style="font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;">On-Device Intent Judge</h3>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;">A local model evaluates the request body — payload, destination, application context, recent history — and classifies what the developer appears to be trying to do. Output is a classification (e.g. <em>code-review-with-secret-exposure</em>, <em>public-reference-lookup</em>, <em>internal-context-extraction</em>) plus a confidence score. Payload never leaves the machine.</p>
+      </div>
+      <div style="padding:28px;border-right:1px solid var(--border);">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Layer 03</div>
+        <h3 style="font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;">Cloud Judge · Escalation Only</h3>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;">When the on-device judge isn't confident, a redacted version of the request is sent to a larger cloud-side model for a second opinion. Configurable per tenant. Off entirely in air-gap mode — the on-device judge then handles every decision under your configured fail-safe policy.</p>
+      </div>
+      <div style="padding:28px;">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Layer 04</div>
+        <h3 style="font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;">Policy-Driven Response</h3>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;">Intent classifications don't decide the response by themselves — your policy does. Each classification is mapped to one of the six enforcement modes (Allow / Warn / Coach / Request / Watermark / Block). The judge tells you what's happening. Your policy decides what to do about it.</p>
+      </div>
+    </div>
+
+    <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:28px;max-width:760px;">We're direct about the trade-offs. Reasoning models are probabilistic; rules are not. That's why both layers exist — and why rule decisions are always logged separately from judge decisions in the audit trail. You can see at any point which control fired, why, and what the response was.</p>
   </div>
 </section>
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Product — Tether Connect</title>
-  <meta name="description" content="Tether Connect: endpoint-native AI egress enforcement. Controlled IDE environment, system-wide intercept, two-tier AI judging (on-device + cloud), and tamper-evident policy distribution."/>
+  <meta name="description" content="Tether Connect: endpoint-native AI egress enforcement. Deterministic rules plus on-device intent classification. Controlled IDE environment, system-wide intercept, two-tier judging (on-device + cloud), and tamper-evident policy distribution."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="shared.css"/>
@@ -138,10 +138,11 @@
         </div>
         <div class="component-body">
           <p>A lightweight background service installed on each developer machine. It operates system-wide — not as an IDE plugin — which means it intercepts AI traffic from <em>any</em> application on the machine, not only the controlled IDE.</p>
-          <p>The agent evaluates each outbound AI request against the active policy: allow, warn, redact, or block. A fast on-device judge handles every request in realtime; when it's not confident, the request escalates to a cloud judge for a second opinion. Every decision is logged with a risk classification and reasoning. When no policy can be retrieved, the agent fails closed — blocking by default until a verified policy is available.</p>
+          <p>Enforcement runs in two layers. <strong>Rules</strong> handle the deterministic floor — credential patterns, blocked destinations, watermarked exports. An <strong>on-device judge</strong> then classifies the intent of what's left: testing vs. shipping, brainstorming vs. exfil, public reference vs. trade secret. Your policy maps each intent class to one of six response modes. When the local judge isn't confident, the case escalates to a cloud judge for a second opinion. When no policy can be retrieved, the agent fails closed.</p>
           <ul class="component-bullets">
             <li>System-wide HTTPS intercept — all AI API traffic, all tools</li>
-            <li>Two-tier judging — on-device judge in realtime; cloud judge for second opinions on ambiguous cases</li>
+            <li>Deterministic rules + on-device intent classification — regex catches the known, the judge reasons about the rest</li>
+            <li>Two-tier judging — on-device first, cloud judge for ambiguous cases only</li>
             <li>Fail-closed posture — blocks when policy is unavailable</li>
             <li>Tamper-resistant design — policy changes require cryptographic verification</li>
             <li>Heartbeat and posture reporting back to admin console</li>
