@@ -503,7 +503,55 @@ body {
   50%      { transform: translate3d(60px, -40px, 0) scale(1.2) rotate(8deg); }
 }
 
-/* Backwards-compat alias for any lingering particle-canvas refs */
+/* ─── Intent comparison table (index + product) ──────────────────── */
+.intent-table {
+  border: 1px solid var(--border);
+  margin-top: 8px;
+  background: var(--bg);
+}
+.intent-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1.3fr;
+  border-bottom: 1px solid var(--border);
+}
+.intent-row:last-child { border-bottom: none; }
+.intent-row.head {
+  background: var(--surface2);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.intent-row.head > div {
+  padding: 14px 20px;
+  border-right: 1px solid var(--border);
+}
+.intent-row.head > div:last-child { border-right: none; }
+.intent-cell {
+  padding: 22px 20px;
+  border-right: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.7;
+}
+.intent-cell:last-child { border-right: none; }
+.intent-cell.payload {
+  background: var(--surface);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--ink2);
+  line-height: 1.6;
+}
+.intent-cell .badge { margin-bottom: 10px; }
+.intent-cell p { margin-top: 4px; }
+
+@media (max-width: 760px) {
+  .intent-row { grid-template-columns: 1fr; }
+  .intent-cell { border-right: none; border-bottom: 1px solid var(--border); }
+  .intent-row.head > div { border-right: none; border-bottom: 1px solid var(--border); }
+}
 .particle-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 1; }
 .hero > *:not(.particle-canvas):not(.wave-canvas):not(.aurora-layer),
 .page-hero > *:not(.particle-canvas):not(.wave-canvas):not(.aurora-layer) { position: relative; z-index: 2; }

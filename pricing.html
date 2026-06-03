@@ -227,6 +227,10 @@
       <div class="faq-a">Tether requires a server to host the admin console and policy distribution endpoint, and agent installation on each developer machine. Requirements are modest — a single VM or container is sufficient for most deployments. We provide detailed infrastructure documentation with every license.</div>
     </div>
     <div class="faq-item">
+      <div class="faq-q">Is Tether rule-based or AI-based?</div>
+      <div class="faq-a">Both, deliberately. Deterministic rules handle the cases where there's no ambiguity to reason about — known credential patterns, blocked destinations, hard compliance boundaries. An on-device judge then classifies the <em>intent</em> of everything else (testing vs. shipping, brainstorming vs. exfil, public reference vs. trade secret) and your policy maps each intent class to one of six enforcement responses. Regex is the floor; intent classification is the reasoning layer on top. The audit trail logs which one fired so incident review stays defensible.</div>
+    </div>
+    <div class="faq-item">
       <div class="faq-q">Does the flat rate include the AI analysis model?</div>
       <div class="faq-a">Yes. The on-device judge — which runs on every endpoint and handles the high-confidence cases entirely locally — is included in the license. For ambiguous cases that escalate, the cloud judge runs on Tether-hosted infrastructure and is included as well. In air-gap mode the cloud judge is unreachable, and the on-device judge handles every decision using your configured fail-safe policy.</div>
     </div>

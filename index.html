@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Tether Connect — AI Security for Enterprise Developers</title>
-  <meta name="description" content="Tether Connect enforces AI security policy at the endpoint. Every outbound request judged, logged, and controlled. Endpoint-native, air-gap capable, mapped to CISA ZTMM 2.0 for the AI-usage attack surface."/>
+  <meta name="description" content="Tether Connect classifies the intent behind every outbound AI request at the developer endpoint — not just the pattern — and applies your policy. Endpoint-native, air-gap capable, mapped to CISA ZTMM 2.0 for the AI-usage attack surface."/>
   <link rel="canonical" href="https://tetherconnect.app/"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -150,7 +150,7 @@
     <div class="hero-left tc-hero-in">
       <div class="hero-eyebrow">AI Security · Endpoint-Native · Enterprise</div>
       <h1>Your developers<br/>use AI.<br/><em>Do you control it?</em></h1>
-      <p class="hero-sub">Tether Connect enforces AI usage policy at every developer endpoint — judging, logging, and blocking outbound AI requests before they leave the machine. Air-gap capable. Local AI judging. No per-seat SaaS overhead.</p>
+      <p class="hero-sub">Tether Connect judges the <em style="font-style:normal;color:var(--ink);font-weight:500;">intent</em> behind every outbound AI request before it leaves the machine — not just the pattern — and applies your policy. Endpoint-native. Air-gap capable. No per-seat SaaS overhead.</p>
       <div class="hero-actions">
         <a href="contact.html" class="btn-primary">Request a Demo ↗</a>
         <a href="product.html" class="btn-secondary">See the Product →</a>
@@ -254,6 +254,58 @@
   </div>
 </section>
 
+<!-- INTENT THESIS -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label red">The Difference</div>
+    <h2 class="section-title">Rules describe yesterday's bad.<br/>Intent catches today's.</h2>
+    <p class="section-sub">Regex and allowlists don't scale to a generative surface. Tether starts with deterministic rules — fast, signed, predictable — then an on-device judge classifies what's left by <strong style="color:var(--ink);font-weight:500;">intent</strong>: testing vs. shipping, brainstorming vs. exfil, public reference vs. trade secret. Your policy chooses the response.</p>
+
+    <div class="intent-table">
+      <div class="intent-row head">
+        <div>Outbound Payload</div>
+        <div>Rule Sees</div>
+        <div>Intent Says</div>
+      </div>
+      <div class="intent-row">
+        <div class="intent-cell payload">"Refactor this auth flow"<br/>+ live session token visible in pasted code</div>
+        <div class="intent-cell">
+          <span class="badge badge-red">Pattern · Block</span>
+          <p>Token regex fires. Hard deny. Dev gets a generic 4xx and no context.</p>
+        </div>
+        <div class="intent-cell">
+          <span class="badge badge-blue">Coach + Rotate</span>
+          <p>Dev is doing code review, not exfil. Surface the leaked secret in-IDE, open a credential-rotation ticket, redact and forward the request.</p>
+        </div>
+      </div>
+      <div class="intent-row">
+        <div class="intent-cell payload">"Explain how OAuth refresh tokens work"<br/>+ pasted excerpt from a public RFC</div>
+        <div class="intent-cell">
+          <span class="badge badge-amber">Looks Risky · Warn</span>
+          <p>"Token" keyword fires. Dev gets an interruption for no reason.</p>
+        </div>
+        <div class="intent-cell">
+          <span class="badge badge-green">Allow + Log</span>
+          <p>Public spec, no org context, no PII. Forward without interruption. Recorded for audit.</p>
+        </div>
+      </div>
+      <div class="intent-row">
+        <div class="intent-cell payload">"What does our payment fraud model do?"<br/>— no code attached, no obvious sensitive strings</div>
+        <div class="intent-cell">
+          <span class="badge badge-green">Nothing Matches · Allow</span>
+          <p>No PII, no credentials, no blocked destination. Passes silently.</p>
+        </div>
+        <div class="intent-cell">
+          <span class="badge badge-red">Block + Capture</span>
+          <p>Question implies trade-secret extraction. Deny, log the attempted query, raise the incident to the security console.</p>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:28px;max-width:760px;">Rules don't get retired. They're how Tether handles the deterministic floor — known-bad patterns, credential signatures, blocked destinations. Intent classification is the reasoning layer on top, for the cases where a regex is either wrong or absent.</p>
+  </div>
+</section>
+
 <!-- HOW IT WORKS -->
 <section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
@@ -286,7 +338,7 @@
         <div class="arch-num">04</div>
         <div class="arch-icon">🧠</div>
         <div class="arch-node-title">On-Device Judge</div>
-        <div class="arch-node-sub">Local model judges every request in realtime — fast pre-screen</div>
+        <div class="arch-node-sub">Classifies intent on every request — testing vs. exfil, public vs. trade-secret</div>
         <span class="badge badge-green">On-Device</span>
       </div>
       <div class="arch-node">
@@ -321,8 +373,8 @@
       </div>
       <div class="feature-card">
         <div class="feature-tag">AI Analysis</div>
-        <h3>Two-Tier AI Judging</h3>
-        <p>An on-device judge inspects every request in realtime — fast pre-screen that resolves the high-confidence cases without leaving the machine. Ambiguous cases escalate to a cloud judge for a second opinion. In air-gap mode the cloud judge is unreachable, so the on-device judge handles every decision using your configured fail-safe policy (default: coach the developer when in doubt).</p>
+        <h3>Intent Classification, Not Just Regex</h3>
+        <p>Rules catch the known-bad: credential patterns, blocked destinations, watermarked exports. The on-device judge then classifies what's left — testing vs. shipping, brainstorming vs. exfil, public reference vs. trade secret — and your policy decides what to do with each. Ambiguous cases escalate to the cloud judge for a second opinion. In air-gap mode the cloud judge is unreachable and the on-device judge applies your fail-safe policy.</p>
       </div>
       <div class="feature-card">
         <div class="feature-tag">Policy</div>
