@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Integrations — Tether</title>
+  <meta name="description" content="Splunk HEC, Microsoft Sentinel, syslog RFC 5424 UDP. SCIM via Jackson. Okta Device Trust. Microsoft Graph managedDevice. HMAC-signed webhooks. All BUILT, all on master."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .int-card { border: 1px solid var(--border); padding: 28px; margin-bottom: 24px; background: var(--surface); }
+    .int-card h3 { font-family: var(--cond); font-weight: 700; font-size: 20px; text-transform: uppercase; margin-bottom: 6px; }
+    .int-card .int-route { font-family: var(--mono); font-size: 11px; color: var(--ink); background: var(--surface2); border: 1px solid var(--border); padding: 6px 10px; margin: 10px 0 18px; display: inline-block; }
+    .int-card ul { list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13.5px; color: var(--ink2); font-weight: 300; line-height: 1.7; }
+    .int-card ul li::before { content: '· '; color: var(--red); font-weight: 600; }
+    .int-card .cite { margin-right: 6px; }
+    .int-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 800px) { .int-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+
+<nav class="tc-nav">
+  <a href="index.html" class="nav-logo">
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
+    <span class="nav-wordmark">Tether<span>Connect</span></span>
+  </a>
+    <button class="nav-menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
+    <svg class="icon-open" aria-hidden="true" focusable="false" viewBox="0 0 18 18"><path d="M1 4h16M1 9h16M1 14h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+    <svg class="icon-close" aria-hidden="true" focusable="false" viewBox="0 0 18 18"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+  </button>
+<ul class="nav-links" id="nav-links">
+    <li><a href="how-it-works.html">How it works</a></li>
+    <li><a href="controls.html">Controls</a></li>
+    <li><a href="integrations.html" class="active">Integrations</a></li>
+    <li><a href="pilot.html">Pilot</a></li>
+    <li><a href="demo.html">Demo</a></li>
+    <li><a href="security.html">Security</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li class="nav-cta-li"><a href="contact.html" class="nav-cta">Book a 30-min walkthrough</a></li>
+  </ul>
+</nav>
+
+<main id="main">
+
+
+<div class="page-hero">
+  <canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas>
+  <div class="page-hero-inner tc-hero-in">
+    <div class="page-hero-eyebrow">Integration surface</div>
+    <h1>It plugs into the<br/>SIEM, the IdP, and<br/><em>the posture stack</em><br/>you already run.</h1>
+    <p class="page-hero-sub">Tether ships first-class adapters for the four security-stack surfaces a CISO cares about — SIEM, SCIM, posture export, and webhooks. Every adapter is in production today; every claim below points at a line on master.</p>
+  </div>
+</div>
+
+<!-- SIEM -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">SIEM</div>
+    <h2 class="section-title">Three SIEM adapters.<br/>Same fan-out path.</h2>
+    <p class="section-sub">Register a per-vendor config at <code>POST /api/v1/siem-adapters</code> and every event in the stream fans out automatically. Shared 5-attempt exponential-backoff retry. Adapters live next to webhook delivery for one operational surface.</p>
+
+    <div class="int-grid">
+      <div class="int-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Splunk HEC</h3><span class="badge badge-green">Shipped</span></div>
+        <div class="int-route">POST → &lt;splunk-host&gt;/services/collector/event</div>
+        <ul>
+          <li>Native Splunk HTTP Event Collector. Token in your Splunk Cloud or on-prem instance — Tether holds it write-only.</li>
+          <li>Per-event JSON envelope with <code>policyVersion</code>, identity, agent, host, verdict, deterministic match, judge verdict.</li>
+          <li>Built-in retry (5 attempts, exponential backoff up to ~5.5 min) and delivery log.</li>
+        </ul>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/siem-adapters.js#L267-L282" target="_blank" rel="noopener">siem-adapters.js:267-282</a>
+      </div>
+
+      <div class="int-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Microsoft Sentinel</h3><span class="badge badge-green">Shipped</span></div>
+        <div class="int-route">POST → Log Analytics Data Collector API (HMAC-signed)</div>
+        <ul>
+          <li>SharedKey HMAC-SHA256 authentication against Log Analytics <code>api-version=2016-04-01</code>.</li>
+          <li>Workspace ID + key configured per-adapter. No app registration required.</li>
+          <li>Custom log type per event family so Sentinel rules can target Tether's stream directly.</li>
+        </ul>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/siem-adapters.js#L290-L312" target="_blank" rel="noopener">siem-adapters.js:290-312</a>
+      </div>
+
+      <div class="int-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Syslog RFC 5424</h3><span class="badge badge-green">Shipped</span></div>
+        <div class="int-route">UDP datagram → &lt;syslog-host&gt;:514</div>
+        <ul>
+          <li>UDP only in v1. Targets on-prem Splunk, rsyslog, or any RFC 5424-compatible collector.</li>
+          <li>Air-gap-clean: the syslog path has no internet dependency. Pair with on-prem Overwatch and local Ollama for a true air-gap configuration.</li>
+          <li>Same retry semantics as the other adapters.</li>
+        </ul>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/siem-adapters.js#L333-L355" target="_blank" rel="noopener">siem-adapters.js:333-355</a>
+      </div>
+
+      <div class="int-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Outbound webhooks (HMAC-SHA256)</h3><span class="badge badge-green">Shipped</span></div>
+        <div class="int-route">POST → &lt;your-receiver&gt; · X-Tether-Signature: sha256=&lt;hex&gt;</div>
+        <ul>
+          <li>HMAC of <code>timestamp + "." + body</code>. Constant-time comparison on your side.</li>
+          <li>Per-webhook filters on <code>eventTypes</code> and <code>verdicts</code> so receivers only see what they care about.</li>
+          <li>Secret is write-only at registration; redacted in list and show endpoints.</li>
+        </ul>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/webhook-store.js#L174-L240" target="_blank" rel="noopener">webhook-store.js:174-240</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IDENTITY -->
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Identity · SSO · SCIM</div>
+    <h2 class="section-title">Operator seats from your IdP.<br/>No manual user-management in Tether.</h2>
+    <p class="section-sub">BoxyHQ Jackson handles SAML and OIDC. Directory-sync arrives via a signed webhook. Group membership maps to role; every event lands in the audit trail.</p>
+
+    <div class="int-grid">
+      <div class="int-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>SSO via Jackson</h3><span class="badge badge-green">Shipped</span></div>
+        <div class="int-route">/api/v1/auth/sso/{start, callback, scim}</div>
+        <ul>
+          <li>SAML 2.0 and OIDC supported through Jackson. Upload IdP metadata; SSO is live.</li>
+          <li>WorkOS provider implementation also available — Jackson is the default for self-hosted.</li>
+          <li>Bearer tokens issued per session; per-role scope (admin / operator / viewer).</li>
+        </ul>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/auth-providers/jackson.js" target="_blank" rel="noopener">auth-providers/jackson.js</a>
+      </div>
+
+      <div class="int-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>SCIM directory sync</h3><span class="badge badge-green">Shipped</span></div>
+        <div class="int-route">Jackson dsync webhook · X-DSync-Signature HMAC-SHA256</div>
+        <ul>
+          <li>Push-model via Jackson webhook (not a SCIM2 endpoint). HMAC of the body verified before applying.</li>
+          <li>Handles <code>user.created</code>, <code>user.updated</code>, <code>user.deleted</code>.</li>
+          <li>Group → role mapping: <code>SCIM_GROUP_ADMIN</code> / <code>SCIM_GROUP_OPERATOR</code> / <code>SCIM_GROUP_VIEWER</code> env vars.</li>
+          <li>Every provision, update, and deprovision emits an audit event.</li>
+        </ul>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/auth-providers/jackson.js#L205-L291" target="_blank" rel="noopener">jackson.js:205-291</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POSTURE -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Device posture · IdP conditional access</div>
+    <h2 class="section-title">Tether posture<br/>plugs into the format your IdP reads.</h2>
+    <p class="section-sub">Four export formats. No converter to write. Each format mirrors the receiver's existing schema so your Okta or Entra team does not have to translate.</p>
+
+    <div class="int-grid">
+      <div class="int-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Tether-native JSON</h3><span class="badge badge-green">Shipped</span></div>
+        <div class="int-route">GET /api/v1/devices/posture/export?format=tether</div>
+        <ul>
+          <li>Per-host: OS, arch, MACs, proxy + workspace-daemon versions, config hash, last-applied policy version, compliance heuristic.</li>
+          <li>Filters: <code>?compliantOnly=true</code> and <code>?since=&lt;ISO&gt;</code>.</li>
+          <li>Read-only. Long-polled by your conditional-access broker or pulled on a schedule.</li>
+        </ul>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/posture-export.js#L79-L101" target="_blank" rel="noopener">posture-export.js:79-101</a>
+      </div>
+
+      <div class="int-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Okta Device Trust</h3><span class="badge badge-green">Shipped</span></div>
+        <div class="int-route">GET /api/v1/devices/posture/export?format=okta</div>
+        <ul>
+          <li>Attestation envelope shape Okta Device Trust ingests directly.</li>
+          <li><code>attestations.tether</code> namespace carries Tether-specific signals (policy version applied, time-since-heartbeat, daemon liveness).</li>
+          <li>Drop into Okta's existing conditional-access rule set without a custom integration.</li>
+        </ul>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/posture-export.js#L111-L135" target="_blank" rel="noopener">posture-export.js:111-135</a>
+      </div>
+
+      <div class="int-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Microsoft Graph managedDevice</h3><span class="badge badge-green">Shipped</span></div>
+        <div class="int-route">GET /api/v1/devices/posture/export?format=entra</div>
+        <ul>
+          <li>Mirrors <code>GET /deviceManagement/managedDevices</code> from Microsoft Graph.</li>
+          <li>Tether posture lives under <code>extensions.aiSecurityPosture</code> — out of the way of existing Intune signals.</li>
+          <li>Entra Conditional Access reads it without a Graph schema change.</li>
+        </ul>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/posture-export.js#L145-L172" target="_blank" rel="noopener">posture-export.js:145-172</a>
+      </div>
+
+      <div class="int-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>CSV (RFC 4180)</h3><span class="badge badge-green">Shipped</span></div>
+        <div class="int-route">GET /api/v1/devices/posture/export?format=csv</div>
+        <ul>
+          <li>Proper RFC 4180 quoting. No surprises when an analyst opens it in a spreadsheet.</li>
+          <li>For ad-hoc audits, compliance evidence packets, and incident-response timelines.</li>
+        </ul>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/posture-export.js#L177-L212" target="_blank" rel="noopener">posture-export.js:177-212</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POLICY-AUDIT EXPORT -->
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Audit export</div>
+    <h2 class="section-title">Append-only policy audit.<br/>Pull it on a schedule.</h2>
+    <div class="int-card" style="margin-top:8px;background:var(--bg);">
+      <h3>policy-audit.jsonl</h3>
+      <div class="int-route">GET /api/v1/policy/audit · file: $TETHER_DATA_DIR/policy-audit.jsonl</div>
+      <ul>
+        <li>Append-only JSONL of every policy publish, revert, and adoption ACK. Actor, reason, before-hash, after-hash.</li>
+        <li>Reads against your SOC 2 CC8 change-management evidence requirement directly.</li>
+        <li>SQLite-backed durable stores are post-GA; today the file lives in <code>TETHER_DATA_DIR</code> (your GCS bucket or EFS file system).</li>
+      </ul>
+      <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/docs/PILOT.md" target="_blank" rel="noopener">PILOT.md</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div style="background:var(--ink);color:var(--surface);border-top:1px solid var(--border);">
+  <div style="max-width:1200px;margin:0 auto;padding:64px 40px;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;">
+    <div>
+      <h2 style="font-family:var(--cond);font-weight:700;font-size:28px;text-transform:uppercase;margin-bottom:8px;letter-spacing:-0.01em;">Stand up an adapter in an afternoon.</h2>
+      <p style="font-size:14px;color:#9a9088;font-weight:300;max-width:480px;line-height:1.7;">A platform engineer who knows Splunk or Sentinel registers the adapter in one call. We can pair on it during the pilot.</p>
+    </div>
+    <a href="contact.html" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:0.06em;color:var(--ink);background:var(--surface);padding:11px 22px;text-decoration:none;border:1px solid var(--surface);">Book a 30-min walkthrough ↗</a>
+  </div>
+</div>
+
+</main>
+
+<footer class="tc-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-name">Tether<span>Connect</span></div>
+      <p>AI-egress visibility-and-enforcement for developer machines.</p>
+      <div class="footer-domains">
+        <a href="https://tetherconnect.app">tetherconnect.app</a>
+        <a href="https://ai-security.app">ai-security.app</a>
+      </div>
+    </div>
+    <div class="footer-col"><div class="footer-col-title">Product</div><ul>
+      <li><a href="how-it-works.html">How it works</a></li>
+      <li><a href="controls.html">Controls</a></li>
+      <li><a href="integrations.html">Integrations</a></li>
+      <li><a href="security.html">Security</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+    </ul></div>
+    <div class="footer-col"><div class="footer-col-title">Open source</div><ul>
+      <li><a href="https://github.com/arich2day/project-tether/tree/master/docs" target="_blank" rel="noopener">Docs ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether" target="_blank" rel="noopener">GitHub ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether/blob/master/docs/reviews/SUMMARY.md" target="_blank" rel="noopener">Review verdict ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether/blob/master/docs/DEFENSIVE_PUBLICATION_GOVPROXY.md" target="_blank" rel="noopener">Defensive publication ↗</a></li>
+    </ul></div>
+    <div class="footer-col"><div class="footer-col-title">Company</div><ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="pilot.html">Pilot</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="security.html#disclosures">Security disclosures</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Tether Connect. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="security.html#disclosures">Security</a>
+    </div>
+  </div>
+</footer>
+<script src="motion.js" defer></script>
+</body>
+</html>

@@ -1,506 +1,370 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Security Architecture — Tether Connect</title>
-  <meta name="description" content="Tether Connect's security model: endpoint-native enforcement, cryptographically verified policy distribution, deterministic rules layered with an on-device intent-classification judge, fail-closed design, and a CISA ZTMM 2.0 pillar mapping for the AI-usage attack surface. Tether Connect is not itself certified under any of these frameworks."/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Security — Tether</title>
+  <meta name="description" content="Cryptography, per-tenant isolation, data residency, no-MITM-CA stance, three-tier judge authority, per-request attestation, fail-closed-on-judge-timeout, written security-disclosure policy."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="shared.css"/>
   <style>
-    .principle-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
-    .principle-card{background:var(--surface);padding:36px 32px;}
-    .principle-num{font-family:var(--mono);font-size:10px;color:var(--red);letter-spacing:.1em;margin-bottom:12px;}
-    .principle-card h3{font-family:var(--cond);font-weight:700;font-size:18px;text-transform:uppercase;margin-bottom:10px;}
-    .principle-card p{font-size:14px;color:var(--muted);font-weight:300;line-height:1.7;}
-
-    .threat-row{display:grid;grid-template-columns:260px 1fr 1fr;gap:0;border-top:1px solid var(--border);}
-    .threat-row:last-child{border-bottom:1px solid var(--border);}
-    .threat-cell{padding:20px 20px;border-right:1px solid var(--border);font-size:13px;}
-    .threat-cell:last-child{border-right:none;}
-    .threat-name{font-family:var(--cond);font-weight:600;font-size:14px;text-transform:uppercase;margin-bottom:4px;}
-    .threat-sub{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.06em;}
-    .threat-cell p{color:var(--muted);font-weight:300;line-height:1.6;}
-
-    .security-block{padding:32px 0;border-top:1px solid var(--border);}
-    .security-block:first-child{border-top:2px solid var(--ink);}
-    .security-block-header{display:flex;align-items:baseline;gap:20px;margin-bottom:16px;}
-    .security-block-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);flex-shrink:0;}
-    .security-block h3{font-family:var(--cond);font-weight:700;font-size:20px;text-transform:uppercase;}
-    .security-block p{font-size:14px;color:var(--muted);font-weight:300;line-height:1.75;max-width:700px;margin-bottom:12px;}
-    .security-block p:last-child{margin-bottom:0;}
-
-    .policy-lifecycle{display:flex;align-items:center;gap:0;margin:32px 0;}
-    .lifecycle-step{flex:1;padding:20px;background:var(--surface);border:1px solid var(--border);position:relative;text-align:center;}
-    .lifecycle-step:not(:last-child)::after{content:'→';position:absolute;right:-12px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:14px;color:var(--border-dk);z-index:1;background:var(--bg);padding:0 2px;}
-    .lifecycle-step-num{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:6px;}
-    .lifecycle-step-name{font-family:var(--cond);font-weight:700;font-size:13px;text-transform:uppercase;margin-bottom:4px;}
-    .lifecycle-step-sub{font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.4;}
-
-    .compliance-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
-    .compliance-card{background:var(--surface);padding:28px;}
-    .compliance-framework{font-family:var(--cond);font-weight:700;font-size:20px;text-transform:uppercase;margin-bottom:8px;letter-spacing:-.01em;}
-    .compliance-desc{font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;margin-bottom:16px;}
-    .compliance-items{list-style:none;display:flex;flex-direction:column;gap:6px;}
-    .compliance-items li{font-size:12px;color:var(--muted);font-weight:300;display:flex;align-items:flex-start;gap:6px;}
-    .compliance-items li::before{content:'✓';color:var(--green);flex-shrink:0;font-size:11px;}
-
-    .pillar-row{display:grid;grid-template-columns:220px 1fr 300px;gap:0;border-top:1px solid var(--border);background:var(--surface);}
-    .pillar-row:last-child{border-bottom:1px solid var(--border);}
-    .pillar-label{padding:28px 24px;border-right:1px solid var(--border);}
-    .pillar-name{font-family:var(--cond);font-weight:700;font-size:18px;text-transform:uppercase;letter-spacing:.02em;margin-bottom:12px;}
-    .pillar-stage{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border:1px solid;display:inline-block;}
-    .pillar-stage.traditional{color:var(--muted);border-color:var(--border-dk);background:var(--surface2);}
-    .pillar-stage.initial{color:var(--amber);border-color:var(--amber-bd);background:var(--amber-bg);}
-    .pillar-stage.advanced{color:var(--green);border-color:var(--green-bd);background:var(--green-bg);}
-    .pillar-body{padding:28px 24px;border-right:1px solid var(--border);}
-    .pillar-bullets{list-style:none;display:flex;flex-direction:column;gap:8px;}
-    .pillar-bullets li{font-size:13px;color:var(--ink2);font-weight:300;line-height:1.6;padding-left:18px;position:relative;}
-    .pillar-bullets li::before{content:'▸';color:var(--red);position:absolute;left:0;top:0;font-size:11px;}
-    .pillar-not{padding:28px 24px;background:var(--surface2);}
-    .pillar-not-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
-    .pillar-not p{font-size:12px;color:var(--muted);font-weight:300;line-height:1.6;}
-    .ztmm-closer{margin-top:32px;padding:20px 24px;background:var(--surface2);border:1px solid var(--border);font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;max-width:none;}
-    .ztmm-closer strong{color:var(--ink);font-weight:500;}
-
-    .cta-band{background:var(--ink);color:var(--surface);}
-    .cta-inner{max-width:1200px;margin:0 auto;padding:64px 40px;display:flex;align-items:center;justify-content:space-between;gap:40px;}
-    .cta-text h2{font-family:var(--cond);font-weight:700;font-size:32px;text-transform:uppercase;letter-spacing:-.01em;margin-bottom:8px;}
-    .cta-text p{font-size:14px;color:#9a9088;font-weight:300;max-width:420px;}
-    .cta-actions{display:flex;gap:12px;flex-shrink:0;flex-wrap:wrap;}
-    .btn-primary-inv{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--ink);background:var(--surface);padding:11px 22px;text-decoration:none;border:1px solid var(--surface);transition:opacity .15s;}
-    .btn-primary-inv:hover{opacity:.85;}
-    .btn-outline-inv{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:#9a9088;background:transparent;padding:11px 22px;text-decoration:none;border:1px solid #555048;transition:border-color .15s,color .15s;}
-    .btn-outline-inv:hover{border-color:#9a9088;color:var(--surface);}
-
-    @media(max-width:960px){
-      .principle-grid{grid-template-columns:1fr;}
-      .threat-row{grid-template-columns:1fr;}
-      .threat-cell{border-right:none;border-bottom:1px solid var(--border);}
-      .policy-lifecycle{flex-direction:column;gap:1px;}
-      .lifecycle-step::after{display:none;}
-      .compliance-grid{grid-template-columns:1fr;}
-      .pillar-row{grid-template-columns:1fr;}
-      .pillar-label{border-right:none;border-bottom:1px solid var(--border);}
-      .pillar-body{border-right:none;border-bottom:1px solid var(--border);}
-      .cta-inner{flex-direction:column;align-items:flex-start;padding:48px 20px;}
-    }
+    .principle-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border: 1px solid var(--border); background: var(--surface); }
+    .principle-card { padding: 32px 28px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .principle-card:nth-child(2n) { border-right: none; }
+    .principle-card:nth-last-child(-n+2) { border-bottom: none; }
+    .principle-num { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--red); margin-bottom: 12px; }
+    .principle-card h3 { font-family: var(--cond); font-weight: 700; font-size: 18px; text-transform: uppercase; margin-bottom: 10px; }
+    .principle-card p { font-size: 13.5px; color: var(--muted); font-weight: 300; line-height: 1.7; margin-bottom: 10px; }
+    .threat-row { display: grid; grid-template-columns: 1fr 2fr 1.5fr; gap: 0; padding: 18px 0; border-bottom: 1px solid var(--border); }
+    .threat-row:first-of-type { border-top: 2px solid var(--ink); }
+    .threat-cell { padding: 0 24px 0 0; font-size: 13.5px; color: var(--muted); font-weight: 300; line-height: 1.7; }
+    .threat-name { font-family: var(--cond); font-weight: 700; font-size: 15px; text-transform: uppercase; color: var(--ink); margin-bottom: 4px; }
+    .threat-sub { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; }
+    .disc-card { background: var(--surface); border: 1px solid var(--border-dk); padding: 28px; }
+    .disc-card h3 { font-family: var(--cond); font-weight: 700; font-size: 16px; text-transform: uppercase; margin-bottom: 8px; }
+    .disc-card .key { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; margin-bottom: 4px; }
+    .disc-card p { font-size: 13.5px; color: var(--ink2); font-weight: 300; line-height: 1.7; margin-bottom: 14px; }
+    .disc-card a { color: var(--ink); }
   </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
+
 
 <nav class="tc-nav">
   <a href="index.html" class="nav-logo">
-    <svg viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#c8001e" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#c8001e"/></svg>
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
     <span class="nav-wordmark">Tether<span>Connect</span></span>
   </a>
-  <ul class="nav-links">
-    <li><a href="product.html">Product</a></li>
+    <button class="nav-menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
+    <svg class="icon-open" aria-hidden="true" focusable="false" viewBox="0 0 18 18"><path d="M1 4h16M1 9h16M1 14h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+    <svg class="icon-close" aria-hidden="true" focusable="false" viewBox="0 0 18 18"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+  </button>
+<ul class="nav-links" id="nav-links">
+    <li><a href="how-it-works.html">How it works</a></li>
+    <li><a href="controls.html">Controls</a></li>
+    <li><a href="integrations.html">Integrations</a></li>
+    <li><a href="pilot.html">Pilot</a></li>
     <li><a href="demo.html">Demo</a></li>
     <li><a href="security.html" class="active">Security</a></li>
     <li><a href="pricing.html">Pricing</a></li>
-    <li><a href="company.html">Company</a></li>
-    <li class="nav-cta-li"><a href="contact.html" class="nav-cta">Request Demo</a></li>
+    <li class="nav-cta-li"><a href="contact.html" class="nav-cta">Book a 30-min walkthrough</a></li>
   </ul>
 </nav>
 
+<main id="main">
+
+
 <div class="page-hero">
-  <canvas class="wave-canvas" data-waves data-density="15000" aria-hidden="true"></canvas>
+  <canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas>
   <div class="page-hero-inner tc-hero-in">
-    <div class="page-hero-eyebrow">Security Architecture</div>
-    <h1>Designed to be<br/><em>structurally resistant</em><br/>to bypass.</h1>
-    <p class="page-hero-sub">Tether's security model assumes adversarial conditions — including developers who want to work around controls. Every layer is designed with that assumption in mind.</p>
+    <div class="page-hero-eyebrow">Security architecture</div>
+    <h1>One new auditable<br/>control. <em>No MITM CA.</em><br/>No data-residency exposure.</h1>
+    <p class="page-hero-sub">Cryptographic policy distribution, per-tenant isolation in your cloud account, per-request attestation, fail-closed-on-judge-timeout, three-tier judge authority. The honest threat model — in and out of scope — at the bottom.</p>
   </div>
 </div>
 
-<!-- PRINCIPLES -->
+<!-- DESIGN PRINCIPLES (ported from current security.html:121-141, paired with citations) -->
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label">Design Principles</div>
-    <h2 class="section-title">Four principles that<br/>shape every decision.</h2>
+    <div class="section-label">Design principles</div>
+    <h2 class="section-title">Four principles<br/>shaping every decision.</h2>
     <div class="principle-grid" data-reveal-group>
       <div class="principle-card">
         <div class="principle-num">Principle 01</div>
-        <h3>Fail Closed</h3>
-        <p>When the enforcement agent cannot verify a current policy — due to network unavailability, policy expiry, or integrity failure — it defaults to blocking AI egress. An agent that fails open is not a control. Tether never fails open.</p>
+        <h3>Fail closed</h3>
+        <p>When the agent cannot verify a current policy — network loss, signature mismatch, judge timeout in sync mode — it defaults to blocking. An agent that fails open is not a control.</p>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/policy_client.go#L185-L188" target="_blank" rel="noopener">policy_client.go:185-188</a>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/docs/JUDGE_AUTHORITY.md" target="_blank" rel="noopener">JUDGE_AUTHORITY.md</a>
       </div>
       <div class="principle-card">
         <div class="principle-num">Principle 02</div>
-        <h3>No Trust Without Verification</h3>
-        <p>Policy is only applied after cryptographic verification of its integrity and origin. A policy that hasn't been verified is treated the same as no policy — the agent blocks until it can confirm it's enforcing an authentic, current rule set.</p>
+        <h3>No trust without verification</h3>
+        <p>Policy is applied only after Ed25519 signature verification with a TOFU-pinned per-tenant public key. A policy that fails verification is discarded — the agent continues enforcing the last verified policy or blocks egress entirely.</p>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/policy_signing.go#L171-L203" target="_blank" rel="noopener">policy_signing.go:171-203</a>
       </div>
       <div class="principle-card">
         <div class="principle-num">Principle 03</div>
-        <h3>Payload Never Leaves for Analysis</h3>
-        <p>Rules and intent classification both run on the developer machine. The raw content of an AI request is never transmitted to a third-party analysis platform for evaluation. When the on-device judge isn't confident and escalates to the cloud judge, the payload is redacted first — and in air-gap mode the cloud judge is unreachable, so every decision stays local.</p>
+        <h3>Payload never leaves for analysis</h3>
+        <p>The deterministic floor and (when enabled) the judge run against the prompt locally. Cloud judge calls flow to the customer-configured endpoint, not a Tether-hosted service. Local Ollama keeps every decision on-device.</p>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/judge_selector.go#L76-L93" target="_blank" rel="noopener">judge_selector.go:76-93</a>
       </div>
       <div class="principle-card">
         <div class="principle-num">Principle 04</div>
-        <h3>Defense in Depth</h3>
-        <p>Tether does not rely on a single control. The controlled IDE, the system-wide intercept, the cryptographic policy verification, the deterministic rule layer, the on-device intent judge, and the cloud judge escalation are independent layers — each capable of catching what the others miss.</p>
+        <h3>Defense in depth</h3>
+        <p>Tier 0 floor, Tier 1 sync judge, Tier 2 async judge, deterministic signed-policy distribution, audited Overwatch console — independent layers, each capable of catching what the others miss. The async judge's promotion loop turns evidence into future enforcement.</p>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/docs/JUDGE_AUTHORITY.md" target="_blank" rel="noopener">JUDGE_AUTHORITY.md</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- REASONING LAYER -->
-<section style="border-bottom:1px solid var(--border);" data-reveal>
-  <div class="wrap section-pad">
-    <div class="section-label">Reasoning Layer</div>
-    <h2 class="section-title">We classify intent.<br/>Not just patterns.</h2>
-    <p class="section-sub">Pattern-matching has a known failure mode against a generative input surface: it misses what it wasn't told to look for, and it over-fires on things that share surface features with risk but carry none of the substance. The reasoning layer in Tether exists to close that gap on the AI-usage axis specifically.</p>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border);">
-      <div style="padding:28px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);">
-        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Layer 01</div>
-        <h3 style="font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;">Deterministic Rules</h3>
-        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;">Cryptographically signed, versioned, fast. Credential signatures, blocked destinations, allowlisted domains, hard policy floors. Rules are how Tether handles the cases where there is no ambiguity to reason about — and how the system stays predictable in incident review.</p>
-      </div>
-      <div style="padding:28px;border-bottom:1px solid var(--border);">
-        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Layer 02</div>
-        <h3 style="font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;">On-Device Intent Judge</h3>
-        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;">A local model evaluates the request body — payload, destination, application context, recent history — and classifies what the developer appears to be trying to do. Output is a classification (e.g. <em>code-review-with-secret-exposure</em>, <em>public-reference-lookup</em>, <em>internal-context-extraction</em>) plus a confidence score. Payload never leaves the machine.</p>
-      </div>
-      <div style="padding:28px;border-right:1px solid var(--border);">
-        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Layer 03</div>
-        <h3 style="font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;">Cloud Judge · Escalation Only</h3>
-        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;">When the on-device judge isn't confident, a redacted version of the request is sent to a larger cloud-side model for a second opinion. Configurable per tenant. Off entirely in air-gap mode — the on-device judge then handles every decision under your configured fail-safe policy.</p>
-      </div>
-      <div style="padding:28px;">
-        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Layer 04</div>
-        <h3 style="font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;">Policy-Driven Response</h3>
-        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;">Intent classifications don't decide the response by themselves — your policy does. Each classification is mapped to one of the six enforcement modes (Allow / Warn / Coach / Request / Watermark / Block). The judge tells you what's happening. Your policy decides what to do about it.</p>
-      </div>
-    </div>
-
-    <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:28px;max-width:760px;">We're direct about the trade-offs. Reasoning models are probabilistic; rules are not. That's why both layers exist — and why rule decisions are always logged separately from judge decisions in the audit trail. You can see at any point which control fired, why, and what the response was.</p>
-  </div>
-</section>
-
-<!-- THREAT MODEL -->
+<!-- NO MITM ROOT CA -->
 <section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label">Threat Model</div>
-    <h2 class="section-title">What Tether protects against.<br/>And what it doesn't.</h2>
-    <p class="section-sub">Honest security posture requires a clear threat model. Tether is purpose-built for a specific set of risks — and we're direct about its scope.</p>
+    <div class="section-label red">No MITM root CA on the developer machine</div>
+    <h2 class="section-title">The proxy does not<br/>intercept TLS.</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:8px;">
+      <div>
+        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:16px;"><strong style="color:var(--ink);font-weight:500;">The Connect proxy is loopback-only and does not perform TLS interception.</strong> CONNECT tunnels are byte-copied bidirectionally. The proxy classifies the destination host on the CONNECT path and reads the request body only when an agent is pointed at the configured-upstream HTTP route (Tier B in the coverage taxonomy).</p>
+        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:16px;">No root certificate is installed on the developer's machine. The same CA that decrypts a Cursor call decrypts the developer's banking session — Tether does not put either of those into play.</p>
+        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;">Workspace-tier TLS termination is reserved for the future managed VSCodium build — an opt-in CA install on a managed device, not a sneak-install on every developer's laptop.</p>
+      </div>
+      <div style="background:var(--shell);color:var(--shell-ink);padding:24px;font-family:var(--mono);font-size:12px;line-height:1.8;border:1px solid var(--border-dk);">
+        <span style="color:#8f8a7f;">// warden/cmd/proxy/main.go:1-22</span><br/>
+        // Tether Connect proxy.<br/>
+        //<br/>
+        // <span style="color:#ff6080;">We do not perform TLS interception in Connect.</span><br/>
+        // Workspace-tier TLS termination is reserved for the<br/>
+        // future managed VSCodium build.<br/>
+        //<br/>
+        // No certificate generation. No CA injection.<br/>
+        // CONNECT classification is host-only.<br/>
+        <br/>
+        <a class="cite" style="margin-top:16px;background:#1c1a16;border-color:#322f29;color:#8f8a7f;" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/main.go#L1-L22" target="_blank" rel="noopener">main.go:1-22</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THREE-TIER AUTHORITY — compact summary; full breakdown on /how-it-works -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Three-tier judge authority</div>
+    <h2 class="section-title">Who can block what,<br/>when, and how to tell.</h2>
+    <p class="section-sub" style="max-width:780px;">In one sentence: <strong style="color:var(--ink);font-weight:500;">Tier 0 always blocks; Tier 1 is configurable — sync-block opt-in at deploy time, fail-closed on timeout when enabled; Tier 2 records but cannot block.</strong></p>
+    <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.7;max-width:780px;margin-top:-20px;">Full breakdown — Tier 0 unconditional, Tier 1 fail-closed posture, Tier 2 cannot-block invariant — lives on <a href="how-it-works.html#judge-authority" style="color:var(--ink);"><strong>/how-it-works · Judge authority →</strong></a> Code citations: <a class="cite" style="vertical-align:baseline;" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/proxy_core.go#L114-L117" target="_blank" rel="noopener">proxy_core.go:114-117</a> &nbsp;<a class="cite" style="vertical-align:baseline;" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/proxy_core.go#L158-L181" target="_blank" rel="noopener">:158-181</a> &nbsp;<a class="cite" style="vertical-align:baseline;" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/proxy_core.go#L183-L188" target="_blank" rel="noopener">:183-188</a>.</p>
+  </div>
+</section>
+
+<!-- PER-REQUEST ATTESTATION -->
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Per-request attestation</div>
+    <h2 class="section-title">X-Tether-Policy-Version<br/>on every response.</h2>
+    <p class="section-sub">Ed25519 policy signing proves which bundle Overwatch signed and distributed. Per-request attestation closes the gap from <em>which bundle exists</em> to <em>which bundle decided this specific request.</em></p>
+
+    <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:32px;margin-top:8px;">
+      <div>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">The proxy sets <code>X-Tether-Policy-Version: &lt;version&gt;</code> on every blocked 403 and every forwarded response. Every <code>AI_PROXY_REQUEST</code> event sent to Overwatch carries <code>policyVersion</code>. Every judge review carries it too.</p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">An auditor with the event ID does four things:</p>
+        <ol style="list-style:none;display:flex;flex-direction:column;gap:10px;font-size:13.5px;color:var(--ink2);font-weight:300;line-height:1.7;counter-reset:item;">
+          <li style="display:grid;grid-template-columns:24px 1fr;gap:8px;"><span style="font-family:var(--mono);color:var(--red);">1.</span><span>Pull the signed bundle: <code>GET /api/v1/policy/versions/&lt;version&gt;</code>.</span></li>
+          <li style="display:grid;grid-template-columns:24px 1fr;gap:8px;"><span style="font-family:var(--mono);color:var(--red);">2.</span><span>Pull the public key: <code>GET /api/v1/policy/public-key</code>. Confirm <code>keyId</code> matches.</span></li>
+          <li style="display:grid;grid-template-columns:24px 1fr;gap:8px;"><span style="font-family:var(--mono);color:var(--red);">3.</span><span>Run Ed25519 verification offline: <code>openssl pkeyutl -verify ...</code>.</span></li>
+          <li style="display:grid;grid-template-columns:24px 1fr;gap:8px;"><span style="font-family:var(--mono);color:var(--red);">4.</span><span>Read the <code>controls</code> object in the verified payload. That is the policy in force at decision time.</span></li>
+        </ol>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:16px;">The chain — <code>event.policyVersion → signed bundle → Ed25519 verify → controls</code> — is the reproducible enforcement attestation. <a class="cite" style="vertical-align:baseline;" href="https://github.com/arich2day/project-tether/blob/master/docs/ATTESTATION.md" target="_blank" rel="noopener">docs/ATTESTATION.md</a></p>
+      </div>
+      <div style="background:var(--shell);color:var(--shell-ink);padding:24px;font-family:var(--mono);font-size:11.5px;line-height:1.8;border:1px solid var(--border-dk);">
+        $ curl -s overwatch/api/v1/policy/versions/42<br/>
+        <span style="color:#6aacff;">{</span><br/>
+        &nbsp;&nbsp;<span style="color:#f0c040;">"success"</span>: true,<br/>
+        &nbsp;&nbsp;<span style="color:#f0c040;">"version"</span>: {<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f0c040;">"version"</span>: 42,<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f0c040;">"publishedAt"</span>: <span style="color:#4cba6a;">"2026-06-07T18:29:31Z"</span>,<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f0c040;">"signedPayload"</span>: <span style="color:#4cba6a;">"&lt;canonical-JSON&gt;"</span>,<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f0c040;">"signature"</span>: <span style="color:#4cba6a;">"&lt;base64&gt;"</span>,<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f0c040;">"keyId"</span>: <span style="color:#4cba6a;">"tether-pol-..."</span>,<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f0c040;">"signatureAlgorithm"</span>: <span style="color:#4cba6a;">"Ed25519"</span><br/>
+        &nbsp;&nbsp;}<br/>
+        <span style="color:#6aacff;">}</span><br/>
+        <br/>
+        $ openssl pkeyutl -verify ...<br/>
+        <span style="color:#4cba6a;">Signature Verified Successfully</span>
+      </div>
+    </div>
+
+    <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:24px;max-width:780px;"><strong style="color:var(--ink);font-weight:500;">Honest caveats.</strong> In-memory events do not survive Overwatch restart unless your SIEM adapter forwards them. The persistent audit trail is <code>policy-audit.jsonl</code> for policy publish actions — per-request event durability depends on SIEM forwarding. Tamper-evident per-version bundle retention (append-only WORM) is a documented gap for deployments requiring full forensic retention.</p>
+  </div>
+</section>
+
+<!-- DATA RESIDENCY / PER-TENANT ISOLATION -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Per-tenant isolation · data residency</div>
+    <h2 class="section-title">Your cloud account.<br/>Your secrets. Your buckets.</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:8px;">
+      <div>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;"><strong style="color:var(--ink);font-weight:500;">Overwatch is provisioned in the customer's cloud account.</strong> One Cloud Run service (GCP) or ECS service (AWS) per tenant. Per-tenant GCS bucket / EFS file system for state. Per-tenant Secret Manager / Secrets Manager for tokens and the policy signing key.</p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;">No traffic flows through Tether-owned servers. The custom domain terminates on your Cloud Run instance. For EU and regulated buyers, customer data stays in your <code>eu-west-1</code> or <code>europe-west1</code> region by virtue of where you deploy.</p>
+      </div>
+      <div>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;"><strong style="color:var(--ink);font-weight:500;">The honest qualification.</strong> If you configure a cloud judge with OpenAI or another vendor, prompt previews flow to that vendor. This is your choice — the architecture supports a fully on-prem judge (local Ollama) that keeps all data within your environment.</p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;">Air-gap is architecturally coherent: loopback proxy + local Ollama + on-prem Overwatch + syslog adapter. Not a marketing claim; every component supports it.</p>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/deploy/README.md" target="_blank" rel="noopener">deploy/README.md</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THREAT MODEL — In scope / Out of scope (preserved honesty from security.html:188-228) -->
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Threat model</div>
+    <h2 class="section-title">What Tether covers.<br/>And what it does not.</h2>
+    <p class="section-sub">Honest security posture requires a clear threat model. Tether is purpose-built for a specific set of risks on the developer-machine AI-egress lane.</p>
 
     <div style="margin-bottom:40px;">
-      <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px;padding-bottom:8px;border-bottom:2px solid var(--ink);">In Scope — Tether addresses these threats</div>
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px;padding-bottom:8px;border-bottom:2px solid var(--ink);">In scope — Tether addresses these</div>
       <div class="threat-row">
-        <div class="threat-cell"><div class="threat-name">Inadvertent Data Exfil</div><div class="threat-sub">Developer carelessness</div></div>
-        <div class="threat-cell"><p>Developers unknowingly pasting proprietary code, credentials, or PII into AI completions or chat interfaces. Tether intercepts and evaluates before transmission.</p></div>
-        <div class="threat-cell"><p><span class="badge badge-green">Covered</span> System-wide intercept catches this regardless of which application generates the request.</p></div>
+        <div class="threat-cell"><div class="threat-name">Inadvertent data exfil</div><div class="threat-sub">Developer carelessness</div></div>
+        <div class="threat-cell">Developers pasting proprietary code, credentials, or PII into AI completions or chat interfaces. Tier 0 floor + sync judge catch known patterns and fail-closed-on-timeout configurations.</div>
+        <div class="threat-cell"><span class="badge badge-green">Covered</span> &nbsp; For known patterns and configurations that route through the proxy.</div>
       </div>
       <div class="threat-row">
-        <div class="threat-cell"><div class="threat-name">Shadow AI Tools</div><div class="threat-sub">Unapproved applications</div></div>
-        <div class="threat-cell"><p>Developers installing browser extensions, desktop apps, or CLI utilities that make AI API calls outside the approved toolchain.</p></div>
-        <div class="threat-cell"><p><span class="badge badge-green">Covered</span> System-wide intercept operates below the application layer — it sees all HTTPS egress, not just IDE traffic.</p></div>
+        <div class="threat-cell"><div class="threat-name">Shadow AI tools</div><div class="threat-sub">Unapproved coding agents</div></div>
+        <div class="threat-cell">Developers installing extensions or CLIs that make AI API calls outside the approved toolchain. The proxy classifies the destination host on the CONNECT tunnel; unapproved vendors are blockable.</div>
+        <div class="threat-cell"><span class="badge badge-green">Covered</span> &nbsp; For tools that honor HTTP_PROXY.</div>
       </div>
       <div class="threat-row">
-        <div class="threat-cell"><div class="threat-name">Policy Tampering</div><div class="threat-sub">Local configuration changes</div></div>
-        <div class="threat-cell"><p>A developer attempting to modify, downgrade, or disable the policy running on their machine.</p></div>
-        <div class="threat-cell"><p><span class="badge badge-green">Covered</span> Cryptographic policy verification means the agent will only apply policy it can authenticate. Modified policy is rejected.</p></div>
+        <div class="threat-cell"><div class="threat-name">Policy tampering</div><div class="threat-sub">Local config changes</div></div>
+        <div class="threat-cell">A developer attempting to modify, downgrade, or replay an older policy. Ed25519 verification with monotonic version blocks both tampering and replay.</div>
+        <div class="threat-cell"><span class="badge badge-green">Covered</span></div>
       </div>
       <div class="threat-row">
-        <div class="threat-cell"><div class="threat-name">Compliance Evidence Gaps</div><div class="threat-sub">Audit readiness</div></div>
-        <div class="threat-cell"><p>Inability to demonstrate technical controls over AI usage to auditors, regulators, or enterprise customers.</p></div>
-        <div class="threat-cell"><p><span class="badge badge-green">Covered</span> Immutable audit log captures every decision with timestamp, risk classification, and full context.</p></div>
+        <div class="threat-cell"><div class="threat-name">Compliance evidence gaps</div><div class="threat-sub">Audit readiness</div></div>
+        <div class="threat-cell">Inability to demonstrate technical controls. Append-only <code>policy-audit.jsonl</code> + per-request attestation produce auditable evidence.</div>
+        <div class="threat-cell"><span class="badge badge-green">Covered</span></div>
       </div>
     </div>
 
     <div>
-      <div style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border);">Out of Scope — Tether is not designed for these</div>
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border);">Out of scope — Tether does not address these</div>
       <div class="threat-row">
-        <div class="threat-cell"><div class="threat-name">Server-Side AI Traffic</div><div class="threat-sub">Cloud workloads</div></div>
-        <div class="threat-cell"><p>Agent-to-agent AI calls made from cloud infrastructure, CI/CD pipelines, or server-side processes — not developer endpoints.</p></div>
-        <div class="threat-cell"><p><span class="badge badge-muted">Out of Scope</span> Tether is an endpoint product. Server-side AI governance requires a complementary solution.</p></div>
+        <div class="threat-cell"><div class="threat-name">Server-side AI traffic</div><div class="threat-sub">Cloud workloads</div></div>
+        <div class="threat-cell">Agent-to-agent calls made from CI/CD pipelines or server-side processes — not developer endpoints. Tether is an endpoint product.</div>
+        <div class="threat-cell"><span class="badge badge-muted">Out of scope</span></div>
       </div>
       <div class="threat-row">
-        <div class="threat-cell"><div class="threat-name">SaaS Shadow AI</div><div class="threat-sub">Browser-only access</div></div>
-        <div class="threat-cell"><p>AI tools accessed entirely within the browser without making direct API calls — for example, using ChatGPT via web browser without any local component.</p></div>
-        <div class="threat-cell"><p><span class="badge badge-muted">Partial</span> Browser-based access can be addressed through complementary network controls or policy.</p></div>
+        <div class="threat-cell"><div class="threat-name">Browser-based AI</div><div class="threat-sub">chat.openai.com, claude.ai, gemini.google.com</div></div>
+        <div class="threat-cell">AI tools accessed directly in the browser — no local CLI or extension is involved. Today this is your CASB's domain; Tether's browser-extension coverage is on the roadmap.</div>
+        <div class="threat-cell"><span class="badge badge-muted">Partial</span></div>
       </div>
       <div class="threat-row">
-        <div class="threat-cell"><div class="threat-name">Intentional Insider Threats</div><div class="threat-sub">Motivated adversary</div></div>
-        <div class="threat-cell"><p>A developer with physical access to the machine and significant technical capability who is specifically motivated to circumvent controls.</p></div>
-        <div class="threat-cell"><p><span class="badge badge-muted">Partial</span> Tether raises the cost of bypass significantly but is not designed as a deterrent against a highly motivated, technically sophisticated insider.</p></div>
+        <div class="threat-cell"><div class="threat-name">Tools that bypass HTTP_PROXY</div><div class="threat-sub">Rogue extensions, custom TLS stacks</div></div>
+        <div class="threat-cell">An extension that binds its own socket or uses a hardcoded endpoint bypasses the loopback proxy. Socket-level egress provenance binding is not in the codebase.</div>
+        <div class="threat-cell"><span class="badge badge-muted">Partial</span> &nbsp; Mitigation: managed VSCodium artifact for high-control environments.</div>
+      </div>
+      <div class="threat-row">
+        <div class="threat-cell"><div class="threat-name">Motivated technical insider</div><div class="threat-sub">Adversary with full physical access</div></div>
+        <div class="threat-cell">A developer with deep technical knowledge motivated to circumvent controls (kernel-level interception, custom binaries). Tether raises the cost; it is not a deterrent against this profile.</div>
+        <div class="threat-cell"><span class="badge badge-muted">Partial</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- POLICY DISTRIBUTION SECURITY -->
-<section style="border-bottom:1px solid var(--border);" data-reveal>
+<!-- DISCLOSURE -->
+<section id="disclosures" style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label">Policy Security</div>
-    <h2 class="section-title">How policy is distributed<br/>and verified.</h2>
-    <p class="section-sub">Policy distribution is a potential attack surface. Tether is designed so that a compromised distribution channel cannot result in a weakened or malicious policy being applied.</p>
+    <div class="section-label red">Security disclosures</div>
+    <h2 class="section-title">Coordinated disclosure policy.</h2>
+    <p class="section-sub">If you find a vulnerability in Tether, we want to fix it quickly and credit you publicly. This policy describes scope, process, response timeline, and how to reach us privately.</p>
 
-    <div class="policy-lifecycle" data-reveal-group>
-      <div class="lifecycle-step">
-        <div class="lifecycle-step-num">01</div>
-        <div class="lifecycle-step-name">Author</div>
-        <div class="lifecycle-step-sub">Admin authors policy in console</div>
+    <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:32px;margin-top:8px;">
+      <div class="disc-card">
+        <h3>Scope</h3>
+        <p>In scope: code on <code>master</code> in <code>arich2day/project-tether</code> — Connect proxy (<code>warden/cmd/proxy/</code>), workspace daemon (<code>warden/cmd/workspace/</code>), Overwatch API (<code>overwatch/api/</code>), Overwatch console (<code>overwatch/web/</code>), VS Code extension (<code>vscode-extension/</code>), and the deploy Terraform (<code>deploy/</code>).</p>
+        <p>Out of scope: third-party dependencies (report upstream), Tether's marketing sites, social-engineering vectors, denial-of-service against a customer-deployed tenant (test against a tenant you own).</p>
+        <h3 style="margin-top:8px;">Process</h3>
+        <p>Email a clear write-up, reproducer, and your preferred credit. We acknowledge within 48 hours, triage within 5 business days, and target a fix in 30 days for high-severity issues. We will coordinate disclosure timing with you.</p>
+        <h3 style="margin-top:8px;">Response time targets</h3>
+        <p>Critical (RCE, signing-key compromise, auth bypass): 24-48h acknowledge · 7d fix target.<br/>
+           High (privilege escalation, policy verification bypass): 48h acknowledge · 30d fix target.<br/>
+           Medium / Low: 5 business days acknowledge · best-effort fix.</p>
       </div>
-      <div class="lifecycle-step">
-        <div class="lifecycle-step-num">02</div>
-        <div class="lifecycle-step-name">Sign</div>
-        <div class="lifecycle-step-sub">Console signs bundle cryptographically</div>
-      </div>
-      <div class="lifecycle-step">
-        <div class="lifecycle-step-num">03</div>
-        <div class="lifecycle-step-name">Version</div>
-        <div class="lifecycle-step-sub">Monotonic counter prevents rollback</div>
-      </div>
-      <div class="lifecycle-step">
-        <div class="lifecycle-step-num">04</div>
-        <div class="lifecycle-step-name">Distribute</div>
-        <div class="lifecycle-step-sub">Agents pull with ETag-based change detection</div>
-      </div>
-      <div class="lifecycle-step">
-        <div class="lifecycle-step-num">05</div>
-        <div class="lifecycle-step-name">Verify</div>
-        <div class="lifecycle-step-sub">Agent verifies signature before applying</div>
-      </div>
-      <div class="lifecycle-step">
-        <div class="lifecycle-step-num">06</div>
-        <div class="lifecycle-step-name">Enforce</div>
-        <div class="lifecycle-step-sub">Verified policy applied to all egress</div>
-      </div>
-    </div>
-
-    <div>
-      <div class="security-block">
-        <div class="security-block-header">
-          <span class="security-block-label">Cryptographic Signing</span>
-          <h3>Every policy bundle is signed</h3>
-        </div>
-        <p>Policy is not distributed as plain configuration. Before distribution, the admin console produces a cryptographically signed package that the enforcement agent verifies before applying. A policy that fails verification is discarded — the agent continues enforcing the last verified policy or, if none is available, blocks egress entirely.</p>
-      </div>
-      <div class="security-block">
-        <div class="security-block-header">
-          <span class="security-block-label">Rollback Prevention</span>
-          <h3>Monotonic versioning prevents downgrade attacks</h3>
-        </div>
-        <p>Each policy bundle carries a version counter that agents track. Agents reject any policy bundle with a counter value lower than or equal to the current applied version. This prevents an attacker who has obtained an older, less restrictive policy from replaying it to a developer machine.</p>
-      </div>
-      <div class="security-block">
-        <div class="security-block-header">
-          <span class="security-block-label">Grace Period &amp; Cache</span>
-          <h3>Connectivity loss doesn't create an open window</h3>
-        </div>
-        <p>When an agent loses connectivity to the policy distribution server, it continues enforcing the last verified policy for a configurable grace period. After the grace period expires without a successful policy refresh, the agent moves to a restrictive fallback posture. The last-known-good policy is cached to disk so the agent doesn't need to fetch on every startup.</p>
+      <div class="disc-card">
+        <div class="key">Report a vulnerability</div>
+        <p><a href="mailto:security@tetherconnect.app">security@tetherconnect.app</a></p>
+        <!-- TODO(pgp-key): publish public key fingerprint and key URL — line hidden until key publishes -->
+        <div class="key">Sensitive reports</div>
+        <p>For reports requiring transport encryption, request our key by email before sending details.</p>
+        <div class="key">Safe harbor</div>
+        <p>Good-faith research under this policy is not subject to legal action by Tether. Do not access customer data, do not exfiltrate, do not disrupt service.</p>
+        <div class="key">Public credit</div>
+        <p>We maintain a public Hall of Thanks. You decide whether you want to be listed.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- COMPLIANCE -->
+<!-- COMPLIANCE EVIDENCE (hedged) -->
 <section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label">Compliance Support</div>
-    <h2 class="section-title">Supports your compliance<br/>program.</h2>
-    <p class="section-sub">Tether's audit trail and policy controls are designed to provide evidence relevant to leading security frameworks. Tether Connect is not itself SOC 2 or ISO 27001 certified — your organization's certification program will assess controls in your full environment.</p>
-    <div class="compliance-grid" data-reveal-group>
-      <div class="compliance-card">
-        <div class="compliance-framework">SOC 2</div>
-        <p class="compliance-desc">Tether produces evidence relevant to Common Criteria and Availability principles. Controls apply within the developer endpoint scope.</p>
-        <ul class="compliance-items">
-          <li>Logical access controls (CC6.1, CC6.3)</li>
-          <li>Data transmission protection (CC6.7)</li>
-          <li>Change management evidence (CC8.1)</li>
-          <li>Audit log for security events (CC7.2)</li>
-          <li>Monitoring of authorized access (CC7.1)</li>
-        </ul>
+    <div class="section-label">Compliance evidence</div>
+    <h2 class="section-title">What we produce.<br/>Not what we sign for you.</h2>
+    <p class="section-sub">Tether is not itself SOC 2 or ISO 27001 certified — your auditor evaluates Tether as a control in your environment. What we produce is auditable evidence your auditor can map.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);background:var(--bg);">
+      <div style="padding:28px;border-right:1px solid var(--border);">
+        <div style="font-family:var(--cond);font-weight:700;font-size:16px;text-transform:uppercase;margin-bottom:10px;">SOC 2 evidence</div>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;">CC6 logical access (SCIM via Jackson + role-from-groups + audit). CC7 system monitoring (SIEM fan-out + posture heartbeats). CC8 change management (Ed25519-signed bundles + append-only audit + per-request attestation).</p>
       </div>
-      <div class="compliance-card">
-        <div class="compliance-framework">ISO 27001</div>
-        <p class="compliance-desc">Policy controls and audit trail produce evidence relevant to multiple Annex A control domains. Scope limited to developer endpoint activities.</p>
-        <ul class="compliance-items">
-          <li>Access control policy (A.9)</li>
-          <li>Cryptographic controls (A.10)</li>
-          <li>Operations security — monitoring (A.12)</li>
-          <li>Information transfer controls (A.13)</li>
-          <li>Supplier relationships — AI services (A.15)</li>
-        </ul>
+      <div style="padding:28px;border-right:1px solid var(--border);">
+        <div style="font-family:var(--cond);font-weight:700;font-size:16px;text-transform:uppercase;margin-bottom:10px;">FedRAMP relevance</div>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;">Per-request attestation linking <code>event.id</code> to the active signed bundle is unusual at this stage. Federal buyers care deeply about per-request provenance — this is the highest-leverage capability for that market.</p>
       </div>
-      <div class="compliance-card">
-        <div class="compliance-framework">AI Governance</div>
-        <p class="compliance-desc">Designed to support emerging AI governance requirements. The regulatory landscape is evolving — consult your legal and compliance team for applicability.</p>
-        <ul class="compliance-items">
-          <li>Documented controls over AI data handling</li>
-          <li>Audit trail for AI usage decisions</li>
-          <li>Risk-based evaluation of AI requests</li>
-          <li>Policy versioning and change management</li>
-          <li>Employee awareness and policy enforcement</li>
-        </ul>
+      <div style="padding:28px;">
+        <div style="font-family:var(--cond);font-weight:700;font-size:16px;text-transform:uppercase;margin-bottom:10px;">AI governance</div>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;">Documented technical controls over AI data handling, audit trail of AI usage decisions, risk-based evaluation, policy versioning. Map this to your AI-governance program; we don't pretend to interpret the EU AI Act for you.</p>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ZERO TRUST MATURITY -->
-<section id="ztmm" style="border-bottom:1px solid var(--border);" data-reveal>
-  <div class="wrap section-pad">
-    <div class="section-label">Zero Trust Maturity</div>
-    <h2 class="section-title">Contributes to your<br/>ZTMM 2.0 program.</h2>
-    <p class="section-sub">CISA's Zero Trust Maturity Model 2.0 is a framework — not a certification — for measuring how far your organization has moved from perimeter-based to zero-trust security across five pillars. Tether covers the AI-usage slice: the Data, Applications &amp; Workloads, and Devices pillars where developer AI flows live. Use the mapping below in your ZTMM self-assessment.</p>
-
-    <div style="margin-bottom:48px;">
-      <div class="pillar-row">
-        <div class="pillar-label">
-          <div class="pillar-name">Identity</div>
-          <span class="pillar-stage initial">Stage · Initial</span>
-        </div>
-        <div class="pillar-body">
-          <ul class="pillar-bullets">
-            <li>Tenant- and group-scoped policy via SSO / SAML integration</li>
-            <li>Per-decision audit log tied to the authenticated developer</li>
-            <li>Session controls and idle lock in the managed IDE</li>
-          </ul>
-        </div>
-        <div class="pillar-not">
-          <div class="pillar-not-label">Not in scope</div>
-          <p>SCIM provisioning, continuous user re-authorization, IdP risk-signal ingestion. Pair with your existing Okta / Entra deployment for those.</p>
-        </div>
-      </div>
-
-      <div class="pillar-row">
-        <div class="pillar-label">
-          <div class="pillar-name">Devices</div>
-          <span class="pillar-stage advanced">Stage · Advanced</span>
-        </div>
-        <div class="pillar-body">
-          <ul class="pillar-bullets">
-            <li>Tamper-resistant enforcement agent on every developer endpoint</li>
-            <li>MDM-distributed signed installer (Jamf, Intune, etc.)</li>
-            <li>Fail-closed posture — blocks AI egress when policy can't be verified</li>
-            <li>Heartbeat and posture reporting back to the admin console</li>
-          </ul>
-        </div>
-        <div class="pillar-not">
-          <div class="pillar-not-label">Not in scope</div>
-          <p>Hardware attestation (TPM-bound identity), native EDR integration (CrowdStrike, Defender for Endpoint). Surface device posture to your EDR or IdP via the audit feed.</p>
-        </div>
-      </div>
-
-      <div class="pillar-row">
-        <div class="pillar-label">
-          <div class="pillar-name">Networks</div>
-          <span class="pillar-stage traditional">Stage · Traditional</span>
-        </div>
-        <div class="pillar-body">
-          <ul class="pillar-bullets">
-            <li>System-wide HTTPS intercept on the endpoint catches all AI egress</li>
-            <li>VPN, hotspot, and split-tunnel routes don't bypass the agent</li>
-            <li>Air-gap mode operates with the cloud judge unreachable</li>
-          </ul>
-        </div>
-        <div class="pillar-not">
-          <div class="pillar-not-label">Not in scope</div>
-          <p>Network-layer micro-segmentation, ZTNA tunneling. Tether is endpoint-side by design — pair with your Cloudflare Zero Trust / Zscaler / Netskope stack for the network half.</p>
-        </div>
-      </div>
-
-      <div class="pillar-row">
-        <div class="pillar-label">
-          <div class="pillar-name">Applications &amp; Workloads</div>
-          <span class="pillar-stage advanced">Stage · Advanced</span>
-        </div>
-        <div class="pillar-body">
-          <ul class="pillar-bullets">
-            <li>Per-application policy across browser extension, IDE plugin, and OS-level intercept</li>
-            <li>Two-tier AI judging — on-device first, cloud escalation on ambiguous cases</li>
-            <li>Controlled IDE extension allowlist — unapproved AI tools aren't available</li>
-            <li>Deny-by-default for unrecognized AI endpoints</li>
-          </ul>
-        </div>
-        <div class="pillar-not">
-          <div class="pillar-not-label">Not in scope</div>
-          <p>Workload identity for east-west service traffic, application discovery beyond AI. Tether's app scope is AI-usage specifically.</p>
-        </div>
-      </div>
-
-      <div class="pillar-row">
-        <div class="pillar-label">
-          <div class="pillar-name">Data</div>
-          <span class="pillar-stage advanced">Stage · Advanced</span>
-        </div>
-        <div class="pillar-body">
-          <ul class="pillar-bullets">
-            <li>On-device payload inspection before any data leaves the endpoint</li>
-            <li>PII, PHI, PCI, credential, and trade-secret pattern detection</li>
-            <li>Clipboard and data-transfer controls in the managed IDE</li>
-            <li>Watermarking mode for traceable allowed transfers</li>
-            <li>Immutable audit log of every data-movement decision</li>
-          </ul>
-        </div>
-        <div class="pillar-not">
-          <div class="pillar-not-label">Not in scope</div>
-          <p>Native data classification taxonomy (tags), integration with enterprise DLP (Microsoft Purview, Symantec). Use Tether's classifications as upstream input to your existing DLP.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="section-label" style="margin-bottom:14px;">Cross-Cutting Capabilities</div>
-    <div class="compliance-grid">
-      <div class="compliance-card">
-        <div class="compliance-framework">Visibility &amp; Analytics</div>
-        <p class="compliance-desc"><strong style="color:var(--green);">Stage · Advanced</strong> — per-decision audit with risk classification, fleet posture in real time, evidence-ready exports.</p>
-        <ul class="compliance-items">
-          <li>Immutable audit log for every block / coach / warn / allow</li>
-          <li>Fleet health: enrollment, policy version, last check-in</li>
-          <li>Compliance exports (SOC 2, ISO 27001 evidence formats)</li>
-        </ul>
-      </div>
-      <div class="compliance-card">
-        <div class="compliance-framework">Automation &amp; Orchestration</div>
-        <p class="compliance-desc"><strong style="color:var(--amber);">Stage · Initial</strong> — policy distribution and rollback are automated; SIEM, SOAR, and webhook integrations are on the roadmap.</p>
-        <ul class="compliance-items">
-          <li>Cryptographically signed policy auto-distributes on heartbeat</li>
-          <li>One-click policy rollback to any prior version</li>
-          <li>Roadmap: native Splunk / Sentinel / Datadog connectors and per-decision webhooks</li>
-        </ul>
-      </div>
-      <div class="compliance-card">
-        <div class="compliance-framework">Governance</div>
-        <p class="compliance-desc"><strong style="color:var(--green);">Stage · Advanced</strong> — cryptographically signed policy, full version history, multi-tenant separation, fail-closed defaults.</p>
-        <ul class="compliance-items">
-          <li>Signature verified on every request — not just on fetch</li>
-          <li>Versioned policy with full rollback history</li>
-          <li>Multi-tenant — dozens of groups managed from one console</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="ztmm-closer">
-      <strong>Tether is the AI-usage slice of a Zero Trust stack — not the whole stack.</strong> The placements above are Tether's self-assessment against CISA's pillar definitions, not an assertion of certification. ZTMM 2.0 is a maturity model published by the U.S. Cybersecurity and Infrastructure Security Agency — there is nothing for a vendor to be "compliant with." Treat the mapping as evidence for your own program, and integrate Tether alongside your existing IdP (Okta, Entra), ZTNA / SASE (Cloudflare, Zscaler, Netskope), EDR (CrowdStrike, Defender), and SIEM (Splunk, Sentinel, Datadog).
     </div>
   </div>
 </section>
 
 <!-- CTA -->
-<div class="cta-band" data-reveal>
-  <div class="cta-inner">
-    <div class="cta-text">
-      <h2>Security questions?</h2>
-      <p>We'll walk through the architecture in detail and answer questions about your specific threat model and compliance requirements.</p>
+<div style="background:var(--ink);color:var(--surface);border-top:1px solid var(--border);">
+  <div style="max-width:1200px;margin:0 auto;padding:64px 40px;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;">
+    <div>
+      <h2 style="font-family:var(--cond);font-weight:700;font-size:28px;text-transform:uppercase;margin-bottom:8px;letter-spacing:-0.01em;">Bring your threat model.<br/>We will walk it through ours.</h2>
+      <p style="font-size:14px;color:#9a9088;font-weight:300;max-width:480px;line-height:1.7;">A 30-minute review with your CISO, your AppSec lead, or your compliance team. We come with the code citations; you bring the questions.</p>
     </div>
-    <div class="cta-actions">
-      <a href="contact.html" class="btn-primary-inv">Request a Demo ↗</a>
-      <a href="mailto:alvin@tetherconnect.app" class="btn-outline-inv">Security Contact →</a>
-    </div>
+    <a href="contact.html" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:0.06em;color:var(--ink);background:var(--surface);padding:11px 22px;text-decoration:none;border:1px solid var(--surface);">Book a 30-min walkthrough ↗</a>
   </div>
 </div>
 
+</main>
+
 <footer class="tc-footer">
   <div class="footer-inner">
-    <div class="footer-brand"><div class="footer-brand-name">Tether<span>Connect</span></div><p>AI security enforcement for enterprise developer teams.</p><div class="footer-domains"><a href="https://tetherconnect.app">tetherconnect.app</a><a href="https://ai-security.app">ai-security.app</a></div></div>
-    <div class="footer-col"><h5>Product</h5><ul><li><a href="product.html">Overview</a></li><li><a href="security.html">Security Architecture</a></li><li><a href="pricing.html">Pricing</a></li></ul></div>
-    <div class="footer-col"><h5>Company</h5><ul><li><a href="company.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div>
-    <div class="footer-col"><h5>Legal</h5><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms of Service</a></li></ul></div>
+    <div class="footer-brand">
+      <div class="footer-brand-name">Tether<span>Connect</span></div>
+      <p>AI-egress visibility-and-enforcement for developer machines.</p>
+      <div class="footer-domains">
+        <a href="https://tetherconnect.app">tetherconnect.app</a>
+        <a href="https://ai-security.app">ai-security.app</a>
+      </div>
+    </div>
+    <div class="footer-col"><div class="footer-col-title">Product</div><ul>
+      <li><a href="how-it-works.html">How it works</a></li>
+      <li><a href="controls.html">Controls</a></li>
+      <li><a href="integrations.html">Integrations</a></li>
+      <li><a href="security.html">Security</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+    </ul></div>
+    <div class="footer-col"><div class="footer-col-title">Open source</div><ul>
+      <li><a href="https://github.com/arich2day/project-tether/tree/master/docs" target="_blank" rel="noopener">Docs ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether" target="_blank" rel="noopener">GitHub ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether/blob/master/docs/reviews/SUMMARY.md" target="_blank" rel="noopener">Review verdict ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether/blob/master/docs/DEFENSIVE_PUBLICATION_GOVPROXY.md" target="_blank" rel="noopener">Defensive publication ↗</a></li>
+    </ul></div>
+    <div class="footer-col"><div class="footer-col-title">Company</div><ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="pilot.html">Pilot</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="security.html#disclosures">Security disclosures</a></li>
+    </ul></div>
   </div>
-  <div class="footer-bottom"><p>© 2026 Tether Connect. All rights reserved.</p><div class="footer-bottom-links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div>
+  <div class="footer-bottom">
+    <p>© 2026 Tether Connect. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="security.html#disclosures">Security</a>
+    </div>
+  </div>
 </footer>
 <script src="motion.js" defer></script>
 </body>
