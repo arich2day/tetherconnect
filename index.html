@@ -121,12 +121,12 @@
   <canvas class="wave-canvas" data-waves data-density="13000" aria-hidden="true"></canvas>
   <div class="hero-inner">
     <div class="hero-left tc-hero-in">
-      <div class="hero-eyebrow">For the developer machine</div>
+      <div class="hero-eyebrow">The AI-egress governance gap</div>
       <h1>You have controls<br/>on every other<br/>egress lane.<br/><em>AI tools are the gap.</em></h1>
-      <p class="hero-sub">Tether is a visibility-and-enforcement layer for AI-tool egress on the developer machine. Every decision carries a signed policy version your auditor re-verifies offline. The shape is three layers: a Tier 0 deterministic floor that always blocks, an optional Tier 1 sync judge that fails closed when enabled, and an advisory Tier 2 async judge that produces evidence.</p>
+      <p class="hero-sub">See, control, and prove what your developers send to AI tools — in your own cloud, without slowing them down, and without a root certificate on a single laptop. Tether closes the one egress lane your EDR, CASB, and DLP were never built to watch.</p>
       <div class="hero-stat-row">
-        <span><strong>~10s</strong> &nbsp;fleet policy propagation</span>
-        <span>Ed25519 signed policy bundles &nbsp;—&nbsp; no MITM CA on the developer machine</span>
+        <span><strong>Your cloud.</strong> &nbsp;No Tether-side data lake to leak.</span>
+        <span><strong>No MITM cert.</strong> &nbsp;Verify the endpoint yourself.</span>
       </div>
       <div class="hero-actions">
         <a href="contact.html" class="btn-primary">Book a 30-min walkthrough ↗</a>
@@ -136,21 +136,24 @@
     <div class="hero-terminal" data-tilt data-tilt-max="4">
       <span data-tilt-glare></span>
       <div class="terminal-bar">
-        <span class="terminal-title">tether-proxy · 127.0.0.1:11435 · policy v42</span>
+        <span class="terminal-title">A risky moment, governed</span>
         <div class="terminal-status">
           <div class="dot-live"></div>
-          <span class="terminal-live-label">ACTIVE</span>
+          <span class="terminal-live-label">IN YOUR CLOUD</span>
         </div>
       </div>
       <div class="terminal-body">
-        <div><span class="t-dim">[09:14:32]</span> <span class="t-green">POLICY</span> v42 verified · Ed25519 sig OK</div>
-        <div><span class="t-dim">[09:14:33]</span> <span class="t-blue">CONNECT</span> claude-code → api.anthropic.com · agent=claude-code</div>
-        <div><span class="t-dim">[09:14:51]</span> <span class="t-blue">PROXY</span> POST /v1/messages · 2.1KB · floor=clear</div>
-        <div><span class="t-dim">[09:14:51]</span> <span class="t-green">ALLOW</span> identity=alex@acme · X-Tether-Policy-Version: 42</div>
-        <div><span class="t-dim">[09:15:04]</span> <span class="t-yellow">JUDGE</span> sampled · cloud-sync · timeout 800ms</div>
-        <div><span class="t-dim">[09:15:09]</span> <span class="t-red">BLOCK</span> matched deterministic blocklist · aws_access_key</div>
-        <div><span class="t-dim">[09:15:09]</span> <span class="t-dim">SIEM</span> → splunk-hec · event_id=AI_PROXY_REQUEST</div>
-        <div><span class="t-dim">[09:15:12]</span> <span class="t-blue">AUDIT</span> policy-audit.jsonl appended<span class="t-cursor"></span></div>
+        <div><span class="t-dim">BEFORE</span></div>
+        <div><span class="t-red">→</span> A developer pastes a customer record into an AI prompt.</div>
+        <div><span class="t-dim">&nbsp;&nbsp;&nbsp;It leaves the laptop. You never see it.</span></div>
+        <div style="height:10px;"></div>
+        <div><span class="t-dim">AFTER, WITH TETHER</span></div>
+        <div><span class="t-green">✓</span> Security sees the attempt in the SIEM you already run.</div>
+        <div><span class="t-green">✓</span> Policy catches the risky moment — no developer ticket.</div>
+        <div><span class="t-green">✓</span> An operator decides in seconds. The dev keeps working.</div>
+        <div><span class="t-blue">✓</span> A signed receipt your auditor re-verifies offline.<span class="t-cursor"></span></div>
+        <div style="height:10px;"></div>
+        <div><span class="t-dim">&nbsp;&nbsp;&nbsp;And it never left your cloud.</span></div>
       </div>
     </div>
   </div>
@@ -184,39 +187,87 @@
         <p>The only record of what your developers prompted is at the AI vendor. It is not in your SIEM, not on your audit timeline, and not available during incident response.</p>
       </div>
     </div>
-    <p style="font-size:14px;color:var(--ink);font-weight:500;line-height:1.7;margin-top:32px;max-width:760px;">Tether <strong>does not</strong> replace your EDR, CASB, IdP/SSO, or DLP. It covers the AI-egress lane on the developer machine each of them misses. <a href="pilot.html#coexistence" style="color:var(--red);text-decoration:underline;text-underline-offset:3px;">Full coexistence map →</a></p>
+    <p style="font-size:14px;color:var(--ink);font-weight:500;line-height:1.7;margin-top:32px;max-width:760px;">Tether <strong>does not</strong> replace your EDR, CASB, IdP/SSO, or DLP. It covers the AI-egress lane on the developer machine each of them misses, and feeds the SIEM and IdP you already trust. <a href="pilot.html#coexistence" style="color:var(--red);text-decoration:underline;text-underline-offset:3px;">Full coexistence map →</a></p>
+  </div>
+</section>
+
+<!-- COST OF INACTION -->
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label red">What the gap costs you</div>
+    <h2 class="section-title">The day this matters is the day<br/>you can't answer the question.</h2>
+    <p class="section-sub">Three moments put real stakes on the blind spot. In every one, "we don't have a record" is the wrong answer to be giving.</p>
+    <div class="reality-grid" data-reveal-group>
+      <div class="reality-cell">
+        <div class="reality-tag">Audit</div>
+        <h3>The auditor asks what left.</h3>
+        <p>SOC 2, FedRAMP, an AI-governance review — the control owner asks for evidence of what your developers sent to AI tools, and which policy decided it. Today the only record is at the vendor, and it isn't on your timeline.</p>
+      </div>
+      <div class="reality-cell">
+        <div class="reality-tag">Breach</div>
+        <h3>Incident response has no trail.</h3>
+        <p>A customer record or a live credential surfaces where it shouldn't. You need to scope what was exposed through AI tools and when. The egress lane that carried it never appeared in your SIEM.</p>
+      </div>
+      <div class="reality-cell">
+        <div class="reality-tag">Deadline</div>
+        <h3>The mandate lands with a date on it.</h3>
+        <p>A customer contract, a regulator, or your own board sets a date to govern AI usage. A control you can stand up, prove, and tear down in two weeks beats a year-long platform program — and the AI tools are already in production.</p>
+      </div>
+      <div class="reality-cell">
+        <div class="reality-tag">The fix</div>
+        <h3>Close it before you're asked.</h3>
+        <p>Tether turns the blind spot into a governed, audit-ready channel — in your own cloud, with evidence your auditor verifies offline. <a href="pilot.html" style="color:var(--red);text-decoration:underline;text-underline-offset:3px;">Prove it on your own data in two weeks →</a></p>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- THREE STRONGEST SELLING POINTS (BUILT) -->
 <section data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label">What's built today</div>
-    <h2 class="section-title">Three capabilities your security org can audit<br/>against the code on day one.</h2>
-    <p class="section-sub">Every claim below points at a line on master. The full claims-to-code map is in the repo.</p>
+    <div class="section-label">What you get</div>
+    <h2 class="section-title">Five outcomes — and a one-line proof<br/>a skeptic actually accepts.</h2>
+    <p class="section-sub">No social proof, because we don't claim customers we don't have. Verifiability instead: every claim here is something you can check yourself during a two-week pilot on your own data.</p>
     <div class="sp-grid" data-reveal-group>
       <div class="sp-card">
-        <div class="sp-num">01 · POLICY</div>
-        <h3>Cryptographically signed policy distribution</h3>
-        <p>Every published policy bundle is Ed25519-signed in Overwatch and verified by the proxy before it takes effect. Fail-closed on signature mismatch; replay blocked by a monotonic version. Fleet propagation is bounded by a 10-second poll.</p>
-        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/policy-signing.js#L122-L150" target="_blank" rel="noopener">policy-signing.js:122-150</a>
-        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/policy_client.go#L26" target="_blank" rel="noopener">policy_client.go:26</a>
+        <div class="sp-num">01 · SEE IT</div>
+        <h3>See the AI-egress channel you're blind to</h3>
+        <p>Prompts, completions, and the developer behind them land in the security view and stream to your SIEM — the AI lane your other tools treat as just another approved host.</p>
+        <p style="color:var(--ink);font-weight:400;font-size:13px;border-left:2px solid var(--red);padding-left:12px;margin-top:14px;">"It streams to the SIEM you already run, inside your own tenant."</p>
       </div>
       <div class="sp-card">
-        <div class="sp-num">02 · DEPLOY</div>
-        <h3>Runs in your own GCP or AWS account</h3>
-        <p>One Overwatch service per tenant, provisioned via Terraform in your cloud project. No Tether-hosted data transit. No root CA installed on the developer machine. Per-tenant secrets live in your Secret Manager / Secrets Manager.</p>
-        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/deploy/README.md" target="_blank" rel="noopener">deploy/README.md</a>
-        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/main.go#L1-L22" target="_blank" rel="noopener">proxy/main.go:1-22</a>
+        <div class="sp-num">02 · GOVERN IT</div>
+        <h3>Enforce at the moment of risk — no ticket</h3>
+        <p>Most actions pass untouched. Only genuine risk triggers a just-in-time approval an operator clears in seconds. Safe work is never ticketed; policy reaches the whole fleet fast.</p>
+        <p style="color:var(--ink);font-weight:400;font-size:13px;border-left:2px solid var(--red);padding-left:12px;margin-top:14px;">"Policy is Ed25519-signed and reaches the whole fleet in ~10s."</p>
       </div>
       <div class="sp-card">
-        <div class="sp-num">03 · EVIDENCE</div>
-        <h3>Reproducible per-request attestation</h3>
-        <p>Every decision carries an <code style="font-family:var(--mono);font-size:12px;background:var(--surface2);padding:1px 5px;">X-Tether-Policy-Version</code> response header. Every event and judge review stamps the active version. An auditor pulls the signed bundle and verifies the Ed25519 signature offline against the controls in force.</p>
-        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/docs/ATTESTATION.md" target="_blank" rel="noopener">docs/ATTESTATION.md</a>
+        <div class="sp-num">03 · PROVE IT</div>
+        <h3>Turn a blind spot into audit-ready evidence</h3>
+        <p>Every decision carries a signed policy version. The blind spot becomes a record you can hand to an auditor — and they confirm it without taking your word for it.</p>
+        <p style="color:var(--ink);font-weight:400;font-size:13px;border-left:2px solid var(--red);padding-left:12px;margin-top:14px;">"Your auditor re-verifies the evidence offline, without trusting us."</p>
       </div>
     </div>
-    <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:36px;max-width:780px;">There are five more BUILT capabilities — SIEM adapters for Splunk HEC, Microsoft Sentinel, and syslog RFC 5424 UDP; SCIM via Jackson with role-from-groups mapping; device posture export in Tether / Okta Device Trust / Microsoft Graph managedDevice / CSV; a hardware-adaptive local model judge across four hardware tiers; and a three-tier judge authority model where Tier 0 always blocks. The full list is on the <a href="controls.html" style="color:var(--ink);">Controls page</a>.</p>
+    <div class="sp-grid" data-reveal-group style="border-top:none;">
+      <div class="sp-card">
+        <div class="sp-num">04 · NO BACKLASH</div>
+        <h3>Adopt it without the surveillance fight</h3>
+        <p>No root certificate on developer machines. Tether doesn't read TLS-tunneled content — it governs the egress channel, it doesn't read over a developer's shoulder.</p>
+        <p style="color:var(--ink);font-weight:400;font-size:13px;border-left:2px solid var(--red);padding-left:12px;margin-top:14px;">"No root cert on developer machines — check the endpoint yourself."</p>
+      </div>
+      <div class="sp-card">
+        <div class="sp-num">05 · STACK FIT</div>
+        <h3>Slots into the stack you already trust</h3>
+        <p>It reads your IdP and device-trust posture and writes to your SIEM. No rip-and-replace; it extends EDR, CASB, IdP, and DLP rather than competing with them.</p>
+        <p style="color:var(--ink);font-weight:400;font-size:13px;border-left:2px solid var(--red);padding-left:12px;margin-top:14px;">"Reads your IdP and device-trust posture, writes to your SIEM, day one."</p>
+      </div>
+      <div class="sp-card" style="background:var(--surface);">
+        <div class="sp-num">FOR THE CHAMPION</div>
+        <h3>Want the machinery?</h3>
+        <p>Every claim above maps to a line on master — the proxy, the signing chain, the SIEM adapters, the attestation. The technical brief lays it out in full, with citations, for the person who has to validate it.</p>
+        <a href="technical-brief.html" style="color:var(--red);text-decoration:underline;text-underline-offset:3px;font-size:13.5px;font-weight:500;display:inline-block;margin-top:8px;">Read the technical brief →</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -224,8 +275,8 @@
 <div class="cta-band" data-reveal>
   <div class="cta-inner">
     <div class="cta-text">
-      <h2>Take a 30 minutes.<br/>Decide if it fits your stack.</h2>
-      <p>A working pilot in your own cloud account in two weeks. Explicit success criteria. <code style="font-family:var(--mono);font-size:12px;color:var(--surface);">terraform destroy</code> if it does not deliver.</p>
+      <h2>Prove it on your own data.</h2>
+      <p>Free up to 25 seats, two weeks, in your own cloud. <code style="font-family:var(--mono);font-size:12px;color:var(--surface);">terraform destroy</code> if it doesn't deliver — there's no Tether-side data to expunge.</p>
     </div>
     <div class="cta-actions">
       <a href="contact.html" class="btn-primary-inv">Book a 30-min walkthrough ↗</a>

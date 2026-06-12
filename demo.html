@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Demo — Tether</title>
-  <meta name="description" content="The five-beat developer-loop story Tether runs every day, with code citations and SIEM event names for each beat. Plus an interactive enforcement simulator."/>
+  <meta name="description" content="The same workflow, before and after Tether: an invisible AI-egress channel becomes a governed, audit-ready one — security sees it, policy catches the risky moment, an operator decides in seconds, and the developer barely notices. Plus an interactive simulator."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
@@ -19,63 +19,29 @@
     .beat-layout { display: grid; grid-template-columns: 1.7fr 1fr; gap: 32px; align-items: start; }
     @media (max-width: 900px) { .beat-layout { grid-template-columns: 1fr; } }
 
-    /* Simulator interaction model preserved from prior demo */
-    .sim-wrap {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      display: grid;
-      grid-template-columns: 220px 1fr 220px;
-      min-height: 460px;
-    }
-    .sim-col-head {
-      font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--muted); padding: 14px 16px; border-bottom: 1px solid var(--border); background: var(--surface2);
-    }
-    .sim-col { border-right: 1px solid var(--border); display: flex; flex-direction: column; }
-    .sim-col:last-child { border-right: none; }
-    .sim-col-body { padding: 14px; flex: 1; }
+    /* Risk / evidence card — the reskinned beat visual */
+    .risk-card { border: 1px solid var(--border); background: var(--surface); }
+    .risk-card-bar { background: var(--shell); color: var(--shell-ink); padding: 12px 16px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; display: flex; align-items: center; gap: 10px; }
+    .risk-card-bar .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .risk-card-body { padding: 22px 24px; }
+    .rc-row { display: grid; grid-template-columns: 96px 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); align-items: start; }
+    .rc-row:last-child { border-bottom: none; }
+    .rc-k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding-top: 2px; }
+    .rc-v { font-size: 14px; color: var(--ink2); font-weight: 300; line-height: 1.6; }
+    .rc-v strong { color: var(--ink); font-weight: 500; }
+    .rc-before { color: var(--red); }
+    .rc-after { color: #1f7f3a; }
+    .rc-block { color: var(--red); }
+    .rc-hold { color: #7a4800; }
+    .rc-allow { color: #1f7f3a; }
 
-    .scenario-btn {
-      display: block; width: 100%; text-align: left; background: var(--bg); border: 1px solid var(--border);
-      padding: 12px 14px; margin-bottom: 10px; cursor: pointer; transition: border-color 0.15s, background 0.15s;
-      font-family: var(--sans);
-    }
-    .scenario-btn:hover { border-color: var(--ink); }
-    .scenario-btn.active { border-color: var(--red); background: var(--surface); }
-    .s-name { font-family: var(--cond); font-weight: 600; font-size: 13px; text-transform: uppercase; margin-bottom: 4px; }
-    .s-desc { font-size: 11.5px; color: var(--muted); line-height: 1.5; font-weight: 300; }
+    /* "What this means for you" sidebar */
+    .means-box { border: 1px solid var(--border-dk); background: var(--bg); padding: 24px; }
+    .means-box h4 { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 14px; }
+    .means-box .outcome { font-family: var(--cond); font-weight: 700; font-size: 19px; text-transform: uppercase; line-height: 1.1; margin-bottom: 10px; }
+    .means-box p { font-size: 13.5px; color: var(--muted); font-weight: 300; line-height: 1.7; }
 
-    .mode-tab {
-      display: grid; grid-template-columns: 14px 1fr; gap: 10px;
-      padding: 12px 14px; margin-bottom: 10px; background: var(--bg); border: 1px solid var(--border); cursor: pointer;
-    }
-    .mode-tab:hover { border-color: var(--ink); }
-    .mode-tab.active { border-color: var(--red); background: var(--surface); }
-    .mt-dot { width: 10px; height: 10px; margin-top: 4px; }
-    .mt-name { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--ink); letter-spacing: 0.04em; }
-    .mt-sub { font-size: 11px; color: var(--muted); font-weight: 300; }
-
-    .sim-stage {
-      padding: 0;
-      display: flex; flex-direction: column;
-      background: var(--shell);
-      color: var(--shell-ink);
-      font-family: var(--mono); font-size: 12px; line-height: 1.7;
-    }
-    .stage-topbar { background: #1c1a16; padding: 10px 14px; border-bottom: 1px solid #322f29; display: flex; align-items: center; gap: 8px; }
-    .win-dot { width: 8px; height: 8px; border-radius: 50%; background: #ff6080; }
-    .win-dot:nth-child(2) { background: #f0c040; }
-    .win-dot:nth-child(3) { background: #4cba6a; }
-    .stage-app-label { color: #8f8a7f; font-size: 11px; margin-left: 12px; }
-    .stage-body { flex: 1; padding: 16px; min-height: 240px; }
-    .stage-line { margin-bottom: 6px; }
-    .stage-line .t-dim { color: #58544d; } .stage-line .t-green { color: #4cba6a; } .stage-line .t-red { color: #ff6080; } .stage-line .t-blue { color: #6aacff; } .stage-line .t-yellow { color: #f0c040; }
-    .playback-bar { display: flex; align-items: center; gap: 14px; padding: 14px; background: #1c1a16; border-top: 1px solid #322f29; }
-    .play-btn { background: var(--red); color: var(--surface); border: none; padding: 8px 16px; font-family: var(--mono); font-size: 12px; cursor: pointer; letter-spacing: 0.04em; }
-    .play-btn:hover { opacity: 0.85; }
-    .step-label { font-size: 10px; color: #8f8a7f; letter-spacing: 0.06em; }
-
-    /* Console mock — operator screen for beat 4 */
+    /* Operator console mock — beat 4 */
     .op-mock { background: var(--bg); border: 1px solid var(--border); }
     .op-mock-bar { background: var(--shell); color: var(--shell-ink); padding: 10px 14px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; display: flex; gap: 12px; }
     .op-mock-bar .pill { font-size: 10px; padding: 1px 6px; border: 1px solid #322f29; background: #1c1a16; }
@@ -89,6 +55,41 @@
     .op-btn { font-family: var(--mono); font-size: 11px; padding: 6px 10px; border: 1px solid; cursor: default; letter-spacing: 0.04em; }
     .op-btn.approve { color: var(--green); border-color: var(--green-bd); background: var(--green-bg); }
     .op-btn.deny { color: var(--red); border-color: var(--red-bd); background: var(--red-bg); }
+
+    /* Simulator interaction model preserved from prior demo */
+    .sim-wrap { background: var(--surface); border: 1px solid var(--border); display: grid; grid-template-columns: 220px 1fr 220px; min-height: 460px; }
+    .sim-col-head { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 14px 16px; border-bottom: 1px solid var(--border); background: var(--surface2); }
+    .sim-col { border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+    .sim-col:last-child { border-right: none; }
+    .sim-col-body { padding: 14px; flex: 1; }
+    .scenario-btn { display: block; width: 100%; text-align: left; background: var(--bg); border: 1px solid var(--border); padding: 12px 14px; margin-bottom: 10px; cursor: pointer; transition: border-color 0.15s, background 0.15s; font-family: var(--sans); }
+    .scenario-btn:hover { border-color: var(--ink); }
+    .scenario-btn.active { border-color: var(--red); background: var(--surface); }
+    .s-name { font-family: var(--cond); font-weight: 600; font-size: 13px; text-transform: uppercase; margin-bottom: 4px; }
+    .s-desc { font-size: 11.5px; color: var(--muted); line-height: 1.5; font-weight: 300; }
+    .mode-tab { display: grid; grid-template-columns: 14px 1fr; gap: 10px; padding: 12px 14px; margin-bottom: 10px; background: var(--bg); border: 1px solid var(--border); cursor: pointer; }
+    .mode-tab:hover { border-color: var(--ink); }
+    .mode-tab.active { border-color: var(--red); background: var(--surface); }
+    .mt-dot { width: 10px; height: 10px; margin-top: 4px; }
+    .mt-name { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--ink); letter-spacing: 0.04em; }
+    .mt-sub { font-size: 11px; color: var(--muted); font-weight: 300; }
+    .sim-stage { padding: 0; display: flex; flex-direction: column; background: var(--surface); }
+    .stage-topbar { background: var(--shell); color: var(--shell-ink); padding: 10px 14px; border-bottom: 1px solid #322f29; display: flex; align-items: center; gap: 8px; }
+    .win-dot { width: 8px; height: 8px; border-radius: 50%; background: #ff6080; }
+    .win-dot:nth-child(2) { background: #f0c040; }
+    .win-dot:nth-child(3) { background: #4cba6a; }
+    .stage-app-label { color: #8f8a7f; font-size: 11px; margin-left: 12px; font-family: var(--mono); }
+    .stage-body { flex: 1; padding: 18px; min-height: 240px; }
+    .stage-card-row { display: grid; grid-template-columns: 88px 1fr; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--border); align-items: start; }
+    .stage-card-row:last-child { border-bottom: none; }
+    .scr-k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-top: 2px; }
+    .scr-v { font-size: 13.5px; color: var(--ink2); font-weight: 300; line-height: 1.55; }
+    .scr-v strong { color: var(--ink); font-weight: 500; }
+    .scr-block { color: var(--red); } .scr-allow { color: #1f7f3a; } .scr-hold { color: #7a4800; }
+    .playback-bar { display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--surface2); border-top: 1px solid var(--border); }
+    .play-btn { background: var(--red); color: var(--surface); border: none; padding: 8px 16px; font-family: var(--mono); font-size: 12px; cursor: pointer; letter-spacing: 0.04em; }
+    .play-btn:hover { opacity: 0.85; }
+    .step-label { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; font-family: var(--mono); }
   </style>
 </head>
 <body>
@@ -122,49 +123,32 @@
 <div class="page-hero">
   <canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas>
   <div class="page-hero-inner tc-hero-in">
-    <div class="page-hero-eyebrow">The developer loop</div>
-    <h1>Five beats.<br/>One developer.<br/><em>One audit trail.</em></h1>
-    <p class="page-hero-sub">The same five beats <code>scripts/demo-dry-run.js</code> posts against a live Overwatch. Each beat shows what runs, what's recorded, and the line of code that owns the decision.</p>
+    <div class="page-hero-eyebrow">Before / after</div>
+    <h1>The same workflow.<br/>Now you can <em>see it, govern it,</em><br/>and prove it.</h1>
+    <p class="page-hero-sub">Watch one ordinary moment — a developer pasting sensitive context into an AI tool — go from an invisible, ungoverned channel to one your security team sees, your policy governs, and your auditor can verify. The developer barely notices. Five beats; each one a value moment you'll feel.</p>
   </div>
 </div>
 
 <!-- BEAT 1 -->
 <section class="beat-section">
   <div class="wrap">
-    <div class="beat-head"><span class="beat-eyebrow">Beat 01</span></div>
-    <h2 class="beat-title">Developer hits Claude Code <em>from a laptop</em>.</h2>
-    <p class="beat-sub">The coding agent reads <code>HTTP_PROXY</code> from its environment, opens a connection to <code>127.0.0.1:11435</code>, and forwards a POST to <code>/v1/messages</code>. No agent-side cooperation is required; the env var is enough.</p>
+    <div class="beat-head"><span class="beat-eyebrow">Beat 01 · before</span></div>
+    <h2 class="beat-title">The work happening today — <em>invisible to you</em>.</h2>
+    <p class="beat-sub">A developer asks an AI tool to help refactor some code, and pastes in a real customer record for context. It's a normal Tuesday. The prompt leaves the laptop and reaches the vendor. Nothing in your stack recorded what was in it, who sent it, or that it happened at all.</p>
     <div class="beat-layout">
-      <div class="console-mock">
-        <div class="console-mock-bar">claude-code · ~/repo · session 7a3</div>
-        <div class="console-mock-body">
-          <svg viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="beat1-svg-title beat1-svg-desc">
-            <title id="beat1-svg-title">Beat 1 — developer terminal hitting Claude Code through Tether proxy</title>
-            <desc id="beat1-svg-desc">Terminal session shows claude CLI started with anthropic-base-url set to 127.0.0.1:11435 and http_proxy set to the same loopback address. A POST to /v1/messages is sent through tether-proxy, the deterministic floor returns clear, the sampled judge returns sync, response 200 carries X-Tether-Policy-Version 42, and the request is forwarded to api.anthropic.com.</desc>
-            <style>.t{font-family:'IBM Plex Mono',monospace;font-size:11px;fill:#322f29}.tm{fill:#58544d}.tg{fill:#1f7f3a}.tr{fill:#b51a14}.code{fill:#0e0d0a}</style>
-            <rect width="800" height="220" fill="#f0ebe0"/>
-            <text x="20" y="30" class="t tm">$ claude</text>
-            <text x="20" y="52" class="t tm">› anthropic-base-url: http://127.0.0.1:11435/anthropic/v1</text>
-            <text x="20" y="74" class="t tm">› http_proxy: 127.0.0.1:11435</text>
-            <text x="20" y="100" class="t code">› Help me refactor authMiddleware to handle session refresh.</text>
-            <text x="20" y="124" class="t tm">› [tether] POST /v1/messages 2.1 KB → tether-proxy</text>
-            <text x="20" y="146" class="t tg">› [tether] floor: clear  ·  judge: sampled (sync)</text>
-            <text x="20" y="168" class="t tg">› [200] X-Tether-Policy-Version: 42</text>
-            <text x="20" y="190" class="t tm">› (forwarded to api.anthropic.com)</text>
-          </svg>
+      <div class="risk-card">
+        <div class="risk-card-bar"><span class="dot" style="background:#ff6080;"></span> Without Tether — the blind spot</div>
+        <div class="risk-card-body">
+          <div class="rc-row"><div class="rc-k">Action</div><div class="rc-v">A developer pastes a customer record into an AI prompt for context.</div></div>
+          <div class="rc-row"><div class="rc-k">What left</div><div class="rc-v"><strong>A real customer record</strong> — names, account details — bound for an AI vendor.</div></div>
+          <div class="rc-row"><div class="rc-k">Who saw it</div><div class="rc-v rc-before">No one on your side. EDR saw a connection; CASB saw an approved host; DLP never fired.</div></div>
+          <div class="rc-row"><div class="rc-k">Your record</div><div class="rc-v rc-before">None. The only log of this is at the vendor — not on your timeline.</div></div>
         </div>
       </div>
-      <aside class="beat-sidebar">
-        <h4>What you just saw</h4>
-        <dl>
-          <dt>Runs through</dt>
-          <dd>
-            <a href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/main.go#L98-L103" target="_blank" rel="noopener">proxy/main.go:98-103</a> &nbsp;(bind 127.0.0.1)<br/>
-            <a href="https://github.com/arich2day/project-tether/blob/master/vscode-extension/src/extension.ts#L13" target="_blank" rel="noopener">vscode-extension/extension.ts:13</a> &nbsp;(env injection)
-          </dd>
-          <dt>SIEM event</dt>
-          <dd><span class="ev">AI_PROXY_REQUEST</span> with <code>agent</code>, <code>identity</code>, <code>host</code>, <code>policyVersion</code></dd>
-        </dl>
+      <aside class="means-box">
+        <h4>What this means for you</h4>
+        <div class="outcome">This is the risk you can't currently answer for.</div>
+        <p>Every day, sensitive context flows out a channel your existing controls treat as ordinary traffic. The problem isn't that developers are careless — it's that you have no way to see, govern, or prove what leaves. That's the gap the next four beats close.</p>
       </aside>
     </div>
   </div>
@@ -173,39 +157,23 @@
 <!-- BEAT 2 -->
 <section class="beat-section" style="background:var(--surface);">
   <div class="wrap">
-    <div class="beat-head"><span class="beat-eyebrow">Beat 02</span></div>
-    <h2 class="beat-title">Connect proxy classifies.<br/>Deterministic floor + sampled judge.</h2>
-    <p class="beat-sub">The proxy runs Tier 0 against the request body. If a pattern matches, the request is dead at 403 and the forward path is not reached. If the floor is clear and the request is sampled, the judge runs — sync if the operator opted in to Tier 1, async-only otherwise.</p>
+    <div class="beat-head"><span class="beat-eyebrow">Beat 02 · after</span></div>
+    <h2 class="beat-title">Now you can see it.</h2>
+    <p class="beat-sub">With Tether in place, the same moment surfaces in your security view and streams to the SIEM you already run — attributed to a person, an agent, and a host. The blind spot is a channel you can finally watch.</p>
     <div class="beat-layout">
-      <div class="console-mock">
-        <div class="console-mock-bar">tether-proxy · 127.0.0.1:11435 · v42</div>
-        <div class="console-mock-body">
-          <svg viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="beat2-svg-title beat2-svg-desc">
-            <title id="beat2-svg-title">Beat 2 — Tether proxy classification log</title>
-            <desc id="beat2-svg-desc">Proxy log shows a POST /v1/messages classified at 2.1 KB, the Tier 0 deterministic blocklist returning no match, the sampled Tier 1 sync judge running with an 800 ms timeout and returning verdict ALLOWED in 312 ms, then the request being forwarded to api.anthropic.com with X-Tether-Policy-Version 42 and an AI_PROXY_REQUEST event going to the Splunk HEC adapter.</desc>
-            <style>.t{font-family:'IBM Plex Mono',monospace;font-size:11px;fill:#d6cfbd}.tm{fill:#8f8a7f}.tg{fill:#4cba6a}.tr{fill:#ff6080}.ty{fill:#f0c040}.tb{fill:#6aacff}</style>
-            <rect width="800" height="220" fill="#141210"/>
-            <text x="20" y="28" class="t tm">[09:14:51] CLASSIFY POST /v1/messages · 2.1 KB</text>
-            <text x="20" y="50" class="t ty">[09:14:51] TIER 0  blocklist.go:138  → no match  (clear)</text>
-            <text x="20" y="72" class="t tm">[09:14:51] needsJudgment? novel-agent=false large=false sampled=true</text>
-            <text x="20" y="94" class="t tb">[09:14:51] TIER 1  judge sync · timeout 800ms</text>
-            <text x="20" y="116" class="t tm">[09:14:51]         cloud judge → 312ms → verdict=ALLOWED</text>
-            <text x="20" y="138" class="t tg">[09:14:51] FORWARD  upstream=api.anthropic.com</text>
-            <text x="20" y="160" class="t tg">[09:14:51] HEADER   X-Tether-Policy-Version: 42</text>
-            <text x="20" y="182" class="t tm">[09:14:51] EVENT    AI_PROXY_REQUEST → siem (splunk-hec)</text>
-          </svg>
+      <div class="risk-card">
+        <div class="risk-card-bar"><span class="dot" style="background:#4cba6a;"></span> With Tether — visible in your SIEM</div>
+        <div class="risk-card-body">
+          <div class="rc-row"><div class="rc-k">Who</div><div class="rc-v"><strong>alex@acme</strong>, via a coding agent, from a managed laptop.</div></div>
+          <div class="rc-row"><div class="rc-k">What</div><div class="rc-v">An AI prompt carrying content that looks like a customer record.</div></div>
+          <div class="rc-row"><div class="rc-k">Where</div><div class="rc-v rc-after">In the security view, and streaming to your SIEM — inside your own tenant.</div></div>
+          <div class="rc-row"><div class="rc-k">Tagged</div><div class="rc-v">The policy version in force, so the record is self-describing later.</div></div>
         </div>
       </div>
-      <aside class="beat-sidebar">
-        <h4>What you just saw</h4>
-        <dl>
-          <dt>Tier 0</dt>
-          <dd><a href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/proxy_core.go#L114-L117" target="_blank" rel="noopener">proxy_core.go:114-117</a></dd>
-          <dt>Tier 1 sync</dt>
-          <dd><a href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/proxy_core.go#L130" target="_blank" rel="noopener">proxy_core.go:130</a> · fail-closed at <a href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/proxy_core.go#L158-L181" target="_blank" rel="noopener">:158-181</a></dd>
-          <dt>SIEM event</dt>
-          <dd><span class="ev">AI_PROXY_REQUEST</span> · <code>verdict</code>, <code>deterministic</code>, <code>judgeVerdict</code>, <code>policyVersion</code></dd>
-        </dl>
+      <aside class="means-box">
+        <h4>What this means for you</h4>
+        <div class="outcome">Risk made visible — in the tools you already watch.</div>
+        <p>You don't adopt a new console or move your data. The AI-egress channel shows up in the SIEM your security team already lives in, inside your own cloud. Visibility is the precondition for everything else — you can't govern what you can't see.</p>
       </aside>
     </div>
   </div>
@@ -214,41 +182,23 @@
 <!-- BEAT 3 -->
 <section class="beat-section">
   <div class="wrap">
-    <div class="beat-head"><span class="beat-eyebrow">Beat 03</span></div>
-    <h2 class="beat-title">JIT control fires.<br/>Workspace daemon pauses the action.</h2>
-    <p class="beat-sub">The developer reaches for the clipboard. The workspace daemon's policy axis on <code>clipboard.mode</code> is set to <code>request</code> in this tenant. The daemon does not forward "yes" or "no" — it posts a <code>JIT_ACCESS_REQUEST</code> to Overwatch and waits.</p>
+    <div class="beat-head"><span class="beat-eyebrow">Beat 03 · after</span></div>
+    <h2 class="beat-title">Policy catches the risky moment.<br/><em>No ticket. No slowdown.</em></h2>
+    <p class="beat-sub">A pattern you named — a live credential, a customer-ID format — is stopped at the source, deterministically. Or, for a genuinely ambiguous case, the action pauses for a human instead of failing or filing a ticket. Either way, safe work around it keeps moving untouched.</p>
     <div class="beat-layout">
-      <div class="console-mock">
-        <div class="console-mock-bar">tether-workspace · /api/v1/workspace/decide</div>
-        <div class="console-mock-body">
-          <svg viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="beat3-svg-title beat3-svg-desc">
-            <title id="beat3-svg-title">Beat 3 — workspace daemon issues a JIT access request</title>
-            <desc id="beat3-svg-desc">The workspace daemon posts to /api/v1/workspace/decide with axis clipboard, agent claude-code, host alex-mbp, identity alex@acme, and a context object showing a 3,812-byte payload. The daemon resolves mode request with a 300-second TTL, opens a JIT request req_8f3a in /api/v1/access-requests with decision pending and a wait_url for the developer IDE, then the IDE shows the modal and pauses the action.</desc>
-            <style>.t{font-family:'IBM Plex Mono',monospace;font-size:11px;fill:#322f29}.tm{fill:#58544d}.ty{fill:#7a4800}.tb{fill:#003880}</style>
-            <rect width="800" height="220" fill="#faf6ec"/>
-            <text x="20" y="30" class="t tm">POST /api/v1/workspace/decide</text>
-            <text x="20" y="54" class="t">{ "axis": "clipboard", "agent": "claude-code", "host": "alex-mbp",</text>
-            <text x="20" y="74" class="t">  "identity": "alex@acme", "context": { "byte_size": 3812 } }</text>
-            <text x="20" y="106" class="t ty">→ daemon: mode=request  ·  ttl=300s</text>
-            <text x="20" y="130" class="t ty">→ POST /api/v1/access-requests  ·  request_id=req_8f3a</text>
-            <text x="20" y="156" class="t tm">{ "decision": "pending",</text>
-            <text x="20" y="176" class="t tm">  "wait_url": "/api/v1/access-requests/req_8f3a/decision" }</text>
-            <text x="20" y="200" class="t tb">→ developer IDE: modal shown · action paused</text>
-          </svg>
+      <div class="risk-card">
+        <div class="risk-card-bar"><span class="dot" style="background:#f0c040;"></span> The moment, governed</div>
+        <div class="risk-card-body">
+          <div class="rc-row"><div class="rc-k">Trigger</div><div class="rc-v">The prompt matches a sensitive pattern you defined.</div></div>
+          <div class="rc-row"><div class="rc-k">Named risk</div><div class="rc-v rc-block"><strong>Blocked at the source</strong> — no model, no waiting, with a clear reason for the developer.</div></div>
+          <div class="rc-row"><div class="rc-k">Ambiguous</div><div class="rc-v rc-hold"><strong>Paused for approval</strong> — the action waits in place rather than failing.</div></div>
+          <div class="rc-row"><div class="rc-k">Everything else</div><div class="rc-v rc-allow">Passes untouched. Safe work is never ticketed.</div></div>
         </div>
       </div>
-      <aside class="beat-sidebar">
-        <h4>What you just saw</h4>
-        <dl>
-          <dt>Daemon decision</dt>
-          <dd><a href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/workspace/main.go#L349-L402" target="_blank" rel="noopener">workspace/main.go:349-402</a></dd>
-          <dt>MCP escalation</dt>
-          <dd><a href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/mcp.go#L401-L426" target="_blank" rel="noopener">mcp.go:401-426</a> &nbsp;(<code>mcpEscalate</code>)</dd>
-          <dt>SIEM event</dt>
-          <dd><span class="ev">JIT_ACCESS_REQUEST</span> · <code>axis</code>, <code>identity</code>, <code>request_id</code>, <code>ttl</code></dd>
-          <dt>Honest scope</dt>
-          <dd>Workspace daemon is advisory today. The IDE seam that paints the modal ships with the managed VSCodium artifact.</dd>
-        </dl>
+      <aside class="means-box">
+        <h4>What this means for you</h4>
+        <div class="outcome">Risk governed — without a developer ticket.</div>
+        <p>The fear with any control like this is that it grinds developers to a halt. It doesn't: the overwhelming majority of work passes silently, only genuine risk ever prompts a human, and policy you author reaches the whole fleet in about ten seconds.</p>
       </aside>
     </div>
   </div>
@@ -257,13 +207,13 @@
 <!-- BEAT 4 -->
 <section class="beat-section" style="background:var(--surface);">
   <div class="wrap">
-    <div class="beat-head"><span class="beat-eyebrow">Beat 04</span></div>
-    <h2 class="beat-title">Operator decides in <em>/access-requests</em>.</h2>
-    <p class="beat-sub">The request lands in the Overwatch JIT queue. The operator sees who, what, when, and the matched controls. Approve or deny. The decision is auditable; the developer's IDE long-polls the wait URL and unblocks.</p>
+    <div class="beat-head"><span class="beat-eyebrow">Beat 04 · after</span></div>
+    <h2 class="beat-title">An operator decides <em>in seconds</em>.</h2>
+    <p class="beat-sub">The paused request lands in the operator's queue with everything needed to judge it — who, what, and the policy it matched. One click. The developer's action unblocks the moment the operator approves. This is the most value-legible asset in the whole product: a human making a fast, informed call.</p>
     <div class="beat-layout">
       <div class="op-mock">
         <div class="op-mock-bar">
-          <span>overwatch · /access-requests</span>
+          <span>operator console · approvals</span>
           <span class="pill">acme tenant</span>
           <span class="pill" style="color:#4cba6a;border-color:#1f7f3a;">live</span>
           <span style="margin-left:auto;color:#8f8a7f;">operator@acme</span>
@@ -271,40 +221,34 @@
         <div class="op-mock-body">
           <div class="op-row head">
             <div class="op-cell">Time</div>
-            <div class="op-cell">Identity · axis · agent</div>
+            <div class="op-cell">Who · what · agent</div>
             <div class="op-cell">Context</div>
             <div class="op-cell">Decision</div>
           </div>
           <div class="op-row">
             <div class="op-cell mono">09:15:04</div>
-            <div class="op-cell"><strong>alex@acme</strong> &nbsp;<span class="badge badge-amber">clipboard</span> &nbsp;<span class="badge badge-muted">claude-code</span></div>
-            <div class="op-cell mono">3,812 bytes · agent=claude-code · host=alex-mbp · policy v42</div>
+            <div class="op-cell"><strong>alex@acme</strong> &nbsp;<span class="badge badge-amber">customer record</span> &nbsp;<span class="badge badge-muted">claude-code</span></div>
+            <div class="op-cell mono">Looks like a real customer record · managed laptop</div>
             <div class="op-cell actions"><span class="op-btn approve">Approve</span><span class="op-btn deny">Deny</span></div>
           </div>
           <div class="op-row">
             <div class="op-cell mono">09:11:22</div>
-            <div class="op-cell"><strong>kira@acme</strong> &nbsp;<span class="badge badge-amber">download</span> &nbsp;<span class="badge badge-muted">cursor</span></div>
-            <div class="op-cell mono">file=eval_dataset.jsonl · 14.2 MB · policy v42</div>
+            <div class="op-cell"><strong>kira@acme</strong> &nbsp;<span class="badge badge-amber">large download</span> &nbsp;<span class="badge badge-muted">cursor</span></div>
+            <div class="op-cell mono">eval dataset · 14.2 MB</div>
             <div class="op-cell actions"><span class="op-btn approve">Approve</span><span class="op-btn deny">Deny</span></div>
           </div>
           <div class="op-row">
             <div class="op-cell mono">09:08:01</div>
-            <div class="op-cell"><strong>maya@acme</strong> &nbsp;<span class="badge badge-red">external-link</span> &nbsp;<span class="badge badge-muted">cli</span></div>
-            <div class="op-cell mono">url=https://gist.github.com/anon/... · policy v42</div>
+            <div class="op-cell"><strong>maya@acme</strong> &nbsp;<span class="badge badge-red">external link</span> &nbsp;<span class="badge badge-muted">cli</span></div>
+            <div class="op-cell mono">paste to a public gist</div>
             <div class="op-cell actions"><span class="op-btn approve">Approve</span><span class="op-btn deny">Deny</span></div>
           </div>
         </div>
       </div>
-      <aside class="beat-sidebar">
-        <h4>What you just saw</h4>
-        <dl>
-          <dt>Operator UI</dt>
-          <dd>Console route <code>/access-requests</code> (slot defined in <a href="https://github.com/arich2day/project-tether/blob/master/docs/screenshots/README.md" target="_blank" rel="noopener">docs/screenshots/README.md</a>)</dd>
-          <dt>Backend</dt>
-          <dd><a href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/server.js" target="_blank" rel="noopener">overwatch/api/server.js</a> &nbsp;<code>/api/v1/access-requests</code></dd>
-          <dt>SIEM event</dt>
-          <dd><span class="ev">JIT_ACCESS_DECISION</span> · <code>decision</code>, <code>operator</code>, <code>reason</code>, <code>policyVersion</code></dd>
-        </dl>
+      <aside class="means-box">
+        <h4>What this means for you</h4>
+        <div class="outcome">A human in the loop — only when it's worth it.</div>
+        <p>Your security team gets a clean, scoped queue of exactly the moments that need judgment — not a firehose. Decisions are fast because the context is right there, and the developer is unblocked the instant a call is made. No support ticket ever opens.</p>
       </aside>
     </div>
   </div>
@@ -313,82 +257,65 @@
 <!-- BEAT 5 -->
 <section class="beat-section">
   <div class="wrap">
-    <div class="beat-head"><span class="beat-eyebrow">Beat 05</span></div>
-    <h2 class="beat-title">Developer unblocks.<br/><em>Decision is auditable.</em></h2>
-    <p class="beat-sub">The IDE's long-poll on the wait URL returns <code>decision: approved</code>. The clipboard paste proceeds. Two records persist: a <code>JIT_ACCESS_DECISION</code> event in your SIEM and the <code>policy-audit.jsonl</code> line that authored the active version. An auditor pulls both — plus the signed bundle for version 42 — and verifies offline.</p>
+    <div class="beat-head"><span class="beat-eyebrow">Beat 05 · after</span></div>
+    <h2 class="beat-title">Audit-ready evidence, <em>produced automatically</em>.</h2>
+    <p class="beat-sub">The whole sequence — what was about to leave, what happened, who decided — becomes a record tied to the exact policy that governed it. When an auditor asks, you hand them a signed receipt they verify offline, without taking your word for it. And it never left your cloud.</p>
     <div class="beat-layout">
-      <div class="console-mock">
-        <div class="console-mock-bar">audit · siem fan-out + policy-audit.jsonl</div>
-        <div class="console-mock-body">
-          <svg viewBox="0 0 800 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="beat5-svg-title beat5-svg-desc">
-            <title id="beat5-svg-title">Beat 5 — audit chain and SIEM fan-out after the operator decision</title>
-            <desc id="beat5-svg-desc">The operator approves request req_8f3a. A JIT_ACCESS_DECISION event fans out to Splunk HEC, Sentinel Log Analytics, and the syslog UDP adapter, and a signed webhook fires to a downstream SOAR. An auditor then pulls /api/v1/policy/versions/42, retrieves the signed payload, signature, and keyId, and runs openssl pkeyutl -verify offline — returning Signature Verified Successfully, controls intact.</desc>
-            <style>.t{font-family:'IBM Plex Mono',monospace;font-size:11px;fill:#d6cfbd}.tm{fill:#8f8a7f}.tg{fill:#4cba6a}.ty{fill:#f0c040}.tb{fill:#6aacff}</style>
-            <rect width="800" height="240" fill="#141210"/>
-            <text x="20" y="28" class="t ty">[09:15:18] DECISION req_8f3a · approved · operator@acme · reason=approved</text>
-            <text x="20" y="50" class="t tg">[09:15:18] SIEM splunk-hec  ← JIT_ACCESS_DECISION  ok</text>
-            <text x="20" y="72" class="t tg">[09:15:18] SIEM sentinel-la ← JIT_ACCESS_DECISION  ok</text>
-            <text x="20" y="94" class="t tg">[09:15:18] SIEM syslog-udp  ← JIT_ACCESS_DECISION  ok</text>
-            <text x="20" y="116" class="t tm">[09:15:18] webhook acme-soar → POST /receive · sha256=&lt;hex&gt;  202</text>
-            <text x="20" y="148" class="t tb">[auditor]  GET /api/v1/policy/versions/42</text>
-            <text x="20" y="170" class="t tm">           → signedPayload + signature + keyId</text>
-            <text x="20" y="192" class="t tb">[auditor]  openssl pkeyutl -verify ...</text>
-            <text x="20" y="214" class="t tg">           → Signature Verified Successfully  ·  controls intact</text>
-          </svg>
+      <div class="risk-card">
+        <div class="risk-card-bar"><span class="dot" style="background:#6aacff;"></span> The receipt your auditor pulls</div>
+        <div class="risk-card-body">
+          <div class="rc-row"><div class="rc-k">Was about to leave</div><div class="rc-v rc-before">A customer record, headed for an AI tool.</div></div>
+          <div class="rc-row"><div class="rc-k">What happened</div><div class="rc-v">Caught and recorded — or approved with a name attached. Either way, on the record.</div></div>
+          <div class="rc-row"><div class="rc-k">Proof</div><div class="rc-v rc-after"><strong>A signed receipt</strong> tied to the policy version that decided it.</div></div>
+          <div class="rc-row"><div class="rc-k">Verification</div><div class="rc-v">Your auditor confirms it offline — no need to trust Tether.</div></div>
+          <div class="rc-row"><div class="rc-k">Residency</div><div class="rc-v rc-after">And it never left your cloud.</div></div>
         </div>
       </div>
-      <aside class="beat-sidebar">
-        <h4>What you just saw</h4>
-        <dl>
-          <dt>SIEM fan-out</dt>
-          <dd><a href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/siem-adapters.js#L36" target="_blank" rel="noopener">siem-adapters.js:36</a></dd>
-          <dt>Audit on disk</dt>
-          <dd><code>$TETHER_DATA_DIR/policy-audit.jsonl</code> — append-only</dd>
-          <dt>Attestation</dt>
-          <dd><a href="https://github.com/arich2day/project-tether/blob/master/docs/ATTESTATION.md" target="_blank" rel="noopener">docs/ATTESTATION.md</a> · <code>X-Tether-Policy-Version</code></dd>
-          <dt>SIEM events emitted</dt>
-          <dd><span class="ev">JIT_ACCESS_DECISION</span><span class="ev">WORKSPACE_COACHED</span><span class="ev">POLICY_PUBLISHED</span></dd>
-        </dl>
+      <aside class="means-box">
+        <h4>What this means for you</h4>
+        <div class="outcome">The blind spot becomes your strongest evidence.</div>
+        <p>The day an auditor, a regulator, or an incident asks what your developers sent to AI tools, you have an answer — a verifiable one. Diligence is exactly where Tether looks better, because the evidence stands on its own, inside your own tenant.</p>
+        <p style="margin-top:14px;"><a href="technical-brief.html" style="color:var(--red);text-decoration:underline;text-underline-offset:3px;font-weight:500;">Read the technical brief →</a> for the signing chain and the offline verification.</p>
       </aside>
     </div>
   </div>
 </section>
 
-<!-- INTERACTIVE SIMULATOR — preserved interaction pattern -->
+<!-- INTERACTIVE SIMULATOR — preserved interaction pattern, reskinned output -->
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label red">Try it</div>
-    <h2 class="section-title">Enforcement simulator.</h2>
-    <p class="section-sub">Pick a scenario. Pick an enforcement mode. Watch the policy fire. The audit entry on the right is the same record your security team would see in <code>/events</code>.</p>
+    <h2 class="section-title">Run a risky moment yourself.</h2>
+    <p class="section-sub">Pick what a developer is about to do, pick how you'd govern it, and watch the outcome — framed the way your security team would see it: what was at risk, what happened, and the evidence left behind.</p>
 
     <div class="sim-wrap">
       <div class="sim-col">
-        <div class="sim-col-head">Developer action</div>
+        <div class="sim-col-head">What the developer does</div>
         <div class="sim-col-body">
           <button type="button" class="scenario-btn active" aria-pressed="true" onclick="setScenario(0,this)">
-            <div class="s-name">Cursor inline AI</div>
-            <div class="s-desc">Refactor a function — current selection includes a live AWS access key.</div>
+            <div class="s-name">Refactor with a live key</div>
+            <div class="s-desc">An AI editor request where the selected code contains a live cloud access key.</div>
           </button>
           <button type="button" class="scenario-btn" aria-pressed="false" onclick="setScenario(1,this)">
-            <div class="s-name">Claude Code POST</div>
-            <div class="s-desc">Paraphrased customer record in a prompt body.</div>
+            <div class="s-name">Customer record in a prompt</div>
+            <div class="s-desc">A real customer record pasted into an AI prompt for context.</div>
           </button>
           <button type="button" class="scenario-btn" aria-pressed="false" onclick="setScenario(2,this)">
-            <div class="s-name">curl to OpenAI</div>
-            <div class="s-desc">Shell script POSTs an internal API token in the request body.</div>
+            <div class="s-name">Internal token in a script</div>
+            <div class="s-desc">A shell script sends an internal API token to an AI endpoint.</div>
           </button>
         </div>
       </div>
 
       <div class="sim-col">
-        <div class="sim-col-head">Policy fires</div>
+        <div class="sim-col-head">What happens</div>
         <div class="sim-stage">
           <div class="stage-topbar">
             <span class="win-dot"></span><span class="win-dot"></span><span class="win-dot"></span>
-            <span class="stage-app-label" id="stageAppLabel">tether-proxy · request body</span>
+            <span class="stage-app-label" id="stageAppLabel">A risky moment</span>
           </div>
           <div class="stage-body" id="stageBody">
-            <div class="stage-line"><span class="t-dim">[ready]</span> &nbsp;configure a scenario and mode, then click Run.</div>
+            <div class="stage-card-row"><div class="scr-k">Ready</div><div class="scr-v">Pick a scenario and a way to govern it, then run.</div></div>
           </div>
           <div class="playback-bar">
             <button class="play-btn" id="playBtn" onclick="runPlayback()">▶ Run</button>
@@ -398,27 +325,28 @@
       </div>
 
       <div class="sim-col">
-        <div class="sim-col-head" id="mode-label">Mode</div>
+        <div class="sim-col-head" id="mode-label">How you govern it</div>
         <div class="sim-col-body" role="radiogroup" aria-labelledby="mode-label">
           <button type="button" class="mode-tab active" aria-pressed="true" onclick="setMode(0,this)">
             <span class="mt-dot" aria-hidden="true" style="background:var(--red);"></span>
-            <span><span class="mt-name">Block</span><span class="mt-sub" style="display:block;">Tier 0 floor · 403</span></span>
+            <span><span class="mt-name">Block</span><span class="mt-sub" style="display:block;">Stop it at the source</span></span>
           </button>
           <button type="button" class="mode-tab" aria-pressed="false" onclick="setMode(1,this)">
             <span class="mt-dot" aria-hidden="true" style="background:var(--blue);"></span>
-            <span><span class="mt-name">Coach</span><span class="mt-sub" style="display:block;">Daemon advisory + audit</span></span>
+            <span><span class="mt-name">Coach</span><span class="mt-sub" style="display:block;">Warn and record</span></span>
           </button>
           <button type="button" class="mode-tab" aria-pressed="false" onclick="setMode(2,this)">
             <span class="mt-dot" aria-hidden="true" style="background:var(--amber);"></span>
-            <span><span class="mt-name">Request</span><span class="mt-sub" style="display:block;">JIT to /access-requests</span></span>
+            <span><span class="mt-name">Ask</span><span class="mt-sub" style="display:block;">Pause for an operator</span></span>
           </button>
           <button type="button" class="mode-tab" aria-pressed="false" onclick="setMode(3,this)">
             <span class="mt-dot" aria-hidden="true" style="background:var(--green);"></span>
-            <span><span class="mt-name">Allow</span><span class="mt-sub" style="display:block;">Forward + log</span></span>
+            <span><span class="mt-name">Allow</span><span class="mt-sub" style="display:block;">Let it through, on the record</span></span>
           </button>
         </div>
       </div>
     </div>
+    <p style="font-size:12.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:18px;max-width:780px;">Want the raw proxy decisions and the enforcement tiers behind this? <a href="technical-brief.html#dataflow" style="color:var(--ink);font-weight:500;">Read the technical brief →</a></p>
   </div>
 </section>
 
@@ -426,8 +354,8 @@
 <div style="background:var(--ink);color:var(--surface);border-top:1px solid var(--border);">
   <div style="max-width:1200px;margin:0 auto;padding:64px 40px;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;">
     <div>
-      <h2 style="font-family:var(--cond);font-weight:700;font-size:28px;text-transform:uppercase;margin-bottom:8px;letter-spacing:-0.01em;">Run the same five beats on your environment.</h2>
-      <p style="font-size:14px;color:#9a9088;font-weight:300;max-width:480px;line-height:1.7;">We bring a tenant. You bring the IdP, the SIEM, and the AI tool. The walkthrough hits all five beats end-to-end.</p>
+      <h2 style="font-family:var(--cond);font-weight:700;font-size:28px;text-transform:uppercase;margin-bottom:8px;letter-spacing:-0.01em;">See these five beats on your own data.</h2>
+      <p style="font-size:14px;color:#9a9088;font-weight:300;max-width:480px;line-height:1.7;">Free up to 25 seats, two weeks, in your own cloud. You bring the IdP, the SIEM, and the AI tool — we'll run the whole loop end-to-end.</p>
     </div>
     <a href="contact.html" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:0.06em;color:var(--ink);background:var(--surface);padding:11px 22px;text-decoration:none;border:1px solid var(--surface);">Book a 30-min walkthrough ↗</a>
   </div>
@@ -476,83 +404,74 @@
 </footer>
 
 <script>
-  // Enforcement simulator — preserves interaction pattern from prior demo.html
+  // Interactive simulator — preserves the scenario × mode interaction model from the prior demo,
+  // reskinned to emit a risk / outcome / evidence card instead of raw proxy-log lines.
+  // Each emitted line: [kind, label, text] where kind ∈ neutral|block|allow|hold.
   const SCENARIOS = [
     {
-      app: 'cursor · /workspace/auth/middleware.ts',
-      body: [
-        ['t-dim', '[09:15:04]', 'CLASSIFY', 'POST /openai/v1/chat/completions · 4.2 KB'],
-        ['t-yellow', '[09:15:04]', 'TIER 0', 'blocklist.go:138 → match  aws_access_key  (AKIA[0-9A-Z]{16})']
-      ],
+      app: 'AI editor · a refactor request',
+      atRisk: ['neutral', 'At risk', 'A live cloud access key, sitting in the selected code.'],
       verdicts: {
         0: [
-          ['t-red', '[09:15:04]', 'BLOCK', '403 · reason="matched deterministic blocklist"'],
-          ['t-dim', '[09:15:04]', 'HEADER', 'X-Tether-Policy-Version: 42'],
-          ['t-dim', '[09:15:04]', 'SIEM', '→ splunk-hec  AI_PROXY_REQUEST  verdict=BLOCKED']
+          ['block', 'Outcome', 'Stopped at the source. The key never reaches the AI vendor.'],
+          ['neutral', 'Developer sees', 'A clear reason — "this looks like a live credential."'],
+          ['allow', 'Evidence', 'Recorded in your SIEM with the policy version that decided it.']
         ],
         1: [
-          ['t-blue', '[09:15:04]', 'COACH', 'workspace daemon emits WORKSPACE_COACHED'],
-          ['t-dim', '[09:15:04]', 'NOTE', 'Tier 0 floor would have blocked — coach is for axes only.']
+          ['hold', 'Outcome', 'Allowed, but the developer is warned and the moment is recorded.'],
+          ['neutral', 'Note', 'A live key is exactly what you would normally Block — Coach only warns.']
         ],
         2: [
-          ['t-yellow', '[09:15:04]', 'NOTE', 'Tier 0 floor blocks before JIT runs.'],
-          ['t-red', '[09:15:04]', 'BLOCK', '403 · matched deterministic blocklist']
+          ['neutral', 'Note', 'A named credential is caught before it ever reaches a human queue.'],
+          ['block', 'Outcome', 'Stopped at the source — no operator decision needed.']
         ],
         3: [
-          ['t-yellow', '[09:15:04]', 'NOTE', 'Tier 0 floor is unconditional and cannot be allow-toggled.'],
-          ['t-red', '[09:15:04]', 'BLOCK', '403 · matched deterministic blocklist']
+          ['neutral', 'Note', 'A live credential is too risky to wave through; the floor still catches it.'],
+          ['block', 'Outcome', 'Stopped at the source, on the record.']
         ]
       }
     },
     {
-      app: 'claude-code · POST /v1/messages',
-      body: [
-        ['t-dim', '[09:17:11]', 'CLASSIFY', 'POST /anthropic/v1/messages · 3.1 KB'],
-        ['t-yellow', '[09:17:11]', 'TIER 0', 'blocklist.go:138 → no match  (clear)'],
-        ['t-yellow', '[09:17:11]', 'TIER 1', 'judge sync · timeout 800ms · sampled=true']
-      ],
+      app: 'AI prompt · pasted context',
+      atRisk: ['neutral', 'At risk', 'A real customer record, pasted in for context.'],
       verdicts: {
         0: [
-          ['t-blue', '[09:17:12]', 'JUDGE', 'cloud → 410ms → verdict=BLOCKED · reason=customer_record_paraphrase'],
-          ['t-red', '[09:17:12]', 'BLOCK', '403 · cloud judge (sync) blocked'],
-          ['t-dim', '[09:17:12]', 'SIEM', '→ splunk-hec  AI_PROXY_REQUEST  judgeVerdict=BLOCKED']
+          ['block', 'Outcome', 'Stopped before it leaves. The record stays inside your boundary.'],
+          ['allow', 'Evidence', 'A signed receipt your auditor can verify offline.']
         ],
         1: [
-          ['t-blue', '[09:17:12]', 'JUDGE', 'cloud → 410ms → verdict=ALLOWED  (advisory tier)'],
-          ['t-green', '[09:17:12]', 'COACH', 'workspace daemon emits WORKSPACE_COACHED'],
-          ['t-dim', '[09:17:12]', 'NOTE', 'Coach is workspace-tier; cloud judge in Tier 2 only records.']
+          ['hold', 'Outcome', 'Allowed with a nudge — the developer is coached, the moment recorded.'],
+          ['neutral', 'Note', 'Good for grey-area content where you want awareness, not a hard stop.']
         ],
         2: [
-          ['t-yellow', '[09:17:12]', 'JIT', 'POST /api/v1/access-requests req_a1b · ttl=300s'],
-          ['t-dim', '[09:17:12]', 'WAIT', '/access-requests/req_a1b/decision (long-poll)']
+          ['hold', 'Outcome', 'Paused. An operator gets the context and decides in seconds.'],
+          ['allow', 'Then', 'On approve, the developer unblocks immediately — no ticket filed.']
         ],
         3: [
-          ['t-green', '[09:17:12]', 'ALLOW', '200 · forwarded to api.anthropic.com'],
-          ['t-dim', '[09:17:12]', 'HEADER', 'X-Tether-Policy-Version: 42'],
-          ['t-dim', '[09:17:12]', 'JUDGE', 'async (Tier 2) → review recorded · cannot affect this response']
+          ['allow', 'Outcome', 'Let through — but seen, attributed, and on the record.'],
+          ['neutral', 'Note', 'Even "allow" produces evidence. Nothing is invisible anymore.']
         ]
       }
     },
     {
-      app: 'shell · curl POST /v1/chat/completions',
-      body: [
-        ['t-dim', '[09:21:09]', 'CLASSIFY', 'POST /openai/v1/chat/completions · 1.8 KB'],
-        ['t-yellow', '[09:21:09]', 'TIER 0', 'blocklist.go:138 → match  internal_api_token  (acme_tok_[A-Za-z0-9]{24})']
-      ],
+      app: 'Shell script · an AI endpoint',
+      atRisk: ['neutral', 'At risk', 'An internal API token, headed out in the request body.'],
       verdicts: {
         0: [
-          ['t-red', '[09:21:09]', 'BLOCK', '403 · reason="matched deterministic blocklist"'],
-          ['t-dim', '[09:21:09]', 'SIEM', '→ sentinel-la  AI_PROXY_REQUEST  verdict=BLOCKED']
+          ['block', 'Outcome', 'Stopped at the source. The token never leaves.'],
+          ['allow', 'Evidence', 'Recorded in your SIEM, tagged with the active policy.']
         ],
         1: [
-          ['t-yellow', '[09:21:09]', 'NOTE', 'Tier 0 floor blocks before coach mode applies.']
+          ['neutral', 'Note', 'A named token is caught before Coach mode would apply.'],
+          ['block', 'Outcome', 'Stopped at the source.']
         ],
         2: [
-          ['t-yellow', '[09:21:09]', 'NOTE', 'Tier 0 floor blocks before JIT runs.']
+          ['neutral', 'Note', 'A named token is caught before it reaches an operator queue.'],
+          ['block', 'Outcome', 'Stopped at the source.']
         ],
         3: [
-          ['t-yellow', '[09:21:09]', 'NOTE', 'Tier 0 floor is unconditional and cannot be allow-toggled.'],
-          ['t-red', '[09:21:09]', 'BLOCK', '403 · matched deterministic blocklist']
+          ['neutral', 'Note', 'A named secret is too risky to wave through; the floor still catches it.'],
+          ['block', 'Outcome', 'Stopped at the source, on the record.']
         ]
       }
     }
@@ -583,26 +502,33 @@
     resetStage();
   }
   function resetStage() {
-    document.getElementById('stageBody').innerHTML = '<div class="stage-line"><span class="t-dim">[ready]</span> &nbsp;Click Run to see the policy fire.</div>';
+    document.getElementById('stageBody').innerHTML = '<div class="stage-card-row"><div class="scr-k">Ready</div><div class="scr-v">Click Run to see the outcome.</div></div>';
     document.getElementById('stepLabel').textContent = 'Ready';
   }
-  function emitLine(cls, ts, tag, text) {
+  function kindClass(kind) {
+    if (kind === 'block') return 'scr-block';
+    if (kind === 'allow') return 'scr-allow';
+    if (kind === 'hold') return 'scr-hold';
+    return '';
+  }
+  function emitRow(kind, label, text) {
     const body = document.getElementById('stageBody');
-    const div = document.createElement('div');
-    div.className = 'stage-line';
-    div.innerHTML = '<span class="' + cls + '">' + ts + '</span> &nbsp;<span class="' + cls + '">' + tag + '</span> &nbsp;<span class="t-dim">' + text + '</span>';
-    body.appendChild(div);
+    const row = document.createElement('div');
+    row.className = 'stage-card-row';
+    row.innerHTML = '<div class="scr-k">' + label + '</div><div class="scr-v ' + kindClass(kind) + '">' + text + '</div>';
+    body.appendChild(row);
   }
   function runPlayback() {
     document.getElementById('stageBody').innerHTML = '';
     document.getElementById('stepLabel').textContent = 'Running …';
-    const lines = SCENARIOS[scenarioIdx].body.concat(SCENARIOS[scenarioIdx].verdicts[modeIdx]);
+    const sc = SCENARIOS[scenarioIdx];
+    const rows = [sc.atRisk].concat(sc.verdicts[modeIdx]);
     let i = 0;
     const tick = () => {
-      if (i >= lines.length) { document.getElementById('stepLabel').textContent = 'Done'; return; }
-      const [cls, ts, tag, text] = lines[i++];
-      emitLine(cls, ts, tag, text);
-      setTimeout(tick, 380);
+      if (i >= rows.length) { document.getElementById('stepLabel').textContent = 'Done'; return; }
+      const [kind, label, text] = rows[i++];
+      emitRow(kind, label, text);
+      setTimeout(tick, 420);
     };
     tick();
   }

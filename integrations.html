@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Integrations — Tether</title>
-  <meta name="description" content="Splunk HEC, Microsoft Sentinel, syslog RFC 5424 UDP. SCIM via Jackson. Okta Device Trust. Microsoft Graph managedDevice. HMAC-signed webhooks. All BUILT, all on master."/>
+  <meta name="description" content="Tether extends the SIEM, IdP, and device-posture stack you already run — no rip-and-replace. Streams to Splunk, Sentinel, or syslog; reads your IdP via SSO and SCIM; feeds Okta and Entra conditional access."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
@@ -51,9 +51,9 @@
 <div class="page-hero">
   <canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas>
   <div class="page-hero-inner tc-hero-in">
-    <div class="page-hero-eyebrow">Integration surface</div>
-    <h1>It plugs into the<br/>SIEM, the IdP, and<br/><em>the posture stack</em><br/>you already run.</h1>
-    <p class="page-hero-sub">Tether ships first-class adapters for the four security-stack surfaces a CISO cares about — SIEM, SCIM, posture export, and webhooks. Every adapter is in production today; every claim below points at a line on master.</p>
+    <div class="page-hero-eyebrow">Extends what you already run</div>
+    <h1>It extends the stack<br/>you already trust.<br/><em>No rip-and-replace.</em></h1>
+    <p class="page-hero-sub">Tether doesn't ask you to adopt a new console or move your data. It feeds the SIEM your security team already watches, reads the IdP that already governs access, and writes posture your conditional-access policy already reads — on day one. Every adapter below is in production today.</p>
   </div>
 </div>
 
@@ -61,54 +61,47 @@
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">SIEM</div>
-    <h2 class="section-title">Three SIEM adapters.<br/>Same fan-out path.</h2>
-    <p class="section-sub">Register a per-vendor config at <code>POST /api/v1/siem-adapters</code> and every event in the stream fans out automatically. Shared 5-attempt exponential-backoff retry. Adapters live next to webhook delivery for one operational surface.</p>
+    <h2 class="section-title">The AI-egress channel shows up<br/>where your security team already looks.</h2>
+    <p class="section-sub">Register the SIEM you already pay for, and every Tether event flows into it automatically — with built-in retry so you don't lose events to a transient outage. Your platform team writes no custom code.</p>
 
     <div class="int-grid">
       <div class="int-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Splunk HEC</h3><span class="badge badge-green">Shipped</span></div>
-        <div class="int-route">POST → &lt;splunk-host&gt;/services/collector/event</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Splunk</h3><span class="badge badge-green">Shipped</span></div>
         <ul>
-          <li>Native Splunk HTTP Event Collector. Token in your Splunk Cloud or on-prem instance — Tether holds it write-only.</li>
-          <li>Per-event JSON envelope with <code>policyVersion</code>, identity, agent, host, verdict, deterministic match, judge verdict.</li>
-          <li>Built-in retry (5 attempts, exponential backoff up to ~5.5 min) and delivery log.</li>
+          <li>Tether events land in your Splunk Cloud or on-prem instance natively — no connector to build.</li>
+          <li>Each event carries the policy version, identity, agent, host, and verdict, so your existing searches and dashboards just work.</li>
+          <li>The access token lives in your Splunk; Tether holds it write-only.</li>
         </ul>
-        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/siem-adapters.js#L267-L282" target="_blank" rel="noopener">siem-adapters.js:267-282</a>
       </div>
 
       <div class="int-card">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Microsoft Sentinel</h3><span class="badge badge-green">Shipped</span></div>
-        <div class="int-route">POST → Log Analytics Data Collector API (HMAC-signed)</div>
         <ul>
-          <li>SharedKey HMAC-SHA256 authentication against Log Analytics <code>api-version=2016-04-01</code>.</li>
-          <li>Workspace ID + key configured per-adapter. No app registration required.</li>
-          <li>Custom log type per event family so Sentinel rules can target Tether's stream directly.</li>
+          <li>Streams into Log Analytics with no app registration to stand up.</li>
+          <li>A distinct log type per event family means your Sentinel analytics rules can target Tether's stream directly.</li>
+          <li>Configured per workspace; your security team keeps full control of detection logic.</li>
         </ul>
-        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/siem-adapters.js#L290-L312" target="_blank" rel="noopener">siem-adapters.js:290-312</a>
       </div>
 
       <div class="int-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Syslog RFC 5424</h3><span class="badge badge-green">Shipped</span></div>
-        <div class="int-route">UDP datagram → &lt;syslog-host&gt;:514</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Syslog (air-gap clean)</h3><span class="badge badge-green">Shipped</span></div>
         <ul>
-          <li>UDP only in v1. Targets on-prem Splunk, rsyslog, or any RFC 5424-compatible collector.</li>
-          <li>Air-gap-clean: the syslog path has no internet dependency. Pair with on-prem Overwatch and local Ollama for a true air-gap configuration.</li>
-          <li>Same retry semantics as the other adapters.</li>
+          <li>Targets on-prem Splunk, rsyslog, or any standards-compliant collector — with no internet dependency.</li>
+          <li>The piece that makes a true air-gap deployment work: pair it with on-prem control plane and a local judge.</li>
+          <li>Same reliable delivery as the other adapters.</li>
         </ul>
-        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/siem-adapters.js#L333-L355" target="_blank" rel="noopener">siem-adapters.js:333-355</a>
       </div>
 
       <div class="int-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Outbound webhooks (HMAC-SHA256)</h3><span class="badge badge-green">Shipped</span></div>
-        <div class="int-route">POST → &lt;your-receiver&gt; · X-Tether-Signature: sha256=&lt;hex&gt;</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Signed webhooks</h3><span class="badge badge-green">Shipped</span></div>
         <ul>
-          <li>HMAC of <code>timestamp + "." + body</code>. Constant-time comparison on your side.</li>
-          <li>Per-webhook filters on <code>eventTypes</code> and <code>verdicts</code> so receivers only see what they care about.</li>
-          <li>Secret is write-only at registration; redacted in list and show endpoints.</li>
+          <li>For anything else downstream — SOAR, a ticketing system, your own pipeline — Tether posts signed, verifiable events.</li>
+          <li>Filter each receiver to only the event types and verdicts it cares about.</li>
+          <li>Secrets are write-only and redacted everywhere after registration.</li>
         </ul>
-        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/webhook-store.js#L174-L240" target="_blank" rel="noopener">webhook-store.js:174-240</a>
       </div>
     </div>
+    <p style="font-size:12.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:20px;max-width:780px;">Exact routes, signing algorithms, retry timing, and the event envelope are in the <a href="technical-brief.html#siem" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
   </div>
 </section>
 
@@ -116,33 +109,29 @@
 <section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Identity · SSO · SCIM</div>
-    <h2 class="section-title">Operator seats from your IdP.<br/>No manual user-management in Tether.</h2>
-    <p class="section-sub">BoxyHQ Jackson handles SAML and OIDC. Directory-sync arrives via a signed webhook. Group membership maps to role; every event lands in the audit trail.</p>
+    <h2 class="section-title">Nobody manages users<br/>in yet another console.</h2>
+    <p class="section-sub">Operator seats come straight from your identity provider. People sign in with the credentials they already have, their role follows their group membership, and removing them from your directory removes their access here — automatically, and audited.</p>
 
     <div class="int-grid">
       <div class="int-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>SSO via Jackson</h3><span class="badge badge-green">Shipped</span></div>
-        <div class="int-route">/api/v1/auth/sso/{start, callback, scim}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Single sign-on</h3><span class="badge badge-green">Shipped</span></div>
         <ul>
-          <li>SAML 2.0 and OIDC supported through Jackson. Upload IdP metadata; SSO is live.</li>
-          <li>WorkOS provider implementation also available — Jackson is the default for self-hosted.</li>
-          <li>Bearer tokens issued per session; per-role scope (admin / operator / viewer).</li>
+          <li>SAML 2.0 and OIDC — your team signs in with the identity provider you already run.</li>
+          <li>Upload your IdP metadata and SSO is live; no per-user setup.</li>
+          <li>Every session is scoped to a role: admin, operator, or viewer.</li>
         </ul>
-        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/auth-providers/jackson.js" target="_blank" rel="noopener">auth-providers/jackson.js</a>
       </div>
 
       <div class="int-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>SCIM directory sync</h3><span class="badge badge-green">Shipped</span></div>
-        <div class="int-route">Jackson dsync webhook · X-DSync-Signature HMAC-SHA256</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Directory sync</h3><span class="badge badge-green">Shipped</span></div>
         <ul>
-          <li>Push-model via Jackson webhook (not a SCIM2 endpoint). HMAC of the body verified before applying.</li>
-          <li>Handles <code>user.created</code>, <code>user.updated</code>, <code>user.deleted</code>.</li>
-          <li>Group → role mapping: <code>SCIM_GROUP_ADMIN</code> / <code>SCIM_GROUP_OPERATOR</code> / <code>SCIM_GROUP_VIEWER</code> env vars.</li>
-          <li>Every provision, update, and deprovision emits an audit event.</li>
+          <li>Create, update, and remove operators directly from your directory — no parallel user list to keep in step.</li>
+          <li>Group membership maps to role, so access stays correct as people change teams.</li>
+          <li>A deprovision in Okta or Entra cuts access here, and every change lands in the audit trail.</li>
         </ul>
-        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/auth-providers/jackson.js#L205-L291" target="_blank" rel="noopener">jackson.js:205-291</a>
       </div>
     </div>
+    <p style="font-size:12.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:20px;max-width:780px;">The SSO/SCIM endpoints, signature scheme, and group-to-role mapping are in the <a href="technical-brief.html#siem" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
   </div>
 </section>
 
@@ -150,53 +139,47 @@
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Device posture · IdP conditional access</div>
-    <h2 class="section-title">Tether posture<br/>plugs into the format your IdP reads.</h2>
-    <p class="section-sub">Four export formats. No converter to write. Each format mirrors the receiver's existing schema so your Okta or Entra team does not have to translate.</p>
+    <h2 class="section-title">A machine that's drifted out of compliance<br/>drops out of device trust on its own.</h2>
+    <p class="section-sub">Your conditional-access policy reads whether a developer's machine is actually running Tether and current on policy — in the format your IdP already understands. No converter to write, no translation for your Okta or Entra team.</p>
 
     <div class="int-grid">
       <div class="int-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Tether-native JSON</h3><span class="badge badge-green">Shipped</span></div>
-        <div class="int-route">GET /api/v1/devices/posture/export?format=tether</div>
-        <ul>
-          <li>Per-host: OS, arch, MACs, proxy + workspace-daemon versions, config hash, last-applied policy version, compliance heuristic.</li>
-          <li>Filters: <code>?compliantOnly=true</code> and <code>?since=&lt;ISO&gt;</code>.</li>
-          <li>Read-only. Long-polled by your conditional-access broker or pulled on a schedule.</li>
-        </ul>
-        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/posture-export.js#L79-L101" target="_blank" rel="noopener">posture-export.js:79-101</a>
-      </div>
-
-      <div class="int-card">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Okta Device Trust</h3><span class="badge badge-green">Shipped</span></div>
-        <div class="int-route">GET /api/v1/devices/posture/export?format=okta</div>
         <ul>
-          <li>Attestation envelope shape Okta Device Trust ingests directly.</li>
-          <li><code>attestations.tether</code> namespace carries Tether-specific signals (policy version applied, time-since-heartbeat, daemon liveness).</li>
-          <li>Drop into Okta's existing conditional-access rule set without a custom integration.</li>
+          <li>Tether posture drops straight into Okta's conditional-access rules with no custom integration.</li>
+          <li>Carries the signals that matter: whether the agent is live and on the current policy.</li>
+          <li>A non-compliant machine falls out of the trusted set automatically.</li>
         </ul>
-        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/posture-export.js#L111-L135" target="_blank" rel="noopener">posture-export.js:111-135</a>
       </div>
 
       <div class="int-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Microsoft Graph managedDevice</h3><span class="badge badge-green">Shipped</span></div>
-        <div class="int-route">GET /api/v1/devices/posture/export?format=entra</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Microsoft Entra</h3><span class="badge badge-green">Shipped</span></div>
         <ul>
-          <li>Mirrors <code>GET /deviceManagement/managedDevices</code> from Microsoft Graph.</li>
-          <li>Tether posture lives under <code>extensions.aiSecurityPosture</code> — out of the way of existing Intune signals.</li>
-          <li>Entra Conditional Access reads it without a Graph schema change.</li>
+          <li>Mirrors the managed-device shape Entra Conditional Access already reads.</li>
+          <li>Tether's signal sits out of the way of your existing Intune data — no schema change.</li>
+          <li>Your Microsoft team works with a format they already know.</li>
         </ul>
-        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/posture-export.js#L145-L172" target="_blank" rel="noopener">posture-export.js:145-172</a>
       </div>
 
       <div class="int-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>CSV (RFC 4180)</h3><span class="badge badge-green">Shipped</span></div>
-        <div class="int-route">GET /api/v1/devices/posture/export?format=csv</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>Tether-native</h3><span class="badge badge-green">Shipped</span></div>
         <ul>
-          <li>Proper RFC 4180 quoting. No surprises when an analyst opens it in a spreadsheet.</li>
-          <li>For ad-hoc audits, compliance evidence packets, and incident-response timelines.</li>
+          <li>Full per-host detail for your own conditional-access broker or scheduled pulls.</li>
+          <li>Filter to compliant-only or to changes since a given time.</li>
+          <li>Read-only — posture reporting, never a write path.</li>
         </ul>
-        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/posture-export.js#L177-L212" target="_blank" rel="noopener">posture-export.js:177-212</a>
+      </div>
+
+      <div class="int-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><h3>CSV</h3><span class="badge badge-green">Shipped</span></div>
+        <ul>
+          <li>Clean, spreadsheet-safe export for ad-hoc audits and evidence packets.</li>
+          <li>Drops into incident-response timelines without surprises.</li>
+          <li>The format your compliance team will ask for anyway.</li>
+        </ul>
       </div>
     </div>
+    <p style="font-size:12.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:20px;max-width:780px;">Export routes, the exact field shapes, and filter parameters are in the <a href="technical-brief.html#siem" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
   </div>
 </section>
 
@@ -204,16 +187,15 @@
 <section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Audit export</div>
-    <h2 class="section-title">Append-only policy audit.<br/>Pull it on a schedule.</h2>
+    <h2 class="section-title">A change log of every policy decision —<br/>ready for your auditor.</h2>
     <div class="int-card" style="margin-top:8px;background:var(--bg);">
-      <h3>policy-audit.jsonl</h3>
-      <div class="int-route">GET /api/v1/policy/audit · file: $TETHER_DATA_DIR/policy-audit.jsonl</div>
+      <h3>Append-only policy audit</h3>
       <ul>
-        <li>Append-only JSONL of every policy publish, revert, and adoption ACK. Actor, reason, before-hash, after-hash.</li>
-        <li>Reads against your SOC 2 CC8 change-management evidence requirement directly.</li>
-        <li>SQLite-backed durable stores are post-GA; today the file lives in <code>TETHER_DATA_DIR</code> (your GCS bucket or EFS file system).</li>
+        <li>Every policy publish, revert, and fleet acknowledgement is recorded — who did it, why, and what changed.</li>
+        <li>Reads directly against a SOC 2 CC8 change-management evidence requirement; pull it on a schedule into your own systems.</li>
+        <li>The record lives in your cloud storage, inside your tenant — not on a Tether server.</li>
       </ul>
-      <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/docs/PILOT.md" target="_blank" rel="noopener">PILOT.md</a>
+      <p style="font-size:12.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:14px;">Export route, file format, and storage location are in the <a href="technical-brief.html#siem" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
     </div>
   </div>
 </section>

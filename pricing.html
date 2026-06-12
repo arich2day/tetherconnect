@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Pricing — Tether</title>
-  <meta name="description" content="Per-developer-seat pricing. Connect $18, Workspace $36 (preview), Overwatch Enterprise add-on. Judge inference is customer-supplied. 14-day pilot free up to 25 seats."/>
+  <meta name="description" content="Predictable per-developer-seat pricing that extends the stack you already run. Connect $18, Workspace (preview), Overwatch Enterprise add-on. Judge inference is customer-supplied — Tether bills nothing. Pilot free up to 25 seats for two weeks."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
@@ -69,7 +69,7 @@
   <div class="page-hero-inner tc-hero-in">
     <div class="page-hero-eyebrow">Pricing</div>
     <h1>Per-developer-seat.<br/>Monthly or annual.<br/><em>Volume tiers</em> at 50, 250, 1000.</h1>
-    <p class="page-hero-sub">Three SKUs. Judge inference is customer-supplied — cloud judges bill from your model vendor; local Ollama judges run at zero per-call cost. 14-day pilot free up to 25 seats on the Connect tier.</p>
+    <p class="page-hero-sub">Predictable, per-seat pricing that extends the stack you already run. Judge inference is customer-supplied — a cloud judge bills from your own model vendor; a local judge runs at zero per-call cost. Pilot is free up to 25 seats for two weeks on the Connect tier.</p>
   </div>
 </div>
 
@@ -91,7 +91,7 @@
           <li><span>Deterministic regex floor + operator exceptions</span></li>
           <li><span>CONNECT-tier marketplace blocking</span></li>
           <li><span>Configured-upstream content inspection (Tier B)</span></li>
-          <li><span>Optional LLM judge — customer-supplied (cloud or local Ollama)</span></li>
+          <li><span>Optional LLM judge — customer-supplied (your cloud model or a local one)</span></li>
           <li><span>JIT approval queue + append-only audit</span></li>
           <li><span>MCP <code>tether_may_i_*</code> voluntary surface</span></li>
         </ul>
@@ -121,7 +121,6 @@
           <li><span>Long-term audit retention (90d Connect / 1y Workspace / 7y Enterprise)</span></li>
           <li><span>Evidence your auditor maps to your SOC 2 / FedRAMP program</span></li>
           <li><span>Custom branding bundle distribution</span></li>
-          <li><span>Multi-tenant SaaS Overwatch — post-GA</span></li>
         </ul>
       </div>
     </div>
@@ -171,10 +170,10 @@
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Pilot</div>
-    <h2 class="section-title">14-day pilot.<br/>Free up to 25 seats.</h2>
+    <h2 class="section-title">Two-week pilot.<br/>Free up to 25 seats.</h2>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:8px;">
       <div>
-        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">Connect tier only during pilot. Includes operator console, deterministic enforcement, JIT queue, identity sync, SIEM adapters, posture export. At day 14 the pilot continues at list price unless cancelled. Prepay and lighthouse terms — see the <a href="#discounts" style="color:var(--ink);">Discounts at a glance</a> block.</p>
+        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">Connect tier, in your own cloud, for two weeks at no cost. Includes the operator console, deterministic enforcement, the approval queue, identity sync, SIEM adapters, and posture export. At day 14 you decide: continue at list price, or run <code style="font-family:var(--mono);font-size:12px;">terraform destroy</code> — there's no Tether-side data to expunge. Prepay and lighthouse terms are in the <a href="#discounts" style="color:var(--ink);">Discounts at a glance</a> block.</p>
         <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;">Workspace tier in pilot is available to design partners only. Per-deal terms; a Tether engineer assists installation and the first policy publish. Pilot conversion expectation: 60+ days from first install.</p>
       </div>
       <div>
@@ -194,11 +193,11 @@
     <div style="margin-top:8px;">
       <div class="faq-item">
         <h3>Is judge inference included?</h3>
-        <p><strong>Judge inference is customer-supplied.</strong> Cloud judges bill from your model vendor — Tether bills nothing for judge calls. Local Ollama judges run on the developer's machine or a customer-hosted server at zero per-call cost. Operators tune the sample rate (default 3%, hard-capped at 10%) so cost stays predictable.</p>
+        <p><strong>Judge inference is customer-supplied.</strong> A cloud judge bills from your own model vendor — Tether bills nothing for judge calls. A local judge runs on the developer's machine or a server you host, at zero per-call cost. You tune how often the judge samples, so the cost stays predictable.</p>
       </div>
       <div class="faq-item">
         <h3>Why is the judge cost not on the bill?</h3>
-        <p>Model costs vary by 100x across vendors. Folding them into a per-seat number would distort the economics for half our customers. Concrete range so you can sanity-check: at the default 3% sample rate, a 50-seat fleet runs ~$0.20–$8.80/month on gpt-4o-mini (cloud judge); ~$0 on local Ollama. Source: 2026-06 OpEx review (<code>docs/reviews/03-business.md §1.1</code>).</p>
+        <p>Model costs vary by 100x across vendors. Folding them into a per-seat number would distort the economics for half our customers. A concrete range to sanity-check against: at the default sample rate, a 50-seat fleet runs roughly $0.20–$8.80/month on a small cloud judge model, and about $0 on a local judge.</p>
       </div>
       <div class="faq-item">
         <h3>Are custom integrations included?</h3>
