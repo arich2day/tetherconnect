@@ -1,275 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Pricing — Tether Connect</title>
-  <meta name="description" content="Tether Connect pricing: flat-rate self-hosted licensing. No per-seat fees. Enterprise pricing for unlimited endpoints."/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Pricing — Tether</title>
+  <meta name="description" content="Per-developer-seat pricing. Connect $18, Workspace $36 (preview), Overwatch Enterprise add-on. Judge inference is customer-supplied. 14-day pilot free up to 25 seats."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="shared.css"/>
   <style>
-    .pricing-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;background:var(--border);border:2px solid var(--ink);}
-    .pricing-card{background:var(--surface);padding:40px;}
-    .pricing-card.featured{background:var(--ink);color:var(--surface);}
-    .pricing-tier{font-family:var(--cond);font-weight:700;font-size:24px;text-transform:uppercase;letter-spacing:.02em;margin-bottom:6px;}
-    .pricing-desc{font-size:13px;color:var(--muted);font-weight:300;line-height:1.6;margin-bottom:28px;}
-    .pricing-card.featured .pricing-desc{color:#9a9088;}
-    .pricing-divider{height:1px;background:var(--border);margin:24px 0;}
-    .pricing-card.featured .pricing-divider{background:#2a2520;}
-    .pricing-price{font-family:var(--cond);font-weight:700;font-size:44px;text-transform:uppercase;letter-spacing:-.02em;line-height:1;margin-bottom:6px;}
-    .pricing-price-note{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;margin-bottom:8px;}
-    .pricing-card.featured .pricing-price-note{color:#6b6259;}
-    .pricing-billing{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.06em;margin-bottom:28px;}
-    .pricing-card.featured .pricing-billing{color:#555048;}
-    .pricing-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:32px;}
-    .pricing-features li{font-size:13px;color:var(--ink2);font-weight:300;display:flex;align-items:flex-start;gap:8px;}
-    .pricing-card.featured .pricing-features li{color:#c8c0b4;}
-    .pricing-features li::before{content:'▸';color:var(--red);font-size:10px;flex-shrink:0;margin-top:3px;}
-    .pricing-card.featured .pricing-features li::before{color:#ff6080;}
-    .pricing-section-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:20px 0 10px;padding-top:16px;border-top:1px solid var(--border);}
-    .pricing-card.featured .pricing-section-label{color:#555048;border-top-color:#2a2520;}
-
-    .faq-item{border-top:1px solid var(--border);padding:24px 0;}
-    .faq-item:last-child{border-bottom:1px solid var(--border);}
-    .faq-q{font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;}
-    .faq-a{font-size:14px;color:var(--muted);font-weight:300;line-height:1.75;max-width:720px;}
-
-    .cost-compare{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border);}
-    .cc-header{background:var(--surface2);padding:16px 24px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
-    .cc-header.hl{color:var(--ink);background:var(--surface3);}
-    .cc-row{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border);}
-    .cc-row:last-child{border-bottom:none;}
-    .cc-cell{padding:16px 24px;font-size:13px;border-right:1px solid var(--border);}
-    .cc-cell:last-child{border-right:none;}
-    .cc-cell.label{color:var(--ink);font-weight:400;}
-    .cc-cell.bad{color:var(--red);}
-    .cc-cell.good{color:var(--green);font-weight:500;}
-
-    .cta-band{background:var(--ink);color:var(--surface);}
-    .cta-inner{max-width:1200px;margin:0 auto;padding:64px 40px;display:flex;align-items:center;justify-content:space-between;gap:40px;}
-    .cta-text h2{font-family:var(--cond);font-weight:700;font-size:32px;text-transform:uppercase;letter-spacing:-.01em;margin-bottom:8px;}
-    .cta-text p{font-size:14px;color:#9a9088;font-weight:300;max-width:420px;}
-    .cta-actions{display:flex;gap:12px;flex-shrink:0;flex-wrap:wrap;}
-    .btn-primary-inv{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--ink);background:var(--surface);padding:11px 22px;text-decoration:none;border:1px solid var(--surface);transition:opacity .15s;}
-    .btn-primary-inv:hover{opacity:.85;}
-
-    @media(max-width:960px){
-      .pricing-grid{grid-template-columns:1fr;}
-      .cost-compare{grid-template-columns:1fr;}
-      .cc-row{grid-template-columns:1fr;}
-      .cc-cell{border-right:none;}
-      .cta-inner{flex-direction:column;align-items:flex-start;padding:48px 20px;}
-    }
+    .sku-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--border); background: var(--surface); }
+    .sku-card { padding: 32px 28px; border-right: 1px solid var(--border); }
+    .sku-card:last-child { border-right: none; }
+    .sku-card.featured { background: var(--bg); border-top: 2px solid var(--red); margin-top: -1px; }
+    .sku-name { font-family: var(--cond); font-weight: 700; font-size: 22px; text-transform: uppercase; margin-bottom: 6px; }
+    .sku-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--red); text-transform: uppercase; margin-bottom: 18px; }
+    .sku-price { font-family: var(--cond); font-weight: 700; font-size: 36px; line-height: 1; margin-bottom: 4px; }
+    .sku-price small { font-size: 13px; color: var(--muted); font-weight: 300; font-family: var(--sans); }
+    .sku-sub { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 22px; }
+    .sku-card ul { list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px; color: var(--ink2); font-weight: 300; line-height: 1.65; }
+    .sku-card ul li { display: grid; grid-template-columns: 12px 1fr; gap: 8px; }
+    .sku-card ul li::before { content: '·'; color: var(--red); font-weight: 700; }
+    .vol-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); margin-top: 8px; }
+    .vol-table th, .vol-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); text-align: left; }
+    .vol-table th:last-child, .vol-table td:last-child { border-right: none; }
+    .vol-table thead th { background: var(--surface2); font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
+    .vol-table tbody tr:last-child td { border-bottom: none; }
+    .vol-table td { font-size: 13.5px; color: var(--ink2); font-weight: 300; }
+    .vol-table td.seats { font-family: var(--mono); color: var(--ink); }
+    .faq-item { padding: 24px 0; border-bottom: 1px solid var(--border); }
+    .faq-item:first-of-type { border-top: 2px solid var(--ink); }
+    .faq-item h3 { font-family: var(--cond); font-weight: 700; font-size: 16px; text-transform: uppercase; margin-bottom: 8px; }
+    .faq-item p { font-size: 14px; color: var(--ink2); font-weight: 300; line-height: 1.75; }
+    @media (max-width: 800px) { .sku-grid { grid-template-columns: 1fr; } .sku-card { border-right: none; border-bottom: 1px solid var(--border); } }
   </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
+
 
 <nav class="tc-nav">
   <a href="index.html" class="nav-logo">
-    <svg viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#c8001e" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#c8001e"/></svg>
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
     <span class="nav-wordmark">Tether<span>Connect</span></span>
   </a>
-  <ul class="nav-links">
-    <li><a href="product.html">Product</a></li>
+    <button class="nav-menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
+    <svg class="icon-open" aria-hidden="true" focusable="false" viewBox="0 0 18 18"><path d="M1 4h16M1 9h16M1 14h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+    <svg class="icon-close" aria-hidden="true" focusable="false" viewBox="0 0 18 18"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+  </button>
+<ul class="nav-links" id="nav-links">
+    <li><a href="how-it-works.html">How it works</a></li>
+    <li><a href="controls.html">Controls</a></li>
+    <li><a href="integrations.html">Integrations</a></li>
+    <li><a href="pilot.html">Pilot</a></li>
     <li><a href="demo.html">Demo</a></li>
     <li><a href="security.html">Security</a></li>
     <li><a href="pricing.html" class="active">Pricing</a></li>
-    <li><a href="company.html">Company</a></li>
-    <li class="nav-cta-li"><a href="contact.html" class="nav-cta">Request Demo</a></li>
+    <li class="nav-cta-li"><a href="contact.html" class="nav-cta">Book a 30-min walkthrough</a></li>
   </ul>
 </nav>
 
+<main id="main">
+
+
 <div class="page-hero">
-  <canvas class="wave-canvas" data-waves data-density="15000" aria-hidden="true"></canvas>
+  <canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas>
   <div class="page-hero-inner tc-hero-in">
     <div class="page-hero-eyebrow">Pricing</div>
-    <h1>Flat-rate licensing.<br/><em>Not per-seat billing.</em></h1>
-    <p class="page-hero-sub">Tether Connect is self-hosted. You pay for the software license — not per developer. As your team grows, your enforcement cost doesn't.</p>
+    <h1>Per-developer-seat.<br/>Monthly or annual.<br/><em>Volume tiers</em> at 50, 250, 1000.</h1>
+    <p class="page-hero-sub">Three SKUs. Judge inference is customer-supplied — cloud judges bill from your model vendor; local Ollama judges run at zero per-call cost. 14-day pilot free up to 25 seats on the Connect tier.</p>
   </div>
 </div>
 
-<!-- PRICING CARDS -->
+<!-- SKU TABLE -->
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="pricing-grid" data-reveal-group>
-      <!-- Startup -->
-      <div class="pricing-card">
-        <div class="pricing-tier">Startup</div>
-        <p class="pricing-desc">For engineering teams getting AI governance in place before scale demands it.</p>
-        <div class="pricing-divider"></div>
-        <div class="pricing-price">Talk<br/>to us</div>
-        <div class="pricing-price-note">Startup-friendly pricing</div>
-        <div class="pricing-billing">Annual license · self-hosted · flat rate</div>
-        <ul class="pricing-features">
-          <li>Up to 50 developer endpoints</li>
-          <li>System-wide egress enforcement</li>
-          <li>On-device AI payload analysis</li>
-          <li>Signed policy bundle distribution</li>
-          <li>Admin console &amp; audit logs</li>
-          <li>Multi-tenant (up to 3 tenants)</li>
-          <li>Email support</li>
-          <li>Deployment documentation</li>
+    <div class="section-label">SKUs</div>
+    <h2 class="section-title">Three tiers. Honest about each.</h2>
+    <div class="sku-grid" data-reveal-group>
+      <div class="sku-card">
+        <div class="sku-name">Connect</div>
+        <div class="sku-tag">The wedge</div>
+        <div class="sku-price">$18 <small>/ seat / mo</small></div>
+        <div class="sku-sub">Billed monthly or annually</div>
+        <ul>
+          <li><span>Connect proxy + workspace daemon per developer machine</span></li>
+          <li><span>VS Code extension</span></li>
+          <li><span>Single-tenant Overwatch in your cloud account</span></li>
+          <li><span>Deterministic regex floor + operator exceptions</span></li>
+          <li><span>CONNECT-tier marketplace blocking</span></li>
+          <li><span>Configured-upstream content inspection (Tier B)</span></li>
+          <li><span>Optional LLM judge — customer-supplied (cloud or local Ollama)</span></li>
+          <li><span>JIT approval queue + append-only audit</span></li>
+          <li><span>MCP <code>tether_may_i_*</code> voluntary surface</span></li>
         </ul>
-        <a href="contact.html" class="btn-secondary" style="width:100%;justify-content:center;">Get in Touch →</a>
       </div>
-
-      <!-- Enterprise -->
-      <div class="pricing-card featured">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-          <div class="pricing-tier">Enterprise</div>
-          <span class="badge" style="color:#f0ebe3;border-color:#555048;background:transparent;font-size:10px;">Recommended</span>
-        </div>
-        <p class="pricing-desc">For organizations that need unlimited scale, compliance tooling, and dedicated support.</p>
-        <div class="pricing-divider"></div>
-        <div class="pricing-price">Custom</div>
-        <div class="pricing-price-note">Volume licensing available</div>
-        <div class="pricing-billing">Annual license · unlimited endpoints · flat rate</div>
-        <ul class="pricing-features">
-          <li>Unlimited developer endpoints</li>
-          <li>Everything in Startup</li>
+      <div class="sku-card featured">
+        <div class="sku-name">Workspace</div>
+        <div class="sku-tag" style="color:var(--red);font-weight:600;">[Preview — design partners only]</div>
+        <div class="sku-price" style="color:var(--muted);"><s>$36</s> <small style="color:var(--muted);">/ seat / mo</small></div>
+        <div class="sku-sub">Pricing on request during preview</div>
+        <ul>
+          <li><span>Everything in Connect</span></li>
+          <li><span>Tether Workspace IDE (VSCodium-based, signed binary) <strong style="color:var(--red);">(post-GA)</strong></span></li>
+          <li><span>Managed root CA + TLS termination on workspace egress <strong style="color:var(--red);">(post-GA)</strong></span></li>
+          <li><span>Clipboard JIT, downloads, external links, screen capture <strong style="color:var(--red);">(advisory today; enforced when managed VSCodium ships)</strong></span></li>
+          <li><span>Printing, USB, settings-UI lock <strong style="color:var(--red);">(post-GA)</strong></span></li>
+          <li><span>Custom branding (company name, logo, primary color — visual branding)</span></li>
         </ul>
-        <div class="pricing-section-label">Advanced Features</div>
-        <ul class="pricing-features">
-          <li>Unlimited tenants</li>
-          <li>SSO / SAML integration</li>
-          <li>Custom policy development support</li>
-          <li>Compliance report exports (SOC 2, ISO 27001)</li>
-          <li>Fleet health dashboards &amp; alerting</li>
-          <li>Policy rollback &amp; version history</li>
-          <li>Whitelabel per-tenant branding</li>
-        </ul>
-        <div class="pricing-section-label">Support</div>
-        <ul class="pricing-features">
-          <li>Dedicated implementation engineer</li>
-          <li>SLA-backed support</li>
-          <li>Quarterly security review</li>
-          <li>Custom integration assistance</li>
-        </ul>
-        <a href="contact.html" class="btn-primary" style="width:100%;justify-content:center;background:var(--surface);color:var(--ink);">Request a Demo ↗</a>
       </div>
-
-      <!-- Air-Gap -->
-      <div class="pricing-card">
-        <div class="pricing-tier">Air-Gap</div>
-        <p class="pricing-desc">For defense, intelligence, and regulated industries where no external connectivity is permitted.</p>
-        <div class="pricing-divider"></div>
-        <div class="pricing-price">Custom</div>
-        <div class="pricing-price-note">Specialized deployment</div>
-        <div class="pricing-billing">Annual license · fully offline · flat rate</div>
-        <ul class="pricing-features">
-          <li>Fully offline deployment</li>
-          <li>No external connectivity required</li>
-          <li>Everything in Enterprise</li>
+      <div class="sku-card">
+        <div class="sku-name">Overwatch Enterprise</div>
+        <div class="sku-tag">Org layer · add-on</div>
+        <div class="sku-price">$8 <small>/ seat / mo + $2,500 / org / mo base</small></div>
+        <div class="sku-sub">Required for orgs ≥ 500 seats</div>
+        <ul>
+          <li><span>SSO via SAML 2.0 / OIDC (Okta, Entra ID, Auth0, Google Workspace)</span></li>
+          <li><span>SCIM directory sync via Jackson</span></li>
+          <li><span>Long-term audit retention (90d Connect / 1y Workspace / 7y Enterprise)</span></li>
+          <li><span>Evidence your auditor maps to your SOC 2 / FedRAMP program</span></li>
+          <li><span>Custom branding bundle distribution</span></li>
+          <li><span>Multi-tenant SaaS Overwatch — post-GA</span></li>
         </ul>
-        <div class="pricing-section-label">Air-Gap Specifics</div>
-        <ul class="pricing-features">
-          <li>Offline AI analysis model included</li>
-          <li>Offline policy update delivery</li>
-          <li>Air-gapped admin console deployment</li>
-          <li>Classified environment deployment guide</li>
-          <li>ITAR / export control consideration support</li>
-          <li>On-site deployment assistance available</li>
-        </ul>
-        <a href="contact.html" class="btn-secondary" style="width:100%;justify-content:center;">Contact Us →</a>
       </div>
     </div>
+    <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:24px;max-width:780px;">See the <a href="#discounts" style="color:var(--ink);">Discounts at a glance</a> block below for prepay terms, lighthouse, and early-stage. Pricing reflects the current PRICING spec.</p>
   </div>
 </section>
 
-<!-- COST COMPARISON -->
+<!-- VOLUME TIERS -->
 <section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label">Cost Model</div>
-    <h2 class="section-title">Why flat-rate matters<br/>at scale.</h2>
-    <p class="section-sub">Per-seat SaaS pricing punishes growth. Tether's flat-rate model means your security cost doesn't grow with your headcount.</p>
-    <div style="max-width:700px;">
-      <div class="cost-compare">
-        <div class="cc-header">Scenario</div>
-        <div class="cc-header hl">Tether Connect (flat)</div>
-        <div class="cc-row">
-          <div class="cc-cell label">50 developers</div>
-          <div class="cc-cell good">Startup tier — contact for price</div>
-        </div>
-        <div class="cc-row">
-          <div class="cc-cell label">200 developers</div>
-          <div class="cc-cell good">Enterprise tier — same flat rate</div>
-        </div>
-        <div class="cc-row">
-          <div class="cc-cell label">500 developers</div>
-          <div class="cc-cell good">Same license — no per-seat charge</div>
-        </div>
-        <div class="cc-row">
-          <div class="cc-cell label">1,000+ developers</div>
-          <div class="cc-cell good">Volume pricing available — still flat</div>
-        </div>
+    <div class="section-label">Volume tiers</div>
+    <h2 class="section-title">Per-seat economics at scale.</h2>
+    <div class="table-scroll">
+    <table class="vol-table">
+      <caption class="visually-hidden">Volume pricing tiers for Connect and Overwatch Enterprise base. Workspace volume tiers withheld during preview.</caption>
+      <thead><tr><th scope="col">Seats</th><th scope="col">Connect</th><th scope="col">Overwatch base</th></tr></thead>
+      <tbody>
+        <tr><td class="seats">1 – 49</td><td>$18 / seat / mo</td><td>—</td></tr>
+        <tr><td class="seats">50 – 249</td><td>$15 / seat / mo</td><td>$1,500 / mo</td></tr>
+        <tr><td class="seats">250 – 999</td><td>$12 / seat / mo</td><td>$2,500 / mo</td></tr>
+        <tr><td class="seats">1000+</td><td>$10 / seat / mo</td><td>$4,000 / mo (custom features unlocked)</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:14px;max-width:780px;">Workspace volume tiers are withheld until GA — pricing on request during preview. Education and qualified non-profits: 50% off list (see <a href="#discounts" style="color:var(--ink);">Discounts at a glance</a>).</p>
+  </div>
+</section>
+
+<!-- DISCOUNTS AT A GLANCE — single source of truth -->
+<section id="discounts" style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Discounts at a glance</div>
+    <h2 class="section-title">One source of truth.<br/>Listed once.</h2>
+    <p class="section-sub">Discounts are not stackable unless we say so in writing. The FAQ and SKU footnotes point here.</p>
+    <ul style="list-style:none;display:flex;flex-direction:column;gap:14px;font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.7;max-width:780px;border-top:2px solid var(--ink);padding-top:20px;">
+      <li style="display:grid;grid-template-columns:200px 1fr;gap:16px;padding-bottom:14px;border-bottom:1px solid var(--border);"><strong style="color:var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:0.06em;">Annual prepay</strong><span>15% off list.</span></li>
+      <li style="display:grid;grid-template-columns:200px 1fr;gap:16px;padding-bottom:14px;border-bottom:1px solid var(--border);"><strong style="color:var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:0.06em;">3-year prepay</strong><span>25% off list.</span></li>
+      <li style="display:grid;grid-template-columns:200px 1fr;gap:16px;padding-bottom:14px;border-bottom:1px solid var(--border);"><strong style="color:var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:0.06em;">5-year prepay</strong><span>35% off list. Rare.</span></li>
+      <li style="display:grid;grid-template-columns:200px 1fr;gap:16px;padding-bottom:14px;border-bottom:1px solid var(--border);"><strong style="color:var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:0.06em;">Lighthouse</strong><span>First 5 paid customers in any vertical: 50% off for 12 months in exchange for a public case study and reference calls.</span></li>
+      <li style="display:grid;grid-template-columns:200px 1fr;gap:16px;padding-bottom:14px;border-bottom:1px solid var(--border);"><strong style="color:var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:0.06em;">Early-stage startups</strong><span>&lt;$5M ARR and &lt;25 seats: Connect free for 12 months.</span></li>
+      <li style="display:grid;grid-template-columns:200px 1fr;gap:16px;"><strong style="color:var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:0.06em;">Education / non-profit</strong><span>50% off list for qualified accounts.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- PILOT -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Pilot</div>
+    <h2 class="section-title">14-day pilot.<br/>Free up to 25 seats.</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:8px;">
+      <div>
+        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">Connect tier only during pilot. Includes operator console, deterministic enforcement, JIT queue, identity sync, SIEM adapters, posture export. At day 14 the pilot continues at list price unless cancelled. Prepay and lighthouse terms — see the <a href="#discounts" style="color:var(--ink);">Discounts at a glance</a> block.</p>
+        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;">Workspace tier in pilot is available to design partners only. Per-deal terms; a Tether engineer assists installation and the first policy publish. Pilot conversion expectation: 60+ days from first install.</p>
       </div>
-      <p style="font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em;margin-top:12px;">Enterprise AI security tools are typically priced per seat. A large engineering org's per-seat costs scale linearly with headcount. Tether's flat-rate model means that cost stays constant regardless of team size.</p>
+      <div>
+        <p style="font-size:14px;color:var(--muted);font-weight:300;line-height:1.75;margin-bottom:10px;"><strong style="color:var(--ink);font-weight:500;">Best-effort SLA during pilot.</strong> Production SLA post-GA.</p>
+        <p style="font-size:14px;color:var(--muted);font-weight:300;line-height:1.75;">See the <a href="pilot.html" style="color:var(--ink);">Pilot page</a> for what's included, day-by-day activity, success criteria, and out-of-scope.</p>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- FAQ -->
-<section style="border-bottom:1px solid var(--border);" data-reveal>
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">FAQ</div>
-    <h2 class="section-title">Common pricing questions.</h2>
+    <h2 class="section-title">What the price does<br/>and does not include.</h2>
 
-    <div class="faq-item">
-      <div class="faq-q">What counts as an "endpoint"?</div>
-      <div class="faq-a">An endpoint is any developer machine with the Tether enforcement agent installed. The Startup tier covers up to 50 concurrent enrolled machines. Enterprise and Air-Gap are unlimited.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Is there a free trial or evaluation period?</div>
-      <div class="faq-a">Yes. We offer a time-limited evaluation for qualified organizations. Contact us and we'll set up a scoped deployment in your environment so you can validate the integration before committing to a license.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">What infrastructure do I need to self-host?</div>
-      <div class="faq-a">Tether requires a server to host the admin console and policy distribution endpoint, and agent installation on each developer machine. Requirements are modest — a single VM or container is sufficient for most deployments. We provide detailed infrastructure documentation with every license.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Is Tether rule-based or AI-based?</div>
-      <div class="faq-a">Both, deliberately. Deterministic rules handle the cases where there's no ambiguity to reason about — known credential patterns, blocked destinations, hard compliance boundaries. An on-device judge then classifies the <em>intent</em> of everything else (testing vs. shipping, brainstorming vs. exfil, public reference vs. trade secret) and your policy maps each intent class to one of six enforcement responses. Regex is the floor; intent classification is the reasoning layer on top. The audit trail logs which one fired so incident review stays defensible.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Does the flat rate include the AI analysis model?</div>
-      <div class="faq-a">Yes. The on-device judge — which runs on every endpoint and handles the high-confidence cases entirely locally — is included in the license. For ambiguous cases that escalate, the cloud judge runs on Tether-hosted infrastructure and is included as well. In air-gap mode the cloud judge is unreachable, and the on-device judge handles every decision using your configured fail-safe policy.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">How does Tether map to CISA ZTMM 2.0?</div>
-      <div class="faq-a">Tether contributes to all five Zero Trust Maturity Model 2.0 pillars — Identity (Initial), Devices (Advanced), Networks (Traditional, paired with your ZTNA / SASE), Applications &amp; Workloads (Advanced), and Data (Advanced) — plus cross-cutting Visibility &amp; Analytics (Advanced), Automation &amp; Orchestration (Initial), and Governance (Advanced). ZTMM is a maturity model, not a certification, so there's nothing for a vendor to be "compliant with." Our self-assessment with the per-pillar breakdown is on <a href="security.html#ztmm" style="color:var(--ink);">Security &raquo; Zero Trust Maturity</a>.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">What's the contract term?</div>
-      <div class="faq-a">Standard licensing is annual. Multi-year terms are available at preferred pricing. We don't require long-term commitments for initial deployments — we'd rather earn the renewal.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Do you offer MSP or reseller pricing?</div>
-      <div class="faq-a">Yes. If you're a managed security service provider or reseller looking to offer Tether Connect to your customers, contact us to discuss our partner program and multi-customer licensing options.</div>
+    <div style="margin-top:8px;">
+      <div class="faq-item">
+        <h3>Is judge inference included?</h3>
+        <p><strong>Judge inference is customer-supplied.</strong> Cloud judges bill from your model vendor — Tether bills nothing for judge calls. Local Ollama judges run on the developer's machine or a customer-hosted server at zero per-call cost. Operators tune the sample rate (default 3%, hard-capped at 10%) so cost stays predictable.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Why is the judge cost not on the bill?</h3>
+        <p>Model costs vary by 100x across vendors. Folding them into a per-seat number would distort the economics for half our customers. Concrete range so you can sanity-check: at the default 3% sample rate, a 50-seat fleet runs ~$0.20–$8.80/month on gpt-4o-mini (cloud judge); ~$0 on local Ollama. Source: 2026-06 OpEx review (<code>docs/reviews/03-business.md §1.1</code>).</p>
+      </div>
+      <div class="faq-item">
+        <h3>Are custom integrations included?</h3>
+        <p>First three SAML / SCIM connector configurations are included. Subsequent custom integrations bill at $2,500 / connector flat. Custom data-residency requirements (EU-only Overwatch, on-prem-only) bill at +30% to base list.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What's the cloud infrastructure cost?</h3>
+        <p>Per-tenant Cloud Run or ECS Fargate runs roughly $15-65 / month on top of the per-seat license, depending on cloud and traffic. Predictable: Cloud Run bills by instance-hour, not per request, so the bill is flat per tenant. You pay your cloud vendor directly.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What is the SLA?</h3>
+        <p>Best-effort SLA during pilot. Production SLA post-GA.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What discount terms exist?</h3>
+        <p>One source of truth: the <a href="#discounts" style="color:var(--ink);">Discounts at a glance</a> block above. Annual / 3-year / 5-year prepay, lighthouse, early-stage, education — all listed once.</p>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- CTA -->
-<div class="cta-band" data-reveal>
-  <div class="cta-inner">
-    <div class="cta-text">
-      <h2>Get pricing for your org.</h2>
-      <p>Tell us your team size and environment and we'll come back with a specific number — no vague "it depends" without context.</p>
+<div style="background:var(--ink);color:var(--surface);border-top:1px solid var(--border);">
+  <div style="max-width:1200px;margin:0 auto;padding:64px 40px;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;">
+    <div>
+      <h2 style="font-family:var(--cond);font-weight:700;font-size:28px;text-transform:uppercase;margin-bottom:8px;letter-spacing:-0.01em;">Bring your seat count.<br/>We'll bring the math.</h2>
+      <p style="font-size:14px;color:#9a9088;font-weight:300;max-width:480px;line-height:1.7;">Discounts kick in at 50 seats. Lighthouse terms exist. The base-rate floor is $10 / seat at 1000+.</p>
     </div>
-    <div class="cta-actions">
-      <a href="contact.html" class="btn-primary-inv">Request Pricing ↗</a>
-    </div>
+    <a href="contact.html" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:0.06em;color:var(--ink);background:var(--surface);padding:11px 22px;text-decoration:none;border:1px solid var(--surface);">Book a 30-min walkthrough ↗</a>
   </div>
 </div>
 
+</main>
+
 <footer class="tc-footer">
   <div class="footer-inner">
-    <div class="footer-brand"><div class="footer-brand-name">Tether<span>Connect</span></div><p>AI security enforcement for enterprise developer teams.</p><div class="footer-domains"><a href="https://tetherconnect.app">tetherconnect.app</a><a href="https://ai-security.app">ai-security.app</a></div></div>
-    <div class="footer-col"><h5>Product</h5><ul><li><a href="product.html">Overview</a></li><li><a href="security.html">Security Architecture</a></li><li><a href="pricing.html">Pricing</a></li></ul></div>
-    <div class="footer-col"><h5>Company</h5><ul><li><a href="company.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div>
-    <div class="footer-col"><h5>Legal</h5><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms of Service</a></li></ul></div>
+    <div class="footer-brand">
+      <div class="footer-brand-name">Tether<span>Connect</span></div>
+      <p>AI-egress visibility-and-enforcement for developer machines.</p>
+      <div class="footer-domains">
+        <a href="https://tetherconnect.app">tetherconnect.app</a>
+        <a href="https://ai-security.app">ai-security.app</a>
+      </div>
+    </div>
+    <div class="footer-col"><div class="footer-col-title">Product</div><ul>
+      <li><a href="how-it-works.html">How it works</a></li>
+      <li><a href="controls.html">Controls</a></li>
+      <li><a href="integrations.html">Integrations</a></li>
+      <li><a href="security.html">Security</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+    </ul></div>
+    <div class="footer-col"><div class="footer-col-title">Open source</div><ul>
+      <li><a href="https://github.com/arich2day/project-tether/tree/master/docs" target="_blank" rel="noopener">Docs ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether" target="_blank" rel="noopener">GitHub ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether/blob/master/docs/reviews/SUMMARY.md" target="_blank" rel="noopener">Review verdict ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether/blob/master/docs/DEFENSIVE_PUBLICATION_GOVPROXY.md" target="_blank" rel="noopener">Defensive publication ↗</a></li>
+    </ul></div>
+    <div class="footer-col"><div class="footer-col-title">Company</div><ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="pilot.html">Pilot</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="security.html#disclosures">Security disclosures</a></li>
+    </ul></div>
   </div>
-  <div class="footer-bottom"><p>© 2026 Tether Connect. All rights reserved.</p><div class="footer-bottom-links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div>
+  <div class="footer-bottom">
+    <p>© 2026 Tether Connect. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="security.html#disclosures">Security</a>
+    </div>
+  </div>
 </footer>
 <script src="motion.js" defer></script>
 </body>

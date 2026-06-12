@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Contact — Tether Connect</title>
+  <title>Contact — Tether</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="shared.css"/>
@@ -45,28 +45,39 @@
   </style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
+
 
 <nav class="tc-nav">
   <a href="index.html" class="nav-logo">
-    <svg viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#c8001e" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#c8001e"/></svg>
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
     <span class="nav-wordmark">Tether<span>Connect</span></span>
   </a>
-  <ul class="nav-links">
-    <li><a href="product.html">Product</a></li>
+    <button class="nav-menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
+    <svg class="icon-open" aria-hidden="true" focusable="false" viewBox="0 0 18 18"><path d="M1 4h16M1 9h16M1 14h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+    <svg class="icon-close" aria-hidden="true" focusable="false" viewBox="0 0 18 18"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+  </button>
+<ul class="nav-links" id="nav-links">
+    <li><a href="how-it-works.html">How it works</a></li>
+    <li><a href="controls.html">Controls</a></li>
+    <li><a href="integrations.html">Integrations</a></li>
+    <li><a href="pilot.html">Pilot</a></li>
     <li><a href="demo.html">Demo</a></li>
     <li><a href="security.html">Security</a></li>
     <li><a href="pricing.html">Pricing</a></li>
-    <li><a href="company.html">Company</a></li>
-    <li class="nav-cta-li"><a href="contact.html" class="nav-cta active">Request Demo</a></li>
+    <li class="nav-cta-li"><a href="contact.html" class="nav-cta">Book a 30-min walkthrough</a></li>
   </ul>
 </nav>
+
+<main id="main">
+
 
 <div class="page-hero">
   <canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas>
   <div class="page-hero-inner tc-hero-in">
     <div class="page-hero-eyebrow">Contact</div>
-    <h1>Let's talk about<br/><em>your environment.</em></h1>
-    <p class="page-hero-sub">Every deployment is different. Tell us about your team size, tech stack, and key concerns — we'll come prepared with something relevant.</p>
+    <h1>Book a 30-min<br/><em>walkthrough.</em></h1>
+    <p class="page-hero-sub">Tell us your cloud (GCP or AWS), your IdP, your SIEM, and the AI tools in scope. We come prepared. No SDR sequence; the call is with someone technical.</p>
   </div>
 </div>
 
@@ -88,88 +99,74 @@
           <div class="contact-item-value"><a href="tel:+12027904956">+1 (202) 790-4956</a></div>
         </div>
         <div class="contact-item">
-          <div class="contact-item-label">Primary Domain</div>
-          <div class="contact-item-value"><a href="https://tetherconnect.app">tetherconnect.app</a></div>
+          <div class="contact-item-label">Security disclosures</div>
+          <div class="contact-item-value"><a href="security.html#disclosures">security.html#disclosures</a></div>
         </div>
         <div class="contact-item">
-          <div class="contact-item-label">Also At</div>
-          <div class="contact-item-value"><a href="https://ai-security.app">ai-security.app</a></div>
+          <div class="contact-item-label">Source</div>
+          <div class="contact-item-value"><a href="https://github.com/arich2day/project-tether" target="_blank" rel="noopener">github.com/arich2day/project-tether</a></div>
         </div>
 
         <div class="what-to-expect">
           <div class="wte-label">What to expect after you reach out</div>
           <div class="wte-step"><div class="wte-step-num">01</div><div class="wte-step-text">We aim to respond within one business day.</div></div>
-          <div class="wte-step"><div class="wte-step-num">02</div><div class="wte-step-text">A 30-minute call to understand your environment, team size, and primary concerns.</div></div>
-          <div class="wte-step"><div class="wte-step-num">03</div><div class="wte-step-text">A tailored demo scoped to your specific threat model and stack.</div></div>
-          <div class="wte-step"><div class="wte-step-num">04</div><div class="wte-step-text">If it's a fit, an evaluation agreement to deploy in your environment and validate.</div></div>
+          <div class="wte-step"><div class="wte-step-num">02</div><div class="wte-step-text">A 30-minute walkthrough scoped to your environment, IdP, SIEM, and AI tools.</div></div>
+          <div class="wte-step"><div class="wte-step-num">03</div><div class="wte-step-text">If it's a fit, a Terraform-provisioned tenant in your own cloud account, in two weeks.</div></div>
+          <div class="wte-step"><div class="wte-step-num">04</div><div class="wte-step-text">Day 14: extend, expand, or unwind via <code>terraform destroy</code>.</div></div>
         </div>
       </div>
 
       <div class="contact-form">
-        <div style="font-family:var(--cond);font-weight:700;font-size:20px;text-transform:uppercase;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border);">Request a Demo</div>
-        <form action="mailto:alvin@tetherconnect.app" method="post" enctype="text/plain">
-          <div class="form-two">
-            <div class="form-row">
-              <label for="fname">First Name</label>
-              <input type="text" id="fname" name="first_name" placeholder="Alex"/>
-            </div>
-            <div class="form-row">
-              <label for="lname">Last Name</label>
-              <input type="text" id="lname" name="last_name" placeholder="Johnson"/>
-            </div>
-          </div>
-          <div class="form-row">
-            <label for="email">Work Email</label>
-            <input type="email" id="email" name="email" placeholder="alex@company.com"/>
-          </div>
-          <div class="form-row">
-            <label for="company">Company</label>
-            <input type="text" id="company" name="company" placeholder="Acme Corp"/>
-          </div>
-          <div class="form-two">
-            <div class="form-row">
-              <label for="team_size">Engineering Team Size</label>
-              <select id="team_size" name="team_size">
-                <option value="">Select range</option>
-                <option>1–10</option>
-                <option>11–50</option>
-                <option>51–200</option>
-                <option>201–500</option>
-                <option>500+</option>
-              </select>
-            </div>
-            <div class="form-row">
-              <label for="interest">Primary Interest</label>
-              <select id="interest" name="interest">
-                <option value="">Select one</option>
-                <option>AI egress enforcement</option>
-                <option>Compliance / audit readiness</option>
-                <option>Air-gap deployment</option>
-                <option>General evaluation</option>
-                <option>Pricing information</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-row">
-            <label for="message">Tell us about your environment or key questions</label>
-            <textarea id="message" name="message" placeholder="We're a 150-person engineering org in fintech. Main concern is preventing proprietary code from reaching external AI APIs…"></textarea>
-          </div>
-          <button type="submit" class="btn-primary" style="width:100%;justify-content:center;border:none;cursor:pointer;font-size:12px;">Send Request ↗</button>
-          <p class="form-note">We respond to every inquiry personally. Your information is not shared with third parties — see our <a href="privacy.html" style="color:var(--ink);">privacy policy</a>.</p>
-        </form>
+        <div style="font-family:var(--cond);font-weight:700;font-size:20px;text-transform:uppercase;margin-bottom:18px;padding-bottom:20px;border-bottom:1px solid var(--border);">Email is the fastest path.</div>
+        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:18px;">Tell us your cloud (GCP or AWS), your IdP, your SIEM, and the AI tools your developers use. One sentence on the concern that triggered the search — customer-record paraphrase, SOC 2 / FedRAMP evidence, air-gap deployment, something else.</p>
+        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:24px;">We read every message. A technical responder replies within one business day — no SDR sequence, no auto-responder.</p>
+        <a href="mailto:alvin@tetherconnect.app?subject=Tether%20-%2030-min%20walkthrough" class="btn-primary" style="width:100%;justify-content:center;font-size:12px;">Email us ↗</a>
+        <p class="form-note" style="margin-top:18px;">Direct: <a href="mailto:alvin@tetherconnect.app" style="color:var(--ink);">alvin@tetherconnect.app</a>. Privacy practices: <a href="privacy.html" style="color:var(--ink);">privacy policy</a>.</p>
       </div>
     </div>
   </div>
 </section>
 
+</main>
+
 <footer class="tc-footer">
   <div class="footer-inner">
-    <div class="footer-brand"><div class="footer-brand-name">Tether<span>Connect</span></div><p>AI security enforcement for enterprise developer teams.</p><div class="footer-domains"><a href="https://tetherconnect.app">tetherconnect.app</a><a href="https://ai-security.app">ai-security.app</a></div></div>
-    <div class="footer-col"><h5>Product</h5><ul><li><a href="product.html">Overview</a></li><li><a href="security.html">Security Architecture</a></li><li><a href="pricing.html">Pricing</a></li></ul></div>
-    <div class="footer-col"><h5>Company</h5><ul><li><a href="company.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div>
-    <div class="footer-col"><h5>Legal</h5><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms of Service</a></li></ul></div>
+    <div class="footer-brand">
+      <div class="footer-brand-name">Tether<span>Connect</span></div>
+      <p>AI-egress visibility-and-enforcement for developer machines.</p>
+      <div class="footer-domains">
+        <a href="https://tetherconnect.app">tetherconnect.app</a>
+        <a href="https://ai-security.app">ai-security.app</a>
+      </div>
+    </div>
+    <div class="footer-col"><div class="footer-col-title">Product</div><ul>
+      <li><a href="how-it-works.html">How it works</a></li>
+      <li><a href="controls.html">Controls</a></li>
+      <li><a href="integrations.html">Integrations</a></li>
+      <li><a href="security.html">Security</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+    </ul></div>
+    <div class="footer-col"><div class="footer-col-title">Open source</div><ul>
+      <li><a href="https://github.com/arich2day/project-tether/tree/master/docs" target="_blank" rel="noopener">Docs ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether" target="_blank" rel="noopener">GitHub ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether/blob/master/docs/reviews/SUMMARY.md" target="_blank" rel="noopener">Review verdict ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether/blob/master/docs/DEFENSIVE_PUBLICATION_GOVPROXY.md" target="_blank" rel="noopener">Defensive publication ↗</a></li>
+    </ul></div>
+    <div class="footer-col"><div class="footer-col-title">Company</div><ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="pilot.html">Pilot</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="security.html#disclosures">Security disclosures</a></li>
+    </ul></div>
   </div>
-  <div class="footer-bottom"><p>© 2026 Tether Connect. All rights reserved.</p><div class="footer-bottom-links"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div>
+  <div class="footer-bottom">
+    <p>© 2026 Tether Connect. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="security.html#disclosures">Security</a>
+    </div>
+  </div>
 </footer>
 <script src="motion.js" defer></script>
 </body>

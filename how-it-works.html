@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>How it works — Tether</title>
+  <meta name="description" content="A loopback proxy on every developer machine. A control plane in your own cloud. A deterministic floor that always blocks. An optional sync judge that fails closed. An advisory async judge that produces evidence."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .arch-diagram { background: var(--surface); border: 1px solid var(--border-dk); padding: 0; margin-top: 8px; }
+    .arch-diagram svg { display: block; width: 100%; height: auto; }
+    .tier-card { border: 1px solid var(--border); padding: 28px; background: var(--surface); }
+    .tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 8px; border: 1px solid var(--border); }
+    .tier-grid .tier-card { border: none; border-right: 1px solid var(--border); border-radius: 0; }
+    .tier-grid .tier-card:last-child { border-right: none; }
+    .tier-num { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; color: var(--red); margin-bottom: 12px; }
+    .tier-card h3 { font-family: var(--cond); font-weight: 700; font-size: 18px; text-transform: uppercase; margin-bottom: 8px; }
+    .tier-card .tier-claim { font-family: var(--mono); font-size: 11px; color: var(--ink); background: var(--surface2); border: 1px solid var(--border); padding: 8px 12px; margin-bottom: 16px; }
+    .tier-card p { font-size: 13.5px; color: var(--muted); font-weight: 300; line-height: 1.7; margin-bottom: 12px; }
+    .tier-card .cite { margin-top: 4px; }
+    @media (max-width: 880px) {
+      .tier-grid { grid-template-columns: 1fr; }
+      .tier-grid .tier-card { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+
+<nav class="tc-nav">
+  <a href="index.html" class="nav-logo">
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
+    <span class="nav-wordmark">Tether<span>Connect</span></span>
+  </a>
+    <button class="nav-menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
+    <svg class="icon-open" aria-hidden="true" focusable="false" viewBox="0 0 18 18"><path d="M1 4h16M1 9h16M1 14h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+    <svg class="icon-close" aria-hidden="true" focusable="false" viewBox="0 0 18 18"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+  </button>
+<ul class="nav-links" id="nav-links">
+    <li><a href="how-it-works.html" class="active">How it works</a></li>
+    <li><a href="controls.html">Controls</a></li>
+    <li><a href="integrations.html">Integrations</a></li>
+    <li><a href="pilot.html">Pilot</a></li>
+    <li><a href="demo.html">Demo</a></li>
+    <li><a href="security.html">Security</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li class="nav-cta-li"><a href="contact.html" class="nav-cta">Book a 30-min walkthrough</a></li>
+  </ul>
+</nav>
+
+<main id="main">
+
+
+<div class="page-hero">
+  <canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas>
+  <div class="page-hero-inner tc-hero-in">
+    <div class="page-hero-eyebrow">How Tether delivers it</div>
+    <h1>A proxy on every dev machine.<br/>A control plane in <em>your</em> cloud.</h1>
+    <p class="page-hero-sub">Tether is three things in one shape: a loopback proxy on the developer machine, a single-tenant Overwatch in your cloud account, and a deterministic floor that always blocks — backed by an optional sync judge that fails closed, and an advisory async judge that produces evidence.</p>
+  </div>
+</div>
+
+<!-- BEAT 1 RESTATEMENT — observation, not fear -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label red">The shape of the problem</div>
+    <h2 class="section-title">The AI-egress lane lives on the developer machine.<br/>Enforcement has to live there too.</h2>
+    <p class="section-sub">Cloud proxies you can walk around are policy documents with a certificate attached. EDR sees the connection but not the payload. The control belongs at the loopback boundary on the developer machine, in front of whatever HTTP path the agent talks to — and behind a control plane your security org can authenticate.</p>
+  </div>
+</section>
+
+<!-- ARCHITECTURE DIAGRAM -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Architecture</div>
+    <h2 class="section-title">One picture.</h2>
+    <p class="section-sub">Three runtimes, two trust boundaries, one signed policy bundle.</p>
+    <div class="arch-diagram">
+      <svg viewBox="0 0 1200 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tether architecture diagram">
+        <defs>
+          <style>
+            .lbl { font-family: 'IBM Plex Mono', monospace; font-size: 11px; fill: #58544d; letter-spacing: 1px; }
+            .ttl { font-family: 'IBM Plex Sans Condensed', sans-serif; font-weight: 700; font-size: 14px; fill: #0e0d0a; text-transform: uppercase; }
+            .sub { font-family: 'IBM Plex Sans', sans-serif; font-size: 11px; fill: #58544d; }
+            .red { fill: #d82018; }
+            .ink { fill: #0e0d0a; }
+            .box { fill: #faf6ec; stroke: #c9c2b1; stroke-width: 1; }
+            .box-em { fill: #faf6ec; stroke: #0e0d0a; stroke-width: 2; }
+            .box-shell { fill: #141210; stroke: #322f29; stroke-width: 1; }
+            .arrow { stroke: #58544d; stroke-width: 1.5; fill: none; }
+            .arrow-em { stroke: #d82018; stroke-width: 1.5; fill: none; }
+            .arrow-dash { stroke: #8f8a7f; stroke-width: 1; fill: none; stroke-dasharray: 4 3; }
+            .boundary { stroke: #8f8a7f; stroke-width: 1; fill: none; stroke-dasharray: 6 4; }
+            .boundary-lbl { font-family: 'IBM Plex Mono', monospace; font-size: 10px; fill: #8f8a7f; letter-spacing: 1.5px; }
+          </style>
+          <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#58544d"/>
+          </marker>
+          <marker id="ahr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="#d82018"/>
+          </marker>
+        </defs>
+
+        <!-- Boundary: developer machine -->
+        <rect x="20" y="30" width="500" height="480" class="boundary"/>
+        <text x="30" y="50" class="boundary-lbl">DEVELOPER MACHINE</text>
+
+        <!-- Boundary: customer cloud -->
+        <rect x="560" y="30" width="620" height="480" class="boundary"/>
+        <text x="570" y="50" class="boundary-lbl">CUSTOMER CLOUD ACCOUNT — GCP OR AWS</text>
+
+        <!-- Coding agents -->
+        <rect x="40" y="80" width="220" height="80" class="box"/>
+        <text x="50" y="103" class="ttl">Coding agent</text>
+        <text x="50" y="123" class="sub">Claude Code · Cursor · Copilot · Codex CLI</text>
+        <text x="50" y="142" class="sub">Aider · Zed · VS Code extension</text>
+
+        <!-- HTTP_PROXY env -->
+        <text x="280" y="115" class="lbl">HTTP_PROXY</text>
+        <text x="280" y="130" class="lbl">→ 127.0.0.1:11435</text>
+
+        <!-- Connect proxy -->
+        <rect x="40" y="190" width="460" height="120" class="box-em"/>
+        <text x="50" y="213" class="ttl">Connect proxy <tspan class="red">· loopback only</tspan></text>
+        <text x="50" y="232" class="sub">127.0.0.1:11435 — kardianos service · Go</text>
+        <text x="50" y="258" class="lbl">TIER 0  deterministic blocklist · always blocks</text>
+        <text x="50" y="276" class="lbl">TIER 1  sync judge · fail-closed on timeout</text>
+        <text x="50" y="294" class="lbl">TIER 2  async judge · advisory · cannot block</text>
+
+        <!-- Workspace daemon -->
+        <rect x="40" y="335" width="460" height="80" class="box"/>
+        <text x="50" y="358" class="ttl">Workspace daemon</text>
+        <text x="50" y="376" class="sub">127.0.0.1:11436 — clipboard / downloads / external links</text>
+        <text x="50" y="394" class="sub">Today: advisory. Enforcing when managed VSCodium ships.</text>
+
+        <!-- Upstream egress -->
+        <rect x="40" y="440" width="220" height="50" class="box"/>
+        <text x="50" y="463" class="ttl">Upstream AI vendor</text>
+        <text x="50" y="479" class="sub">api.anthropic.com · api.openai.com · ...</text>
+
+        <!-- Overwatch -->
+        <rect x="600" y="80" width="560" height="120" class="box-em"/>
+        <text x="610" y="103" class="ttl">Overwatch — single-tenant in your cloud</text>
+        <text x="610" y="122" class="sub">Cloud Run (GCP) or ECS Fargate (AWS) — Node.js / Express</text>
+        <text x="610" y="148" class="lbl">POLICY-STORE · Ed25519-signed bundles · versioned · audited</text>
+        <text x="610" y="166" class="lbl">EVENTS · access-requests · judge-reviews · agents · devices</text>
+        <text x="610" y="184" class="lbl">SSO (Jackson SAML/OIDC)  ·  SCIM webhook  ·  posture export</text>
+
+        <!-- Judge -->
+        <rect x="600" y="225" width="270" height="100" class="box"/>
+        <text x="610" y="248" class="ttl">Judge — customer-supplied</text>
+        <text x="610" y="266" class="sub">Local Ollama (4 hardware tiers)</text>
+        <text x="610" y="282" class="sub">OR cloud (OpenAI-compatible)</text>
+        <text x="610" y="306" class="lbl">Default sample rate 3% · max 10%</text>
+
+        <!-- SIEM/SCIM/IdP -->
+        <rect x="890" y="225" width="270" height="100" class="box"/>
+        <text x="900" y="248" class="ttl">Your security stack</text>
+        <text x="900" y="266" class="sub">Splunk HEC · Sentinel LA · syslog UDP</text>
+        <text x="900" y="282" class="sub">Okta / Entra · Jackson SCIM</text>
+        <text x="900" y="306" class="lbl">Tether is an additive control</text>
+
+        <!-- Audit -->
+        <rect x="600" y="350" width="560" height="80" class="box-shell"/>
+        <text x="610" y="373" class="ttl" style="fill:#d6cfbd">TETHER_DATA_DIR</text>
+        <text x="610" y="392" class="sub" style="fill:#8f8a7f">policy.json (versioned bundles) · policy-audit.jsonl (append-only)</text>
+        <text x="610" y="410" class="sub" style="fill:#8f8a7f">Lives in your VPC. No Tether-hosted data transit.</text>
+
+        <!-- Receipt -->
+        <rect x="600" y="450" width="560" height="40" class="box"/>
+        <text x="610" y="476" class="lbl">X-Tether-Policy-Version: 42 — on every response · auditor verifies offline against signed bundle</text>
+
+        <!-- Flow arrows -->
+        <!-- agent → proxy -->
+        <path d="M150 160 L150 190" class="arrow" marker-end="url(#ah)"/>
+        <!-- proxy → upstream -->
+        <path d="M150 310 L150 440" class="arrow-em" marker-end="url(#ahr)"/>
+        <!-- proxy ↔ overwatch policy poll -->
+        <path d="M500 230 L600 130" class="arrow-em" marker-end="url(#ahr)"/>
+        <text x="510" y="200" class="lbl" style="fill:#d82018">policy poll · 10s</text>
+        <text x="510" y="216" class="lbl" style="fill:#d82018">Ed25519 verify</text>
+        <!-- proxy → judge -->
+        <path d="M500 270 L600 270" class="arrow-dash" marker-end="url(#ah)"/>
+        <text x="510" y="262" class="lbl">judge call</text>
+        <!-- workspace → overwatch -->
+        <path d="M500 375 L600 175" class="arrow-dash" marker-end="url(#ah)"/>
+        <!-- overwatch → siem stack -->
+        <path d="M880 250 L890 250" class="arrow" marker-end="url(#ah)"/>
+        <!-- overwatch → audit -->
+        <path d="M880 200 L880 350" class="arrow" marker-end="url(#ah)"/>
+      </svg>
+      <!-- Stacked text fallback for narrow viewports — CSS swaps SVG ↔ stack at ≤760px -->
+      <div class="arch-stacked" aria-label="Tether architecture, stacked vertical view">
+        <div class="arch-boundary">DEVELOPER MACHINE</div>
+        <div class="arch-node">
+          <div class="arch-node-title">Coding agent</div>
+          <div class="arch-node-sub">Claude Code · Cursor · Copilot · Codex CLI · Aider · Zed · VS Code extension</div>
+          <div class="arch-node-line">HTTP_PROXY → 127.0.0.1:11435</div>
+        </div>
+        <div class="arch-sep">↓</div>
+        <div class="arch-node arch-node-emph">
+          <div class="arch-node-title">Connect proxy <em>· loopback only</em></div>
+          <div class="arch-node-sub">127.0.0.1:11435 — kardianos service · Go</div>
+          <div class="arch-node-line">TIER 0  deterministic blocklist · always blocks</div>
+          <div class="arch-node-line">TIER 1  sync judge · fail-closed on timeout (opt-in)</div>
+          <div class="arch-node-line">TIER 2  async judge · advisory · cannot block</div>
+        </div>
+        <div class="arch-sep">↓</div>
+        <div class="arch-node">
+          <div class="arch-node-title">Workspace daemon</div>
+          <div class="arch-node-sub">127.0.0.1:11436 — clipboard / downloads / external links</div>
+          <div class="arch-node-line">Today: advisory. Enforcing when managed VSCodium ships.</div>
+        </div>
+        <div class="arch-sep">↓</div>
+        <div class="arch-node">
+          <div class="arch-node-title">Upstream AI vendor</div>
+          <div class="arch-node-sub">api.anthropic.com · api.openai.com · …</div>
+        </div>
+        <div class="arch-boundary" style="margin-top:18px;">CUSTOMER CLOUD ACCOUNT — GCP OR AWS</div>
+        <div class="arch-node arch-node-emph">
+          <div class="arch-node-title">Overwatch — single-tenant in your cloud</div>
+          <div class="arch-node-sub">Cloud Run (GCP) or ECS Fargate (AWS) — Node.js / Express</div>
+          <div class="arch-node-line">POLICY-STORE · Ed25519-signed bundles · versioned · audited</div>
+          <div class="arch-node-line">EVENTS · access-requests · judge-reviews · agents · devices</div>
+          <div class="arch-node-line">SSO (Jackson SAML/OIDC) · SCIM webhook · posture export</div>
+        </div>
+        <div class="arch-sep">↓ policy poll · 10s · Ed25519 verify ↑</div>
+        <div class="arch-node">
+          <div class="arch-node-title">Judge — customer-supplied</div>
+          <div class="arch-node-sub">Local Ollama (4 hardware tiers) OR cloud (OpenAI-compatible)</div>
+          <div class="arch-node-line">Default sample rate 3% · max 10%</div>
+        </div>
+        <div class="arch-node">
+          <div class="arch-node-title">Your security stack</div>
+          <div class="arch-node-sub">Splunk HEC · Sentinel LA · syslog UDP · Okta / Entra · Jackson SCIM</div>
+          <div class="arch-node-line">Tether is an additive control</div>
+        </div>
+        <div class="arch-node">
+          <div class="arch-node-title">TETHER_DATA_DIR</div>
+          <div class="arch-node-sub">policy.json (versioned bundles) · policy-audit.jsonl (append-only)</div>
+          <div class="arch-node-line">Lives in your VPC. No Tether-hosted data transit.</div>
+        </div>
+        <div class="arch-node">
+          <div class="arch-node-line">X-Tether-Policy-Version: 42 — on every response · auditor verifies offline against signed bundle</div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:12px;font-family:var(--mono);color:var(--muted);margin-top:12px;letter-spacing:0.04em;">Source visual is adapted from <a class="cite" style="vertical-align:baseline;" href="https://github.com/arich2day/project-tether/blob/master/docs/JUDGE_AUTHORITY.md" target="_blank" rel="noopener">docs/JUDGE_AUTHORITY.md</a> and <a class="cite" style="vertical-align:baseline;" href="https://github.com/arich2day/project-tether/blob/master/deploy/README.md" target="_blank" rel="noopener">deploy/README.md</a>.</p>
+  </div>
+</section>
+
+<!-- DATAFLOW — 5 BEATS THE PROXY ACTUALLY RUNS -->
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Dataflow</div>
+    <h2 class="section-title">What happens on every request.</h2>
+    <div class="block-stack">
+      <div>
+        <div class="block-num">01</div>
+        <div class="block-title">
+          <h3>Agent dials the proxy</h3>
+          <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/main.go#L98-L103" target="_blank" rel="noopener">main.go:98-103</a>
+        </div>
+        <div class="block-body">The coding agent reads <code>HTTP_PROXY</code> from its environment and opens a connection to <code>127.0.0.1:11435</code>. The proxy is loopback-bound by default; widening requires explicit operator config and emits a startup warning. The VS Code extension can opt-in to set the env var for terminals VS Code spawns — Tier 2 agents are governed without separate dev setup.</div>
+      </div>
+      <div>
+        <div class="block-num">02</div>
+        <div class="block-title">
+          <h3>Tier 0 — deterministic floor</h3>
+          <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/proxy_core.go#L114-L117" target="_blank" rel="noopener">proxy_core.go:114-117</a>
+        </div>
+        <div class="block-body">Compiled regex over the embedded floor plus operator-promoted patterns. If a pattern matches, the response is HTTP 403 with the reason text and the forward path is not reached. <strong>Tier 0 cannot be opted out of at runtime.</strong> The forward path never runs on a match. The decision is reachable in the audit log under <code>verdict: BLOCKED</code>.</div>
+      </div>
+      <div>
+        <div class="block-num">03</div>
+        <div class="block-title">
+          <h3>Tier 1 — sync judge (opt-in), fail-closed</h3>
+          <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/proxy_core.go#L130" target="_blank" rel="noopener">proxy_core.go:130</a>
+          <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/proxy_core.go#L158-L181" target="_blank" rel="noopener">proxy_core.go:158-181</a>
+        </div>
+        <div class="block-body">Configurable; sync-block opt-in at deploy time. When both <code>CloudJudgeCanBlock</code> and <code>CloudJudgeEnabled</code> are true, the judge runs in-band with a default 800 ms timeout. On a BLOCKED verdict, the proxy returns 403. <strong>On timeout or empty response, the verdict converts to BLOCKED with reason "cloud judge (sync): timed out — failing closed."</strong> A network adversary cannot defeat blocking by delaying judge calls. This is the 2026-06 hardening.</div>
+      </div>
+      <div>
+        <div class="block-num">04</div>
+        <div class="block-title">
+          <h3>Tier 2 — async judge, advisory</h3>
+          <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/proxy_core.go#L183-L188" target="_blank" rel="noopener">proxy_core.go:183-188</a>
+        </div>
+        <div class="block-body">When sync-mode is off, the judge runs in a goroutine after the response has already been forwarded. It cannot rewrite, block, or retract the response — by invariant. What it can do: produce a <code>judgeReview</code> record with <code>promptDigest.sha256</code>, a 200-character preview, and a verdict an operator can promote to the Tier 0 floor for future requests. The customer for Tier 2 is the operator console and the SIEM, not the developer.</div>
+      </div>
+      <div>
+        <div class="block-num">05</div>
+        <div class="block-title">
+          <h3>Receipt on every response</h3>
+          <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/docs/ATTESTATION.md" target="_blank" rel="noopener">docs/ATTESTATION.md</a>
+        </div>
+        <div class="block-body">The proxy sets <code>X-Tether-Policy-Version: &lt;version&gt;</code> on every blocked 403 and every forwarded response. The corresponding event in your SIEM carries the same <code>policyVersion</code>. An auditor pulls <code>GET /api/v1/policy/versions/&lt;version&gt;</code>, retrieves the signed bundle, and runs an offline Ed25519 verification against the controls in force at decision time.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THREE-TIER JUDGE AUTHORITY -->
+<section id="judge-authority" style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Judge authority</div>
+    <h2 class="section-title">"The judge said ALLOWED" is not the same as<br/>"the request was allowed."</h2>
+    <p class="section-sub">The framing depends on the tier. Tether is honest about which one is in effect, which is why the three tiers exist in the code as distinct branches — not a single configurable knob.</p>
+    <div class="tier-grid" data-reveal-group>
+      <div class="tier-card">
+        <div class="tier-num">TIER 0 — DETERMINISTIC FLOOR</div>
+        <h3>Always blocks. No opt-out.</h3>
+        <div class="tier-claim">Operator opt-out? No.</div>
+        <p>Compiled regex over the embedded floor plus operator-promoted patterns. The forward path is not reached on a match. This is the only enforcement layer a regulated customer can rely on to block by policy alone — no model, no network, no opinion.</p>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/blocklist.go#L138" target="_blank" rel="noopener">blocklist.go:138</a>
+      </div>
+      <div class="tier-card">
+        <div class="tier-num">TIER 1 — SYNC JUDGE</div>
+        <h3>Blocks when enabled. Fails closed on timeout.</h3>
+        <div class="tier-claim">Configurable; sync-block opt-in at deploy time.</div>
+        <p>The judge runs in-band with a default 800 ms timeout. When enabled, it blocks in-band and fails closed on timeout — the verdict converts to BLOCKED on timeout or empty result. If <code>CloudJudgeCanBlock</code> is left false, the judge runs as Tier 2 advisory.</p>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/docs/JUDGE_AUTHORITY.md" target="_blank" rel="noopener">JUDGE_AUTHORITY.md</a>
+      </div>
+      <div class="tier-card">
+        <div class="tier-num">TIER 2 — ASYNC JUDGE</div>
+        <h3>Records. Cannot block. By invariant.</h3>
+        <div class="tier-claim">Operator opt-in? No effect on the current request.</div>
+        <p>Runs in a goroutine after the response is forwarded. Produces a <code>judgeReview</code> the operator can promote to the Tier 0 floor — affecting future requests, not the one being judged. The async path has no handle on the response that already went out. By construction.</p>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/proxy_core.go#L245" target="_blank" rel="noopener">proxy_core.go:245</a>
+      </div>
+    </div>
+    <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:32px;max-width:780px;">For known patterns, Tier 0 is the strong guarantee. For novel content, Tier 1 blocks if the operator opted in. For TLS-tunneled traffic that does not route through the configured plaintext upstream, the proxy classifies the destination host but does not read the body — see the <a href="security.html" style="color:var(--ink);">Security page</a> for the full scope.</p>
+  </div>
+</section>
+
+<!-- HONEST SCOPE -->
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Honest scope</div>
+    <h2 class="section-title">What the proxy sees<br/>and what it does not.</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:8px;">
+      <div>
+        <div class="capability-label">In scope</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:14px;font-size:14px;color:var(--ink2);font-weight:300;line-height:1.7;">
+          <li><strong style="color:var(--ink);font-weight:500;">CONNECT destination classification.</strong> The proxy sees the host on the CONNECT tunnel and can block unapproved AI vendors and off-allowlist marketplace installs at the host level.</li>
+          <li><strong style="color:var(--ink);font-weight:500;">Configured-upstream content inspection.</strong> When an agent supports a base-URL override (Claude Code, Codex CLI, OpenAI-SDK consumers, Continue, aider), Tether reads the full prompt, runs the deterministic floor, and optionally invokes the judge before forwarding.</li>
+          <li><strong style="color:var(--ink);font-weight:500;">Identity attribution.</strong> Every decision carries the developer's SCIM identity, the agent label, the host, and the policy version.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="capability-label">Out of scope today</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:14px;font-size:14px;color:var(--ink2);font-weight:300;line-height:1.7;">
+          <li><strong style="color:var(--ink);font-weight:500;">TLS-tunneled body inspection.</strong> The Connect proxy does not perform TLS interception. No root CA is installed on the developer machine. Workspace-tier TLS termination is reserved for the future managed VSCodium build.</li>
+          <li><strong style="color:var(--ink);font-weight:500;">Workspace daemon enforcement.</strong> Clipboard, downloads, external links, screen capture, and coach mode are <strong>advisory today</strong>. The daemon returns the right decision and emits the audit; the IDE-side enforcement seam ships with the managed VSCodium artifact.</li>
+          <li><strong style="color:var(--ink);font-weight:500;">Tools that bypass HTTP_PROXY.</strong> An extension or CLI agent that binds its own socket bypasses the proxy. Tether governs the AI-egress lane for the tools your developers are authorized to use.</li>
+          <li><strong style="color:var(--ink);font-weight:500;">MCP servers that hardcode their own endpoint.</strong> MCP-server-bound traffic that bypasses <code>HTTP_PROXY</code> does not pass through the loopback proxy. Recommendation: allowlist MCP endpoints at the proxy host-classification layer; monitor for novel destinations in the operator console. Cooperative MCP agents that speak Tether's <code>tether_may_i_*</code> surface stay in scope — see <a class="cite" style="vertical-align:baseline;" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/mcp.go" target="_blank" rel="noopener">warden/cmd/proxy/mcp.go</a>.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div style="background:var(--ink);color:var(--surface);border-top:1px solid var(--border);">
+  <div style="max-width:1200px;margin:0 auto;padding:64px 40px;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;">
+    <div>
+      <h2 style="font-family:var(--cond);font-weight:700;font-size:28px;text-transform:uppercase;margin-bottom:8px;letter-spacing:-0.01em;">Walk through it on your environment.</h2>
+      <p style="font-size:14px;color:#9a9088;font-weight:300;max-width:480px;line-height:1.7;">We bring the architecture diagram. You bring the dev-machine OS, the IdP, the SIEM, and the two AI tools you actually use.</p>
+    </div>
+    <a href="contact.html" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:0.06em;color:var(--ink);background:var(--surface);padding:11px 22px;text-decoration:none;border:1px solid var(--surface);">Book a 30-min walkthrough ↗</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+</main>
+
+<footer class="tc-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-name">Tether<span>Connect</span></div>
+      <p>AI-egress visibility-and-enforcement for developer machines.</p>
+      <div class="footer-domains">
+        <a href="https://tetherconnect.app">tetherconnect.app</a>
+        <a href="https://ai-security.app">ai-security.app</a>
+      </div>
+    </div>
+    <div class="footer-col"><div class="footer-col-title">Product</div><ul>
+      <li><a href="how-it-works.html">How it works</a></li>
+      <li><a href="controls.html">Controls</a></li>
+      <li><a href="integrations.html">Integrations</a></li>
+      <li><a href="security.html">Security</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+    </ul></div>
+    <div class="footer-col"><div class="footer-col-title">Open source</div><ul>
+      <li><a href="https://github.com/arich2day/project-tether/tree/master/docs" target="_blank" rel="noopener">Docs ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether" target="_blank" rel="noopener">GitHub ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether/blob/master/docs/reviews/SUMMARY.md" target="_blank" rel="noopener">Review verdict ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether/blob/master/docs/DEFENSIVE_PUBLICATION_GOVPROXY.md" target="_blank" rel="noopener">Defensive publication ↗</a></li>
+    </ul></div>
+    <div class="footer-col"><div class="footer-col-title">Company</div><ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="pilot.html">Pilot</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="security.html#disclosures">Security disclosures</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Tether Connect. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="security.html#disclosures">Security</a>
+    </div>
+  </div>
+</footer>
+<script src="motion.js" defer></script>
+</body>
+</html>

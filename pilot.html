@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Pilot — Tether</title>
+  <meta name="description" content="A two-week pilot in your own cloud account. Explicit success criteria. Honest out-of-scope. Decision at day 14: extend, expand, or unwind via terraform destroy."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .pilot-checklist { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+    .pilot-checklist li {
+      display: grid; grid-template-columns: 28px 1fr; gap: 12px;
+      padding: 14px 18px; border: 1px solid var(--border); background: var(--surface);
+      font-size: 14px; color: var(--ink2); font-weight: 300; line-height: 1.6;
+    }
+    .pilot-checklist li::before {
+      content: '□'; color: var(--red); font-family: var(--mono); font-size: 16px; line-height: 1;
+    }
+    .pilot-checklist li strong { color: var(--ink); font-weight: 500; }
+    .day-table {
+      width: 100%; border-collapse: collapse; border: 1px solid var(--border); margin-top: 8px;
+    }
+    .day-table th, .day-table td {
+      padding: 14px 16px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border);
+      vertical-align: top; text-align: left;
+    }
+    .day-table th:last-child, .day-table td:last-child { border-right: none; }
+    .day-table thead th {
+      background: var(--surface2); font-family: var(--mono); font-size: 10px;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 400;
+    }
+    .day-table tbody tr:last-child td { border-bottom: none; }
+    .day-table td.day-num { font-family: var(--mono); font-size: 12px; color: var(--red); width: 80px; }
+    .day-table td.day-body { font-size: 14px; color: var(--ink2); font-weight: 300; line-height: 1.7; }
+    .what-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border); background: var(--surface); }
+    .what-cell { padding: 24px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .what-cell:nth-child(2n) { border-right: none; }
+    .what-cell:nth-last-child(-n+2) { border-bottom: none; }
+    .what-cell h3 { font-family: var(--cond); font-weight: 700; font-size: 15px; text-transform: uppercase; margin-bottom: 8px; }
+    .what-cell p { font-size: 13.5px; color: var(--muted); font-weight: 300; line-height: 1.7; }
+    .what-cell .cite { margin-top: 10px; }
+    @media (max-width: 800px) { .what-grid { grid-template-columns: 1fr; } .what-cell { border-right: none; } }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+
+<nav class="tc-nav">
+  <a href="index.html" class="nav-logo">
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
+    <span class="nav-wordmark">Tether<span>Connect</span></span>
+  </a>
+    <button class="nav-menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
+    <svg class="icon-open" aria-hidden="true" focusable="false" viewBox="0 0 18 18"><path d="M1 4h16M1 9h16M1 14h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+    <svg class="icon-close" aria-hidden="true" focusable="false" viewBox="0 0 18 18"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+  </button>
+<ul class="nav-links" id="nav-links">
+    <li><a href="how-it-works.html">How it works</a></li>
+    <li><a href="controls.html">Controls</a></li>
+    <li><a href="integrations.html">Integrations</a></li>
+    <li><a href="pilot.html" class="active">Pilot</a></li>
+    <li><a href="demo.html">Demo</a></li>
+    <li><a href="security.html">Security</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li class="nav-cta-li"><a href="contact.html" class="nav-cta">Book a 30-min walkthrough</a></li>
+  </ul>
+</nav>
+
+<main id="main">
+
+
+<div class="page-hero">
+  <canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas>
+  <div class="page-hero-inner tc-hero-in">
+    <div class="page-hero-eyebrow">How to start</div>
+    <h1>Two weeks.<br/>Your cloud account.<br/><em>terraform destroy</em><br/>if it does not deliver.</h1>
+    <p class="page-hero-sub">The pilot deploys one Overwatch tenant on Cloud Run (GCP) or ECS Fargate (AWS) in your account. SSO via Jackson. Operator seats from your IdP. BYO-laptop installer per developer. Day 14: extend, expand, or unwind.</p>
+  </div>
+</div>
+
+<!-- WHAT YOU GET -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">What you get</div>
+    <h2 class="section-title">A working tenant<br/>with the full integration surface lit up.</h2>
+    <div class="what-grid">
+      <div class="what-cell">
+        <h3>Hosted Overwatch tenant</h3>
+        <p>One Cloud Run service (GCP) or ECS service (AWS) provisioned in your cloud account via Terraform. Or evaluate first in our <code>demo.tetherconnect.app</code> sandbox before bringing it inside.</p>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/deploy/README.md" target="_blank" rel="noopener">deploy/README.md</a>
+      </div>
+      <div class="what-cell">
+        <h3>Custom hostname</h3>
+        <p><code>&lt;customer&gt;.overwatch.example.com</code> with DNS + managed TLS, via the Terraform <code>custom_domain</code> variable.</p>
+      </div>
+      <div class="what-cell">
+        <h3>SSO via Jackson</h3>
+        <p>Upload your IdP metadata. SAML or OIDC. WorkOS alternative supported.</p>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/auth-providers/jackson.js" target="_blank" rel="noopener">jackson.js</a>
+      </div>
+      <div class="what-cell">
+        <h3>SCIM directory sync</h3>
+        <p>Operator seats auto-provisioned from your IdP. Group → role mapping (admin / operator / viewer). Every provision and deprovision lands in the audit trail.</p>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/auth-providers/jackson.js#L205-L291" target="_blank" rel="noopener">jackson.js:205-291</a>
+      </div>
+      <div class="what-cell">
+        <h3>Two operator seats + one admin seat</h3>
+        <p>More on request. Tokens come from per-tenant Secret Manager (GCP) / Secrets Manager (AWS). Never on a Tether-hosted credential store.</p>
+      </div>
+      <div class="what-cell">
+        <h3>BYO-laptop installer</h3>
+        <p>One-liner per developer machine. Connect proxy + workspace daemon register with the tenant and the activity flows into Events / Devices / AccessRequests.</p>
+      </div>
+      <div class="what-cell">
+        <h3>SIEM, posture export, audit log</h3>
+        <p>Splunk HEC, Sentinel Log Analytics, syslog UDP — all live. <code>GET /api/v1/policy/audit</code> for append-only JSONL of every policy change. Posture export in Tether-native / Okta / Entra / CSV.</p>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/siem-adapters.js#L36" target="_blank" rel="noopener">siem-adapters.js:36</a>
+      </div>
+      <div class="what-cell">
+        <h3>HMAC-signed webhooks</h3>
+        <p>Outbound webhooks at <code>/api/v1/webhooks</code> for anything else downstream. <code>X-Tether-Signature: sha256=&lt;hex&gt;</code> over <code>timestamp + "." + body</code>.</p>
+        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/webhook-store.js#L174-L240" target="_blank" rel="noopener">webhook-store.js:174-240</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOU SEE END-TO-END (5 BEATS) -->
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">End-to-end</div>
+    <h2 class="section-title">What you exercise in pilot week one.</h2>
+    <p class="section-sub">Five beats — the same ones the production loop runs every day. Reproduce them in your console; the headless smoke at <code>scripts/demo-dry-run.js</code> posts the same beats against a live Overwatch and asserts every surface renders.</p>
+    <div class="block-stack">
+      <div>
+        <div class="block-num">01</div>
+        <div class="block-title"><h3>Developer hits Claude Code / Cursor / Copilot</h3></div>
+        <div class="block-body">Agent dials <code>127.0.0.1:11435</code> via <code>HTTP_PROXY</code>. The proxy classifies the request.</div>
+      </div>
+      <div>
+        <div class="block-num">02</div>
+        <div class="block-title"><h3>Connect proxy applies the deterministic floor</h3></div>
+        <div class="block-body">Compiled regex over the embedded floor plus your operator-promoted patterns. Optionally a sampled judge review.</div>
+      </div>
+      <div>
+        <div class="block-num">03</div>
+        <div class="block-title"><h3>JIT control fires</h3></div>
+        <div class="block-body">If the request triggers a JIT-mode control (clipboard paste, download, external link), the workspace daemon pauses and posts an access request to Overwatch.</div>
+      </div>
+      <div>
+        <div class="block-num">04</div>
+        <div class="block-title"><h3>Operator decides in <code>/access-requests</code></h3></div>
+        <div class="block-body">Approve or deny in the console. Decision is audited and returned to the developer.</div>
+      </div>
+      <div>
+        <div class="block-num">05</div>
+        <div class="block-title"><h3>Developer unblocks. Decision is auditable.</h3></div>
+        <div class="block-body">Event lands in your SIEM with <code>policyVersion</code>. Append-only <code>policy-audit.jsonl</code> retains the policy publish that authored the decision.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DAY BY DAY -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Day by day</div>
+    <h2 class="section-title">14 days. Concrete activity per day.</h2>
+    <div class="table-scroll">
+    <table class="day-table">
+      <caption class="visually-hidden">Day-by-day pilot activity over 14 days.</caption>
+      <thead><tr><th scope="col">Day</th><th scope="col">Activity</th></tr></thead>
+      <tbody>
+        <tr><td class="day-num">Day 1</td><td class="day-body">Tether provisions the tenant. Customer adds DNS records. Customer uploads IdP metadata.</td></tr>
+        <tr><td class="day-num">Day 2</td><td class="day-body">Customer admin mints invite codes. Two operators sign in via SSO. First developer connects via BYO installer.</td></tr>
+        <tr><td class="day-num">Day 3-4</td><td class="day-body">Customer authors three regexes for sensitive patterns specific to the org. Publishes policy. Verifies audit entry.</td></tr>
+        <tr><td class="day-num">Day 5-7</td><td class="day-body">Real developer traffic flows. Operators triage judge reviews. At least one promote-to-blocklist.</td></tr>
+        <tr><td class="day-num">Day 8-10</td><td class="day-body">JIT loop tested: a developer asks to paste credentials, operator denies, audit entry recorded.</td></tr>
+        <tr><td class="day-num">Day 11-12</td><td class="day-body">Customer reviews <code>/policy/audit</code> export. Verifies posture heartbeats from every connected machine.</td></tr>
+        <tr><td class="day-num">Day 13-14</td><td class="day-body">Debrief against success criteria. Decision: extend, expand, or unwind.</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- SUCCESS CRITERIA -->
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Success criteria</div>
+    <h2 class="section-title">Concrete, observable, two-week.</h2>
+    <p class="section-sub">If we cannot hit these by day 14, the pilot has not delivered. Mark the box; do not move the goalposts.</p>
+    <ul class="pilot-checklist">
+      <li><span><strong>At least 3 developer machines connect via BYO installer</strong>, each posting a posture heartbeat at startup.</span></li>
+      <li><span><strong>At least one JIT request</strong> reaches Overwatch and the operator resolves it inside the SLA target (default 5 min TTL).</span></li>
+      <li><span><strong>At least one judge review is promoted</strong> to the deterministic blocklist via <code>POST /api/v1/judge-reviews/:id/promote</code>.</span></li>
+      <li><span><strong>Policy publish + revert round-trip is visible</strong> in <code>/api/v1/policy/audit</code>.</span></li>
+      <li><span><strong>An ALLOWED → BLOCKED transition is auditable</strong> when a developer's prompt contains a customer-specific regex you've added.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- OUT OF SCOPE -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Out of scope for pilot v1</div>
+    <h2 class="section-title">Five things the pilot does not include.<br/>By design — not by omission.</h2>
+    <p class="section-sub">These are documented limits of the pilot build, not bugs. If any of them is a hard gate for your environment, tell us before we provision the tenant.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border);background:var(--surface);">
+      <div style="padding:24px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);">
+        <h3 style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;margin-bottom:8px;">1. Multi-tenant on a single instance</h3>
+        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">The pilot model is one Overwatch per customer. Cross-tenant isolation lives at the deploy boundary. Multi-tenant SaaS is post-GA.</p>
+      </div>
+      <div style="padding:24px;border-bottom:1px solid var(--border);">
+        <h3 style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;margin-bottom:8px;">2. Per-machine tokens</h3>
+        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">All proxy and daemon installs on this tenant share the operator token. The invite handshake gates redemption; rotating the token rotates everyone at once.</p>
+      </div>
+      <div style="padding:24px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);">
+        <h3 style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;margin-bottom:8px;">3. Branded VSCodium artifact</h3>
+        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">Order is captured during pilot. The signed IDE artifact is not produced by this build. Workspace-tier enforcement is advisory-only today.</p>
+      </div>
+      <div style="padding:24px;border-bottom:1px solid var(--border);">
+        <h3 style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;margin-bottom:8px;">4. Production SLA</h3>
+        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">Best-effort SLA during pilot. Production SLA post-GA.</p>
+      </div>
+      <div style="padding:24px;border-right:1px solid var(--border);">
+        <h3 style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;margin-bottom:8px;">5. MDM-distributed installer</h3>
+        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">Pilot installer is <code>curl | bash</code> / <code>iwr | iex</code>. Production deployments should pin to a known digest or distribute through your MDM.</p>
+      </div>
+      <div style="padding:24px;background:var(--bg);">
+        <h3 style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;margin-bottom:8px;">Design Partner Program</h3>
+        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">First 5 paid customers in any vertical: 50% off list for 12 months in exchange for a public case study and reference calls. The Workspace tier in pilot is available to design partners only — per-deal terms; a Tether engineer assists installation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COEXISTENCE TABLE — VERBATIM FROM PILOT.md -->
+<section id="coexistence" style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Stack fit</div>
+    <h2 class="section-title">"Don't we already have this?"</h2>
+    <p class="section-sub">Security teams already have at least three of EDR / CASB / IdP-SSO / DLP. Tether does not replace any of them — it covers the AI-egress gap each one misses. The honest answer to set expectations with the people asking:</p>
+
+    <div class="table-scroll">
+      <table class="coex-table">
+        <caption class="visually-hidden">Coexistence between Tether and EDR, CASB, IdP / SSO, and DLP across 13 capabilities on the developer machine.</caption>
+        <thead><tr>
+          <th scope="col">Capability</th>
+          <th class="center" scope="col">Tether</th>
+          <th class="center" scope="col">EDR</th>
+          <th class="center" scope="col">CASB</th>
+          <th class="center" scope="col">IdP / SSO</th>
+          <th class="center" scope="col">DLP</th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="col-cap">Sees prompts / completions before they leave the IDE</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td></tr>
+          <tr><td class="col-cap">Attributes activity to a specific coding agent</td><td class="center yes">✓</td><td class="center partial">partial</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td></tr>
+          <tr><td class="col-cap">Inline JIT prompt approval (clipboard / download / external link)</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td></tr>
+          <tr><td class="col-cap">Policy distributed straight to the developer machine (no MITM)</td><td class="center yes">✓</td><td class="center yes">✓</td><td class="center partial">depends</td><td class="center no">—</td><td class="center partial">depends</td></tr>
+          <tr><td class="col-cap">Operator console scoped to developer / AI-tool activity</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td></tr>
+          <tr><td class="col-cap">On-device payload inspection before TLS<sup style="font-size:9px;color:var(--red);">†</sup></td><td class="center partial">partial</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td><td class="center partial">partial</td></tr>
+          <tr><td class="col-cap">Air-gap / no-cloud-dep pilot</td><td class="center yes">✓</td><td class="center partial">depends</td><td class="center no">—</td><td class="center partial">depends</td><td class="center partial">depends</td></tr>
+          <tr><td class="col-cap">Cross-IDE policy (VS Code, Cursor, JetBrains, CLI agents)</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td></tr>
+          <tr><td class="col-cap">Process-level egress block</td><td class="center partial">partial (proxy-based)</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td></tr>
+          <tr><td class="col-cap">Endpoint malware / behavioral threat detection</td><td class="center no">—</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td></tr>
+          <tr><td class="col-cap">SaaS shadow-IT discovery and posture</td><td class="center no">—</td><td class="center no">—</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td></tr>
+          <tr><td class="col-cap">User identity and SSO federation</td><td class="center partial">partial (via Jackson)</td><td class="center no">—</td><td class="center no">—</td><td class="center yes">✓</td><td class="center no">—</td></tr>
+          <tr><td class="col-cap">File-level content classification across the org</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td><td class="center yes">✓</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:14px;max-width:780px;"><sup style="color:var(--red);">†</sup> On-device payload inspection before TLS: Tether reads request bodies on the configured-upstream HTTP path. TLS-tunneled traffic is host-classified on the CONNECT path, not body-inspected — see <a href="how-it-works.html" style="color:var(--ink);">How it works · Honest scope</a>.</p>
+    <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:18px;max-width:780px;">Read this honestly: Tether is the AI-egress layer of the developer machine. The other four still do the jobs you bought them for. If your EDR / CASB / IdP / DLP vendor adds a credible AI-tool-aware story later, that's real competitive pressure — and we'd rather you ask us about it directly than read an analyst note.</p>
+  </div>
+</section>
+
+<!-- UNWINDING -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label red">Unwinding the pilot</div>
+    <h2 class="section-title">One <code>terraform destroy</code><br/>and the tenant is gone.</h2>
+    <p class="section-sub" style="max-width:760px;">Pilot tenant is one <code>terraform destroy</code>. Customer data lives in the customer's own Secret Manager / GCS / EFS scope; deleting the tenant deletes its state. No Tether-hosted data to expunge — the deploy is in your account.</p>
+    <div style="background:var(--shell);color:var(--shell-ink);padding:24px;font-family:var(--mono);font-size:13px;line-height:1.8;border:1px solid var(--border-dk);">
+      <span style="color:#8f8a7f;"># Day 14: pilot did not deliver. Unwind cleanly.</span><br/>
+      $ cd deploy/gcp/terraform<br/>
+      $ terraform destroy -auto-approve<br/>
+      <span style="color:#8f8a7f;"># Cloud Run service, GCS bucket, Secret Manager secrets — gone.</span><br/>
+      <span style="color:#8f8a7f;"># Uninstall the proxy and daemon on each developer machine.</span><br/>
+      $ tether-proxy uninstall &amp;&amp; tether-workspace uninstall
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div style="background:var(--ink);color:var(--surface);border-top:1px solid var(--border);">
+  <div style="max-width:1200px;margin:0 auto;padding:64px 40px;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;">
+    <div>
+      <h2 style="font-family:var(--cond);font-weight:700;font-size:28px;text-transform:uppercase;margin-bottom:8px;letter-spacing:-0.01em;">Two weeks, one decision.</h2>
+      <p style="font-size:14px;color:#9a9088;font-weight:300;max-width:480px;line-height:1.7;">Tell us your cloud (GCP or AWS), your IdP, your SIEM, and the AI tools in scope. We bring a tenant ready to provision.</p>
+    </div>
+    <a href="contact.html" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:0.06em;color:var(--ink);background:var(--surface);padding:11px 22px;text-decoration:none;border:1px solid var(--surface);">Book a 30-min walkthrough ↗</a>
+  </div>
+</div>
+
+</main>
+
+<footer class="tc-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-name">Tether<span>Connect</span></div>
+      <p>AI-egress visibility-and-enforcement for developer machines.</p>
+      <div class="footer-domains">
+        <a href="https://tetherconnect.app">tetherconnect.app</a>
+        <a href="https://ai-security.app">ai-security.app</a>
+      </div>
+    </div>
+    <div class="footer-col"><div class="footer-col-title">Product</div><ul>
+      <li><a href="how-it-works.html">How it works</a></li>
+      <li><a href="controls.html">Controls</a></li>
+      <li><a href="integrations.html">Integrations</a></li>
+      <li><a href="security.html">Security</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+    </ul></div>
+    <div class="footer-col"><div class="footer-col-title">Open source</div><ul>
+      <li><a href="https://github.com/arich2day/project-tether/tree/master/docs" target="_blank" rel="noopener">Docs ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether" target="_blank" rel="noopener">GitHub ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether/blob/master/docs/reviews/SUMMARY.md" target="_blank" rel="noopener">Review verdict ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether/blob/master/docs/DEFENSIVE_PUBLICATION_GOVPROXY.md" target="_blank" rel="noopener">Defensive publication ↗</a></li>
+    </ul></div>
+    <div class="footer-col"><div class="footer-col-title">Company</div><ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="pilot.html">Pilot</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="security.html#disclosures">Security disclosures</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Tether Connect. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="security.html#disclosures">Security</a>
+    </div>
+  </div>
+</footer>
+<script src="motion.js" defer></script>
+</body>
+</html>

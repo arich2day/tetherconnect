@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>About — Tether</title>
+  <meta name="description" content="Why we built Tether. What we believe. What we are building toward in the next 90-180 days."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .moment-box { background: var(--surface); border-left: 2px solid var(--red); padding: 28px 32px; margin-top: 8px; }
+    .moment-box p { font-size: 16px; color: var(--ink); font-weight: 300; line-height: 1.8; }
+    .moment-box p + p { margin-top: 16px; }
+
+    .founder-card { display: grid; grid-template-columns: 200px 1fr; gap: 32px; padding: 32px; background: var(--surface); border: 1px solid var(--border); margin-bottom: 24px; align-items: start; }
+    .founder-photo-placeholder {
+      aspect-ratio: 1 / 1;
+      background: var(--surface2);
+      border: 1px dashed var(--border-dk);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+      color: var(--muted); text-align: center; padding: 16px;
+      text-transform: uppercase;
+    }
+    .founder-meta h3 { font-family: var(--cond); font-weight: 700; font-size: 20px; text-transform: uppercase; margin-bottom: 4px; }
+    .founder-role { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--red); margin-bottom: 14px; }
+    .founder-bio { font-size: 14px; color: var(--ink2); font-weight: 300; line-height: 1.75; }
+    @media (max-width: 720px) {
+      .founder-card { grid-template-columns: 1fr; }
+      .founder-photo-placeholder { aspect-ratio: 16 / 9; }
+    }
+
+    .belief { padding: 24px 0; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 32px 1fr; gap: 16px; }
+    .belief:first-of-type { border-top: 2px solid var(--ink); }
+    .belief-num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--red); padding-top: 4px; }
+    .belief h3 { font-family: var(--cond); font-weight: 700; font-size: 16px; text-transform: uppercase; margin-bottom: 8px; line-height: 1.2; }
+    .belief p { font-size: 14px; color: var(--ink2); font-weight: 300; line-height: 1.75; }
+    .belief p .cite { vertical-align: baseline; }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+
+<nav class="tc-nav">
+  <a href="index.html" class="nav-logo">
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
+    <span class="nav-wordmark">Tether<span>Connect</span></span>
+  </a>
+    <button class="nav-menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
+    <svg class="icon-open" aria-hidden="true" focusable="false" viewBox="0 0 18 18"><path d="M1 4h16M1 9h16M1 14h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+    <svg class="icon-close" aria-hidden="true" focusable="false" viewBox="0 0 18 18"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+  </button>
+<ul class="nav-links" id="nav-links">
+    <li><a href="how-it-works.html">How it works</a></li>
+    <li><a href="controls.html">Controls</a></li>
+    <li><a href="integrations.html">Integrations</a></li>
+    <li><a href="pilot.html">Pilot</a></li>
+    <li><a href="demo.html">Demo</a></li>
+    <li><a href="security.html">Security</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li class="nav-cta-li"><a href="contact.html" class="nav-cta">Book a 30-min walkthrough</a></li>
+  </ul>
+</nav>
+
+<main id="main">
+
+
+<div class="page-hero">
+  <canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas>
+  <div class="page-hero-inner tc-hero-in">
+    <div class="page-hero-eyebrow">About</div>
+    <h1>Why we built Tether.</h1>
+    <p class="page-hero-sub">The shape of the AI-egress problem on the developer machine, the moment that convinced us the existing controls would not close it, and the 90-180 day cut of what we are building next.</p>
+  </div>
+</div>
+
+<!-- THE PROBLEM SHAPE — moved from founder-moment placeholder. Founder section is hidden in v2; see TODO below. -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label red">The shape under the visibility problem</div>
+    <h2 class="section-title">Rules don't work on<br/>a generative surface.</h2>
+
+    <div class="moment-box">
+      <p>The deeper problem under the visibility one is that rules don't work on a generative surface. Regex DLP, allowlists, signature scanners — these were built for an enumerable world. Developers using AI tools don't paste literal <code>SECRET_KEY=</code>; they paraphrase, refactor, brainstorm. There is no regex for "is this an exfil attempt?"</p>
+      <p>The dev-machine layer was the right place to close the gap because that's where the request still has the prompt body and the identity attached. Cloud proxies you can walk around are policy documents with a certificate attached.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TODO(founder-bio): name=?, role=?, prior-credential=? — section intentionally hidden in v2.
+     Reinstate the <section class="founder-card"> block here when real bio, role, credential, and photo are ready. -->
+
+
+<!-- WHAT WE BELIEVE -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">What we believe</div>
+    <h2 class="section-title">Four positions we are willing to defend.</h2>
+    <div style="max-width:840px;">
+      <div class="belief">
+        <div class="belief-num">01</div>
+        <div>
+          <h3>The moat is execution and integration depth — not patents.</h3>
+          <p>The internal patent review concluded that "the earlier 'highly likely to be patentable' framing does not hold" — streaming-guardrail prior art (Judgment-to-Interference, SentGuard, Streaming-VR, WitnessAI, Solo.io agentgateway, Protecto) densely occupies the space. The real moat is the working loopback proxy with cryptographic policy receipts, the local-judge hardware ladder, the per-tenant deploy, and the SIEM/SCIM/posture-export depth a CISO can put into an existing stack in an afternoon. <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/docs/reviews/SUMMARY.md" target="_blank" rel="noopener">docs/reviews/SUMMARY.md</a></p>
+        </div>
+      </div>
+      <div class="belief">
+        <div class="belief-num">02</div>
+        <div>
+          <h3>Every enforcement decision is cryptographically verifiable after the fact.</h3>
+          <p>Every response carries <code>X-Tether-Policy-Version</code>. Every event and judge review stamps the active version. An auditor pulls the signed bundle and runs Ed25519 verification offline, against the controls in force at decision time. The auditor does not have to trust Tether to vouch for itself. <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/docs/ATTESTATION.md" target="_blank" rel="noopener">docs/ATTESTATION.md</a></p>
+        </div>
+      </div>
+      <div class="belief">
+        <div class="belief-num">03</div>
+        <div>
+          <h3>We do not install a MITM root cert on the developer machine.</h3>
+          <p>The Connect proxy is loopback-bound and does not perform TLS interception. The same corporate CA that decrypts a Cursor call decrypts the developer's banking session — we do not put that into play. Workspace-tier TLS termination is reserved for the future managed VSCodium build, where the user has explicitly accepted a managed-device install. <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/main.go#L1-L22" target="_blank" rel="noopener">main.go:1-22</a></p>
+        </div>
+      </div>
+      <div class="belief">
+        <div class="belief-num">04</div>
+        <div>
+          <h3>The judge is additive. The deterministic floor is the floor.</h3>
+          <p>A regulated buyer needs a layer that blocks by policy alone — no model in the path. Tier 0 is that layer. The judge is honest about its tier: Tier 1 sync judge with fail-closed-on-timeout when the operator opts in, or Tier 2 advisory with no path to block the response in flight. We do not collapse those into one sentence to make the pitch cleaner.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUILDING TOWARD -->
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Building toward · 90–180 days</div>
+    <h2 class="section-title">Three things on the next 90–180 day cut.</h2>
+
+    <div style="max-width:840px;display:flex;flex-direction:column;gap:24px;margin-top:8px;">
+      <div style="padding:24px;background:var(--bg);border:1px solid var(--border);">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--red);margin-bottom:8px;">4–8 WEEKS</div>
+        <h3 style="font-family:var(--cond);font-weight:700;font-size:18px;text-transform:uppercase;margin-bottom:6px;">Managed VSCodium artifact pipeline</h3>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;">Signed installer for macOS / Windows / Linux. Apple notarization, Windows Authenticode, AppImage GPG signing. The workspace daemon is already in production and returns the correct decision today; the missing piece is the CI pipeline that produces a customer-trusted IDE binary. <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/docs/WORKSPACE_BRIDGE.md" target="_blank" rel="noopener">WORKSPACE_BRIDGE.md</a></p>
+      </div>
+
+      <div style="padding:24px;background:var(--bg);border:1px solid var(--border);">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--red);margin-bottom:8px;">SHIPPING WITH GA</div>
+        <h3 style="font-family:var(--cond);font-weight:700;font-size:18px;text-transform:uppercase;margin-bottom:6px;">Per-request attestation hardening</h3>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;">The chain is live today: <code>event.policyVersion → signed bundle → Ed25519 verify → controls</code>. The next cut is tamper-evident per-version bundle retention — an append-only WORM-style archive for deployments that need full forensic retention. Today's <code>policy-audit.jsonl</code> covers publishes; per-version archival is the remaining gap, shipping with GA. <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/docs/ATTESTATION.md" target="_blank" rel="noopener">ATTESTATION.md</a></p>
+      </div>
+
+      <div style="padding:24px;background:var(--bg);border:1px solid var(--border);">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--red);margin-bottom:8px;">8–15 DAYS</div>
+        <h3 style="font-family:var(--cond);font-weight:700;font-size:18px;text-transform:uppercase;margin-bottom:6px;">Overwatch durable stores</h3>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;">Today, Overwatch's events / access-requests / judge-reviews / traffic-sessions live in process memory. A Cloud Run restart loses in-flight state. The 8-15 day plan is SQLite-backed durable stores for the per-request event surface, with SIEM forwarding as the durability path until that ships.</p>
+      </div>
+    </div>
+
+    <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:24px;max-width:780px;">No 2027 dates on this page on purpose. Roadmap beyond 180 days is conversation, not commitment.</p>
+  </div>
+</section>
+
+<!-- INVESTORS / PRESS -->
+<section style="border-bottom:1px solid var(--border);">
+  <div class="wrap section-pad">
+    <div class="section-label">Investors · press</div>
+    <p style="font-size:15px;color:var(--ink2);font-weight:300;line-height:1.75;max-width:680px;">For investor inquiries or press: <a href="mailto:contact@tetherconnect.app" style="color:var(--ink);">contact@tetherconnect.app</a>. We do not have a deck on this page. We have a 30-minute conversation, the read-only architecture review on master, and a working pilot we will stand up in your environment.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<div style="background:var(--ink);color:var(--surface);border-top:1px solid var(--border);">
+  <div style="max-width:1200px;margin:0 auto;padding:64px 40px;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;">
+    <div>
+      <h2 style="font-family:var(--cond);font-weight:700;font-size:28px;text-transform:uppercase;margin-bottom:8px;letter-spacing:-0.01em;">Talk to the people building it.</h2>
+      <p style="font-size:14px;color:#9a9088;font-weight:300;max-width:480px;line-height:1.7;">A 30-minute walkthrough with someone technical. No SDR handoff.</p>
+    </div>
+    <a href="contact.html" style="display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:0.06em;color:var(--ink);background:var(--surface);padding:11px 22px;text-decoration:none;border:1px solid var(--surface);">Book a 30-min walkthrough ↗</a>
+  </div>
+</div>
+
+</main>
+
+<footer class="tc-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-name">Tether<span>Connect</span></div>
+      <p>AI-egress visibility-and-enforcement for developer machines.</p>
+      <div class="footer-domains">
+        <a href="https://tetherconnect.app">tetherconnect.app</a>
+        <a href="https://ai-security.app">ai-security.app</a>
+      </div>
+    </div>
+    <div class="footer-col"><div class="footer-col-title">Product</div><ul>
+      <li><a href="how-it-works.html">How it works</a></li>
+      <li><a href="controls.html">Controls</a></li>
+      <li><a href="integrations.html">Integrations</a></li>
+      <li><a href="security.html">Security</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+    </ul></div>
+    <div class="footer-col"><div class="footer-col-title">Open source</div><ul>
+      <li><a href="https://github.com/arich2day/project-tether/tree/master/docs" target="_blank" rel="noopener">Docs ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether" target="_blank" rel="noopener">GitHub ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether/blob/master/docs/reviews/SUMMARY.md" target="_blank" rel="noopener">Review verdict ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether/blob/master/docs/DEFENSIVE_PUBLICATION_GOVPROXY.md" target="_blank" rel="noopener">Defensive publication ↗</a></li>
+    </ul></div>
+    <div class="footer-col"><div class="footer-col-title">Company</div><ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="pilot.html">Pilot</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="security.html#disclosures">Security disclosures</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Tether Connect. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="security.html#disclosures">Security</a>
+    </div>
+  </div>
+</footer>
+<script src="motion.js" defer></script>
+</body>
+</html>

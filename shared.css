@@ -1,32 +1,130 @@
 /* ── TETHER CONNECT · SHARED DESIGN SYSTEM ─────────────────────────────── */
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap');
+/* Fonts are loaded once per page via <link rel="stylesheet"> in each page's <head>.
+   The per-page @import was duplicated work — removed in v2. */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* ── ACCESSIBILITY UTILITIES ──────────────────── */
+
+/* Skip-to-content link — visually hidden until focused */
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: 0;
+  z-index: 1000;
+  background: var(--ink);
+  color: var(--surface);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 12px 18px;
+  text-decoration: none;
+  border: 2px solid var(--red);
+  transition: top 0.15s ease;
+}
+.skip-link:focus { top: 0; outline: none; }
+
+/* Visually-hidden helper (for table captions, etc.) */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Horizontal scroll wrapper for wide tables on small screens */
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+/* Project-wide focus-visible — for keyboard navigation. Light surfaces. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+/* Inverse focus ring for dark CTA band + footer */
+.cta-band a:focus-visible,
+.tc-footer a:focus-visible,
+[style*="background:var(--ink)"] a:focus-visible {
+  outline: 2px solid var(--surface);
+  outline-offset: 2px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   GLC tokens layered on top of existing Tether vars.
+   Inlined from project-tether/design-system/src/tokens.css (origin/master).
+   GLC-inspired: 1px default utility rules; 2px on emphasis dividers.
+   Where a GLC token matches an existing site var, we remap via fallback.
+   Where there is no equivalent (--surface2, --amber, --blue, etc.),
+   the local var stays as-is — documented as "Tether-marketing extensions."
+   ───────────────────────────────────────────────────────────────────── */
 :root {
-  --bg:        #f0ebe3;
-  --surface:   #f7f3ee;
-  --surface2:  #ede8e0;
-  --surface3:  #e6e0d8;
-  --border:    #c8c0b4;
-  --border-dk: #9a9088;
-  --ink:       #1a1612;
-  --ink2:      #3d3530;
-  --muted:     #6b6259;
-  --faint:     #9a9088;
-  --red:       #c8001e;
-  --red-bg:    #fde8ec;
+  /* --- GLC Paper (light neutrals) ---------------------------------- */
+  --color-paper:        #f0ebe0;
+  --color-paper-raised: #faf6ec;
+  --color-paper-deep:   #e5dfd0;
+
+  /* --- GLC Ink (dark neutrals) ------------------------------------- */
+  --color-ink:    #0e0d0a;
+  --color-ink-60: #322f29;
+  --color-ink-40: #58544d;
+  --color-ink-25: #8f8a7f;
+
+  /* --- GLC Rule (dividers) ----------------------------------------- */
+  --color-rule:      #c9c2b1;
+  --color-rule-soft: #ded6c3;
+
+  /* --- GLC Flag (accent) ------------------------------------------- */
+  --color-flag:      #d82018;
+  --color-flag-soft: #f8e0dd;
+
+  /* --- GLC Shell (dark surfaces) ----------------------------------- */
+  --color-shell:     #141210;
+  --color-shell-mute:#1c1a16;
+  --color-shell-ink: #d6cfbd;
+}
+
+:root {
+  /* Remapped to GLC where semantics line up; original fallbacks preserved. */
+  --bg:        var(--color-paper,        #f0ebe3);
+  --surface:   var(--color-paper-raised, #f7f3ee);
+  --surface2:  #ede8e0;                            /* Tether extension */
+  --surface3:  var(--color-paper-deep,   #e6e0d8);
+  --border:    var(--color-rule,         #c8c0b4);
+  --border-dk: #9a9088;                            /* Tether extension */
+  --ink:       var(--color-ink,          #1a1612);
+  --ink2:      var(--color-ink-60,       #3d3530);
+  --muted:     var(--color-ink-40,       #6b6259);
+  --faint:     var(--color-ink-25,       #9a9088);
+  --red:       var(--color-flag,         #c8001e);
+  --red-bg:    var(--color-flag-soft,    #fde8ec);
   --red-bd:    #e8a0ac;
   --green:     #006630;
   --green-bg:  #e6f4ec;
   --green-bd:  #80c8a0;
-  --amber:     #7a4800;
+  --amber:     #7a4800;                            /* Tether extension */
   --amber-bg:  #fdf0e0;
   --amber-bd:  #e0b870;
-  --blue:      #003880;
+  --blue:      #003880;                            /* Tether extension */
   --blue-bg:   #e6eef8;
   --blue-bd:   #9ab8e8;
+  --shell:     var(--color-shell,        #141210); /* dark surface */
+  --shell-mute:var(--color-shell-mute,   #1c1a16);
+  --shell-ink: var(--color-shell-ink,    #d6cfbd);
   --mono:      'IBM Plex Mono', monospace;
   --cond:      'IBM Plex Sans Condensed', sans-serif;
   --sans:      'IBM Plex Sans', sans-serif;
@@ -105,6 +203,27 @@ body {
 .nav-links a:hover { color: var(--ink); background: var(--surface2); }
 .nav-links a.active { color: var(--ink); background: var(--surface2); }
 
+/* Active-link affordance beyond color — persistent underline that doesn't depend on hue */
+.nav-links a.active:not(.nav-cta) { box-shadow: inset 0 -2px 0 var(--red); }
+
+/* ── MOBILE NAV (≤600px) ─────────────────────── */
+.nav-menu-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--border);
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  color: var(--ink);
+}
+.nav-menu-toggle svg { width: 18px; height: 18px; display: block; }
+.nav-menu-toggle .icon-close { display: none; }
+.nav-menu-toggle[aria-expanded="true"] .icon-open { display: none; }
+.nav-menu-toggle[aria-expanded="true"] .icon-close { display: block; }
+
 .nav-cta {
   font-weight: 600 !important;
   color: var(--surface) !important;
@@ -140,7 +259,20 @@ body {
   margin-bottom: 12px;
 }
 
-.footer-brand-name span { color: #ff6080; }
+/* Footer wordmark accent — uses the same flag red as the rest of the site (v2) */
+.footer-brand-name span { color: var(--red); }
+
+/* Footer column title — was an <h5> in v1; v2 uses <div> to preserve heading hierarchy */
+.footer-col-title {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #555048;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #2a2520;
+}
 
 .footer-brand p {
   font-size: 13px;
@@ -425,7 +557,36 @@ body {
 }
 
 @media (max-width: 600px) {
-  .nav-links li:not(.nav-cta-li):not(:last-child) { display: none; }
+  /* Mobile drawer: hide the desktop link strip; expose the hamburger toggle.
+     The toggle and a hidden checkbox in the nav handle reveal — no JS framework. */
+  .nav-menu-toggle { display: inline-flex; }
+  .nav-links {
+    position: absolute;
+    top: 52px;
+    left: 0;
+    right: 0;
+    height: auto;
+    flex-direction: column;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 0;
+    display: none;
+  }
+  .nav-links.is-open { display: flex; }
+  .nav-links li { display: flex; width: 100%; }
+  .nav-links a {
+    border-left: none;
+    border-top: 1px solid var(--border);
+    padding: 14px 20px;
+    width: 100%;
+    font-size: 12px;
+  }
+  .nav-links li:first-child a { border-top: none; }
+  .nav-links .nav-cta {
+    margin: 8px 20px 4px;
+    border: none !important;
+    justify-content: center;
+  }
   .footer-inner { grid-template-columns: 1fr; }
 }
 
@@ -769,6 +930,332 @@ body {
 .tc-hero-in > *:nth-child(2) { animation-delay: 120ms; }
 .tc-hero-in > *:nth-child(3) { animation-delay: 220ms; }
 .tc-hero-in > *:nth-child(4) { animation-delay: 320ms; }
+
+/* ─── Shared building blocks for the rewrite ────────────────────────── */
+
+/* Citation chip — used wherever a claim has a code source */
+.cite {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 2px 6px;
+  border-radius: 2px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.cite:hover { color: var(--ink); border-color: var(--border-dk); }
+.cite::before { content: '↗'; font-size: 9px; }
+
+/* Two-column "what it does today / why it matters" rows */
+.capability-row {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1.2fr;
+  gap: 0;
+  border-top: 1px solid var(--border);
+}
+.capability-row:first-of-type { border-top: 2px solid var(--ink); }
+.capability-row > div {
+  padding: 24px 24px;
+  border-right: 1px solid var(--border);
+}
+.capability-row > div:last-child { border-right: none; }
+.capability-name { background: var(--surface); }
+.capability-name h3 {
+  font-family: var(--cond);
+  font-weight: 700;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 6px;
+}
+.capability-name .cite { margin-top: 6px; }
+.capability-name p {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+.capability-body {
+  font-size: 13px;
+  color: var(--ink2);
+  font-weight: 300;
+  line-height: 1.7;
+}
+.capability-body strong { color: var(--ink); font-weight: 500; }
+.capability-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+@media (max-width: 900px) {
+  .capability-row { grid-template-columns: 1fr; }
+  .capability-row > div { border-right: none; border-bottom: 1px solid var(--border); }
+}
+
+/* Coexistence table (EDR / CASB / IdP / DLP) — verbatim from PILOT.md */
+.coex-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.coex-table th, .coex-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+.coex-table th:last-child, .coex-table td:last-child { border-right: none; }
+.coex-table thead th {
+  background: var(--surface2);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 400;
+}
+.coex-table tbody tr:last-child td { border-bottom: none; }
+.coex-table td.col-cap { color: var(--ink); font-weight: 400; }
+.coex-table td.center { text-align: center; font-family: var(--mono); font-size: 12px; }
+.coex-table .yes { color: var(--green); font-weight: 600; }
+.coex-table .no { color: var(--faint); }
+.coex-table .partial { color: var(--amber); font-size: 11px; }
+
+/* Beat sidebar (demo) */
+.beat-sidebar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 20px;
+}
+.beat-sidebar h4 {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.beat-sidebar dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 12px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.beat-sidebar dt {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-top: 2px;
+}
+.beat-sidebar dd { color: var(--ink2); }
+.beat-sidebar dd a {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--border-dk);
+}
+.beat-sidebar dd a:hover { color: var(--red); border-bottom-color: var(--red); }
+.beat-sidebar .ev {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink2);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  display: inline-block;
+  margin: 2px 4px 2px 0;
+}
+
+/* Console-UI SVG mock container */
+.console-mock {
+  background: var(--surface);
+  border: 1px solid var(--border-dk);
+  overflow: hidden;
+}
+.console-mock-bar {
+  background: var(--shell);
+  color: var(--shell-ink);
+  padding: 10px 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border-dk);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.console-mock-bar::before {
+  content: '';
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+}
+.console-mock-body { padding: 0; background: var(--surface); }
+.console-mock-body svg { display: block; width: 100%; height: auto; }
+
+/* Big-block list — used on /how-it-works for architecture beats */
+.block-stack { display: flex; flex-direction: column; }
+.block-stack > div {
+  padding: 32px 0;
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 80px 1fr 1.2fr;
+  gap: 32px;
+  align-items: start;
+}
+.block-stack > div:first-child { border-top: 2px solid var(--ink); }
+.block-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--red);
+  padding-top: 4px;
+}
+.block-title h3 {
+  font-family: var(--cond);
+  font-weight: 700;
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  margin-bottom: 8px;
+  line-height: 1.15;
+}
+.block-title .cite { margin-top: 8px; }
+.block-body {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 300;
+  line-height: 1.75;
+}
+.block-body strong { color: var(--ink); font-weight: 500; }
+@media (max-width: 760px) {
+  .block-stack > div { grid-template-columns: 1fr; gap: 12px; }
+}
+
+/* ── v2 ACCESSIBILITY ADDITIONS ──────────────────────────── */
+
+/* Hide architecture SVG, show stacked text fallback on small screens */
+.arch-stacked { display: none; }
+@media (max-width: 760px) {
+  .arch-diagram svg { display: none; }
+  .arch-stacked {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border-dk);
+    gap: 0;
+  }
+  .arch-stacked .arch-node {
+    padding: 18px 16px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    margin-bottom: 0;
+  }
+  .arch-stacked .arch-node + .arch-node { border-top: none; }
+  .arch-stacked .arch-node-emph { border-color: var(--ink); border-width: 2px; }
+  .arch-stacked .arch-node-title {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .arch-stacked .arch-node-title em { color: var(--red); font-style: normal; }
+  .arch-stacked .arch-node-sub {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.55;
+    margin-bottom: 4px;
+  }
+  .arch-stacked .arch-node-line {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink2);
+    letter-spacing: 0.04em;
+    line-height: 1.6;
+  }
+  .arch-stacked .arch-sep {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-align: center;
+    padding: 6px 0;
+    letter-spacing: 0.12em;
+  }
+  .arch-stacked .arch-boundary {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 8px 0;
+  }
+}
+
+/* Demo simulator stacks vertically on mobile */
+@media (max-width: 760px) {
+  .sim-wrap {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  .sim-col {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .sim-col:last-child { border-bottom: none; }
+  .stage-body { min-height: 180px; }
+}
+
+/* Hero terminal scrolls horizontally inside its box on mobile */
+@media (max-width: 760px) {
+  .terminal-body {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+  }
+  .terminal-body > div { display: block; }
+}
+
+/* Demo mode tabs styled as buttons */
+.mode-tab {
+  background: var(--bg);
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  gap: 10px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-family: var(--sans);
+}
+.mode-tab:hover { border-color: var(--ink); }
+.mode-tab[aria-pressed="true"],
+.mode-tab.active { border-color: var(--red); background: var(--surface); }
 
 /* Honor reduced-motion users */
 @media (prefers-reduced-motion: reduce) {

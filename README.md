@@ -18,15 +18,18 @@ Static marketing site for [Tether Connect](https://www.tetherconnect.app), the e
 
 | File | Purpose |
 | --- | --- |
-| `index.html` | Homepage — hero, problem framing, architecture, features, differentiators, CTA. |
-| `product.html` | Product overview — pipeline components, enforcement modes, specs, competitive comparison. |
-| `demo.html` | Seven-screen interactive product tour: Welcome → Architecture → Simulator → Prompt Library (50 example prompts classified as Allow / Coach / Block) → Policy Studio → Admin Console → Pricing. |
-| `security.html` | Security architecture and posture. |
-| `pricing.html` | Tier comparison and pricing model. |
-| `company.html` | About the company. |
-| `contact.html` | Contact info and demo-request form. |
+| `index.html` | Beat 1 — the reality today + headline + 3 strongest selling points + CTA. |
+| `how-it-works.html` | Beat 3 — architecture diagram, dataflow, three-tier judge authority, honest scope. |
+| `controls.html` | Beat 2 + Beat 4 sub-notes — BUILT capabilities with "what it does today / why it matters". |
+| `integrations.html` | Beat 3 — SIEM (Splunk HEC, Sentinel, syslog), SCIM via Jackson, posture export (Tether / Okta / Entra / CSV), HMAC webhooks. |
+| `pilot.html` | Beat 5 — what you get, day-by-day, success criteria, out-of-scope, EDR/CASB/IdP/DLP table, `terraform destroy` unwind. |
+| `demo.html` | The five-beat developer-loop story with "What you just saw" sidebars + interactive simulator. |
+| `security.html` | Cryptography, per-tenant isolation, no-MITM-CA, three-tier authority, attestation, threat model, disclosure policy. |
+| `pricing.html` | SKU table sourced from `Tether_Company_Assets/investor-pitch/PRICING.md`. |
+| `about.html` | "Why we built Tether" — the moment, founders, what we believe, 90–180 day cut. |
+| `contact.html` | Contact info and walkthrough form. |
 | `privacy.html` / `terms.html` | Legal pages. |
-| `shared.css` | Design system: tokens, nav, footer, buttons, badges, typography. |
+| `shared.css` | Design system: GLC tokens layered on existing Tether vars. IBM Plex stack. 1px default rules. |
 | `CNAME` | GitHub Pages custom domain (`www.tetherconnect.app`). |
 
 ## Design System
