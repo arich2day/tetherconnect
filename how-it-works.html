@@ -25,6 +25,21 @@
       .tier-grid { grid-template-columns: 1fr; }
       .tier-grid .tier-card { border-right: none; border-bottom: 1px solid var(--border); }
     }
+    /* "How Tether fits" — category coexistence cards */
+    .fit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--border); background: var(--surface); margin-top: 8px; }
+    .fit-cell { padding: 28px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .fit-cell:nth-child(3n) { border-right: none; }
+    .fit-cell:nth-last-child(-n+3) { border-bottom: none; }
+    .fit-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 12px; }
+    .fit-cell h3 { font-family: var(--cond); font-weight: 700; font-size: 16px; text-transform: uppercase; margin-bottom: 10px; line-height: 1.2; }
+    .fit-cell p { font-size: 13.5px; color: var(--muted); font-weight: 300; line-height: 1.7; margin-bottom: 10px; }
+    .fit-cell p:last-child { margin-bottom: 0; }
+    .fit-cell p strong { color: var(--ink); font-weight: 500; }
+    @media (max-width: 880px) {
+      .fit-grid { grid-template-columns: 1fr; }
+      .fit-cell, .fit-cell:nth-last-child(-n+3) { border-right: none; border-bottom: 1px solid var(--border); }
+      .fit-cell:last-child { border-bottom: none; }
+    }
   </style>
 </head>
 <body>
@@ -127,6 +142,82 @@
       </div>
     </div>
     <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:28px;max-width:780px;">This tiered behavior is the whole point: the floor catches what you can name, a customer-supplied judge weighs the rest, and only real risk reaches a human. The exact tier authority — what can block, when, and how you tell — is in the <a href="technical-brief.html#authority" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
+  </div>
+</section>
+
+<!-- HOW TETHER FITS — category coexistence, vendor-agnostic -->
+<section id="how-it-fits" style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">How Tether fits</div>
+    <h2 class="section-title">Every category you run keeps its job.<br/>Each one leaves the same lane open.</h2>
+    <p class="section-sub" style="max-width:760px;">Six categories cover most security stacks. Each does its job well — and each stops short of the same place, for structural reasons rather than vendor shortcomings: the direct API call a coding agent makes from the developer machine to its LLM vendor. Tether is additive. It governs that one lane and feeds what it sees back to the tools you already run.</p>
+    <div class="fit-grid" data-reveal-group>
+      <div class="fit-cell">
+        <div class="fit-tag">Network / SWG / SASE</div>
+        <h3>The agent call never enters the tunnel.</h3>
+        <p><strong>Does its job:</strong> governs traffic at the network egress, and governs the AI your people use in a browser — SaaS AI apps, web uploads, the paths it terminates.</p>
+        <p><strong>The gap at the developer machine:</strong> a coding agent calls its vendor's API directly. That call doesn't go through a browser, and it may never traverse the tunnel at all — off-VPN, or on a BYO machine. Reading prompt content on the wire at that layer generally requires a TLS-interception certificate. Tether governs the same request at the loopback boundary on the machine itself, attributed to the specific agent, with no root CA installed.</p>
+      </div>
+      <div class="fit-cell">
+        <div class="fit-tag">Software supply chain</div>
+        <h3>The gate is at install. The risk is at runtime.</h3>
+        <p><strong>Does its job:</strong> vets what comes in — extensions, packages, models — and catches the malicious extension at install time. Supply-chain gateways such as Koi do that job well.</p>
+        <p><strong>The gap at the developer machine:</strong> the trusted extension that goes rogue in an update, and exfiltrates through the AI tool it's allowed to talk to, was already inside the gate. Tether governs the runtime egress — the moment the agent tries to send something — so the two controls bracket the same risk from opposite ends.</p>
+      </div>
+      <div class="fit-cell">
+        <div class="fit-tag">EDR / Endpoint</div>
+        <h3>It sees the connection, not the prompt.</h3>
+        <p><strong>Does its job:</strong> endpoint malware and behavioral threat detection — the process, the binary, the network connection. It runs on the machine and keeps doing exactly that alongside Tether.</p>
+        <p><strong>The gap at the developer machine:</strong> it sees that a coding agent opened a TLS connection to its vendor; it does not read the JSON body of the prompt inside that tunnel. Tether reads and enforces on that content, for the tools that route through the proxy.</p>
+      </div>
+      <div class="fit-cell">
+        <div class="fit-tag">CASB</div>
+        <h3>An approved host, contents unknown.</h3>
+        <p><strong>Does its job:</strong> SaaS shadow-IT discovery and posture — which sanctioned and unsanctioned apps your org touches, and how they're configured.</p>
+        <p><strong>The gap at the developer machine:</strong> a coding agent's call to api.anthropic.com is just another approved SaaS host, and classifying what's inside the prompt typically requires interception. Tether classifies it at the source instead — before it leaves the machine.</p>
+      </div>
+      <div class="fit-cell">
+        <div class="fit-tag">DLP</div>
+        <h3>Patterns don't fire on paraphrase.</h3>
+        <p><strong>Does its job:</strong> org-wide content classification — files at rest, mail, the known patterns it watches at the perimeter.</p>
+        <p><strong>The gap at the developer machine:</strong> a developer paraphrases a customer record into a prompt and the patterns never fire — pattern-matching wasn't built for generative, in-flight AI content. Tether applies the deterministic patterns you name at the moment of egress, and pauses the ambiguous case for a human.</p>
+      </div>
+      <div class="fit-cell">
+        <div class="fit-tag">IdP / SSO</div>
+        <h3>Sign-in governance ends at sign-in.</h3>
+        <p><strong>Does its job:</strong> owns identity — who signs in, to what, under which policy. Tether reads from it (SSO, SCIM, device posture) and doesn't replace it.</p>
+        <p><strong>The gap at the developer machine:</strong> what a developer sends after they've authenticated is outside the IdP's frame. Tether attributes that traffic to the IdP identity you already manage — so the record carries a name, not just a host.</p>
+      </div>
+    </div>
+
+    <div class="table-scroll" style="margin-top:36px;">
+      <table class="coex-table">
+        <caption class="visually-hidden">Coexistence between Tether and network/SASE, software supply-chain gateways, EDR, CASB, and DLP across ten capabilities at and beyond the developer machine.</caption>
+        <thead><tr>
+          <th scope="col">Capability</th>
+          <th class="center" scope="col">Tether</th>
+          <th class="center" scope="col">Network / SASE</th>
+          <th class="center" scope="col">Supply-chain gw</th>
+          <th class="center" scope="col">EDR</th>
+          <th class="center" scope="col">CASB</th>
+          <th class="center" scope="col">DLP</th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="col-cap">Governs coding-agent → LLM API calls at the developer machine<sup style="font-size:9px;color:var(--red);">†</sup></td><td class="center yes">✓</td><td class="center partial">partial (browser / tunneled paths)</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td></tr>
+          <tr><td class="col-cap">Works off-VPN / on a BYO machine, no network backhaul</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td></tr>
+          <tr><td class="col-cap">No TLS-interception root CA on the developer machine<sup style="font-size:9px;color:var(--red);">‡</sup></td><td class="center yes">✓</td><td class="center partial">depends</td><td class="center no">—</td><td class="center yes">✓</td><td class="center partial">depends</td><td class="center partial">depends</td></tr>
+          <tr><td class="col-cap">Attributes each request to the specific coding agent</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td><td class="center partial">partial (process-level)</td><td class="center no">—</td><td class="center no">—</td></tr>
+          <tr><td class="col-cap">Deterministic secret-pattern block before the prompt leaves the machine</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td><td class="center partial">partial (network / file patterns)</td></tr>
+          <tr><td class="col-cap">Signed, per-request enforcement attestation</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td></tr>
+          <tr><td class="col-cap">Just-in-time human approval for sensitive actions</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td></tr>
+          <tr><td class="col-cap">Vets / blocks what software is installed (supply chain)</td><td class="center no">—</td><td class="center no">—</td><td class="center yes">✓</td><td class="center partial">partial</td><td class="center no">—</td><td class="center no">—</td></tr>
+          <tr><td class="col-cap">Network-wide egress coverage across the org</td><td class="center no">—</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td><td class="center no">—</td></tr>
+          <tr><td class="col-cap">SaaS AI app (browser) governance</td><td class="center no">—</td><td class="center yes">✓</td><td class="center no">—</td><td class="center no">—</td><td class="center yes">✓</td><td class="center no">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:14px;max-width:780px;"><sup style="color:var(--red);">†</sup> Tether's mark here carries the site's standing scope: full prompt content on the tools that route through the proxy, attribution-level coverage on opaque ones — the <a href="controls.html#coverage" style="color:var(--ink);">per-tool reality is on Controls</a>. <sup style="color:var(--red);">‡</sup> "depends" means content inspection at that layer generally rides on a TLS-interception certificate, though host-level control and some endpoint DLP variants don't; "—" for supply-chain gateways means the row doesn't apply — they gate installs, not traffic.</p>
+    <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:18px;max-width:780px;">Read the table the way it's marked: Tether owns one lane — AI egress at the developer machine — and is a dash everywhere else on purpose. Every other category keeps the job you bought it for; they're complementary, not competing. The full 13-row EDR / CASB / IdP / DLP matrix is on the <a href="pilot.html#coexistence" style="color:var(--red);text-decoration:underline;text-underline-offset:3px;">Pilot page</a>, and the mechanics behind every Tether row are in the <a href="technical-brief.html" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
   </div>
 </section>
 

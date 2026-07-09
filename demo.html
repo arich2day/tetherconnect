@@ -104,6 +104,22 @@
       .sim-wrap { grid-template-columns: 1fr; }
       .sim-col { border-right: none; border-bottom: 1px solid var(--border); }
     }
+
+    /* Real demo capture — styles for the dormant TODO(demo-capture) section below.
+       Unused until that section is uncommented; kept live so uncommenting is the only step. */
+    .capture-frame { border: 1px solid var(--border-dk); background: var(--shell); }
+    .capture-frame video { display: block; width: 100%; max-width: 100%; height: auto; }
+    .capture-caption { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.04em; line-height: 1.6; margin-top: 12px; }
+    .capture-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border); background: var(--surface); margin-top: 12px; }
+    .capture-still { margin: 0; padding: 20px; border-right: 1px solid var(--border); }
+    .capture-still:last-child { border-right: none; }
+    .capture-still img { display: block; width: 100%; max-width: 100%; height: auto; border: 1px solid var(--border); }
+    .capture-still figcaption { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 10px; }
+    @media (max-width: 700px) {
+      .capture-strip { grid-template-columns: 1fr; }
+      .capture-still { border-right: none; border-bottom: 1px solid var(--border); }
+      .capture-still:last-child { border-bottom: none; }
+    }
   </style>
 </head>
 <body>
@@ -295,6 +311,45 @@
     </div>
   </div>
 </section>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     TODO(demo-capture): DORMANT SECTION. Uncomment when these four files
+     land in assets/ (see assets/README.md):
+       assets/tether-connect-demo.webm   · the screen recording, under 50 MB
+       assets/shot-1-overview.png        · poster frame (console overview)
+       assets/shot-2-events.png          · events view still
+       assets/shot-3-access.png          · JIT approval queue still
+     The .capture-* styles in this page's <style> block are already live.
+     Do NOT uncomment before the files exist, or the page ships broken media.
+
+<section class="beat-section" style="background:var(--surface);" data-reveal>
+  <div class="wrap">
+    <div class="beat-head"><span class="beat-eyebrow">The real thing</span></div>
+    <h2 class="beat-title">The same loop, <em>recorded live</em>.</h2>
+    <p class="beat-sub">The five beats above, running for real: the proxy on the machine, the Overwatch console governing it, and the evidence landing as it happens.</p>
+    <div class="capture-frame">
+      <video controls preload="metadata" poster="assets/shot-1-overview.png">
+        <source src="assets/tether-connect-demo.webm" type="video/webm"/>
+        Your browser can't play this video. The five beats above walk through the same sequence.
+      </video>
+    </div>
+    <p class="capture-caption">Recorded live against the running proxy and Overwatch console — not a mockup.</p>
+    <div class="section-label" style="margin-top:32px;">What you're seeing</div>
+    <div class="capture-strip">
+      <figure class="capture-still">
+        <img src="assets/shot-2-events.png" alt="The Overwatch events view, listing real blocked and allowed requests, each attributed to a developer, an agent, and the policy version that decided it."/>
+        <figcaption>Events view · real blocked and allowed requests</figcaption>
+      </figure>
+      <figure class="capture-still">
+        <img src="assets/shot-3-access.png" alt="The just-in-time approval queue in the operator console, with a paused request waiting for an operator to approve or deny."/>
+        <figcaption>Access view · the just-in-time approval queue</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+     TODO(demo-capture): end of dormant section.
+═══════════════════════════════════════════════════════════════════ -->
 
 <!-- INTERACTIVE SIMULATOR — preserved interaction pattern, reskinned output -->
 <section style="border-bottom:1px solid var(--border);" data-reveal>

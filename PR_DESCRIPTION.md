@@ -144,4 +144,44 @@ Every BUILT-capability statement that remains on a public page is backed by a ci
 
 **Citations pending repo access:** none — every BUILT claim retained on a public page maps to a citation already present in the prior source and re-centralized in the brief. No new line numbers were invented; where a claim could not be tied to a specific line in the prior source, it was kept as conceptual value language rather than asserting a citation.
 
+---
+
+## Two adds (this revision)
+
+### ADD-1 — "How Tether fits" on `how-it-works.html` (`#how-it-fits`)
+A new category-first, vendor-agnostic coexistence section between "Will it slow my developers?" and the closing CTA. Six category cards (network/SWG/SASE, software supply-chain gateway, EDR, CASB, DLP, IdP/SSO), each with two beats — what the category does well, and the structural gap it leaves at the developer machine — followed by a 10-row `.coex-table` (Tether · Network/SASE · Supply-chain gw · EDR · CASB · DLP) marked honestly, including three rows where Tether is the dash. Framing throughout is additive ("every category keeps its job"); no category is disparaged; the only vendor mention anywhere is one plural example, "supply-chain gateways such as Koi," with no implied relationship. Closing paragraph links the full 13-row matrix on `pilot.html#coexistence` and the technical brief. Page-local `.fit-*` styles added to the page's `<style>` block; the table reuses shared `.coex-table` / `.table-scroll` / `.visually-hidden` conventions and carries the site's standing per-tool scope caveat via a footnote to `controls.html#coverage`. One supporting line added on `index.html`: the condensed coexistence strip now also links to `how-it-works.html#how-it-fits` (the existing `pilot.html#coexistence` link is untouched).
+
+### ADD-2 — Real demo capture on `demo.html` (built but dormant)
+A "The real thing" section between beat 5 and the simulator: native `<video controls preload="metadata">` (webm source, `shot-1-overview.png` poster), the caption "Recorded live against the running proxy and Overwatch console — not a mockup.", and a two-still "What you're seeing" strip (`shot-2-events.png` events view, `shot-3-access.png` JIT approval queue) with descriptive alt text. The entire section is wrapped in a loud `TODO(demo-capture)` HTML comment because the four asset files are not in the repo yet — nothing broken or fake ships. Its `.capture-*` CSS is live in the page's style block so uncommenting is the only activation step. `assets/` created with `.gitkeep` and a README stating the four expected filenames and the under-50 MB video constraint (GitHub Pages does not serve Git LFS).
+
+### ADD-1 appendix — claims to source
+
+**Category-gap statements (each a category-level public fact, no vendor asserted):**
+
+| Category | Gap statement on the page | Why it's safe to state |
+|---|---|---|
+| Network / SWG / SASE | Coding-agent API calls don't go through a browser and may never traverse the tunnel (off-VPN / BYO); wire-level prompt inspection generally requires a TLS-interception certificate | How forward-proxy/SASE architectures are publicly documented to work: coverage requires traffic to reach the PoP/tunnel, and HTTPS content inspection requires the vendor's root CA on the device. Hedged with "generally" and "may never." |
+| Supply-chain gateway | Catches the malicious extension at install; does not catch the trusted extension that goes rogue in an update and exfiltrates at runtime | Install-time vetting is the category's own public definition of its job; compromised-update supply-chain incidents are a publicly documented risk class. Stated as a scope boundary, not a defect. |
+| EDR | Sees the process and the connection, not the JSON body of the prompt inside the TLS tunnel | Verbatim reuse of the site's existing framing (`index.html` "reality today" EDR cell). |
+| CASB | An agent's API call is just another approved SaaS host; classifying prompt content typically requires interception | Verbatim reuse of the site's existing framing (`index.html` CASB cell), hedged with "typically." |
+| DLP | Pattern-matching doesn't fire on paraphrased, generative in-flight prompt content | Verbatim reuse of the site's existing framing (`index.html` DLP cell). |
+| IdP / SSO | Governs who signs in, not what leaves after sign-in | Verbatim reuse of the site's existing framing (`index.html` coex strip: "IdP/SSO still owns identity; Tether reads from it"). |
+
+**Tether table rows (each backed by a citation already in the v1/v2 appendix above and carried in `technical-brief.html` — reused, not invented):**
+
+| ADD-1 table row | Existing citation (from the appendix above) |
+|---|---|
+| Governs coding-agent → LLM API calls at the developer machine ✓ | Loopback proxy bind / agent dials proxy — `warden/cmd/proxy/main.go:98-103` (brief §02); scope footnote defers to `controls.html#coverage` |
+| Works off-VPN / BYO, no network backhaul ✓ | Same on-machine loopback architecture + per-tenant deploy model — `deploy/README.md` (brief §01) |
+| No TLS-interception root CA ✓ | No TLS interception / no CA injection — `warden/cmd/proxy/main.go:1-22` (brief §08, security) |
+| Attributes each request to the specific coding agent ✓ | Identity attribution (SCIM identity, agent label, host, policy version) — brief §08 honest scope; `docs/ATTESTATION.md` |
+| Deterministic secret-pattern block before the prompt leaves ✓ | Tier 0 deterministic floor — `warden/cmd/proxy/proxy_core.go:114-117`; blocklist match — `blocklist.go:138` (brief §02, §03) |
+| Signed, per-request enforcement attestation ✓ | Per-request attestation / `X-Tether-Policy-Version` — `docs/ATTESTATION.md` (brief §02, §07) |
+| Just-in-time human approval ✓ | JIT decision (workspace daemon) — `warden/cmd/workspace/main.go:349-402`; access-request backend — `overwatch/api/server.js` (brief §06) |
+| Vets / blocks installed software — Tether is **—** | Deliberate under-claim; consistent with brief §08 out-of-scope (extension that binds its own socket bypasses the proxy — no supply-chain vetting claimed) |
+| Network-wide egress coverage — Tether is **—** | Deliberate under-claim; proxy is loopback-only by design (brief §02) |
+| SaaS AI app (browser) governance — Tether is **—** | Deliberate under-claim; consistent with the site's standing scope (attribution-level at best on browser/opaque paths, `controls.html#coverage`) |
+
+Non-Tether marks (e.g., EDR "partial (process-level)" on agent attribution, CASB/DLP "depends" on the root-CA row) match or under-claim relative to the existing 13-row table on `pilot.html#coexistence`; no mark was adjusted in Tether's favor.
+
 https://claude.ai/code/session_01U4egp9pL2VjsrsVAPS2PdE
