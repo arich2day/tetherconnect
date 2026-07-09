@@ -29,7 +29,16 @@
       letter-spacing: -0.01em; text-transform: uppercase; margin-bottom: 24px;
     }
     .hero h1 em { font-style: italic; color: var(--red); }
-    .hero-sub { font-size: 15.5px; color: var(--ink2); font-weight: 300; line-height: 1.7; max-width: 540px; margin-bottom: 28px; }
+    .hero-outcome {
+      font-family: var(--cond); font-weight: 700; font-size: clamp(18px, 2vw, 23px);
+      line-height: 1.25; letter-spacing: 0.005em; margin-bottom: 18px; max-width: 560px;
+      text-transform: uppercase; color: var(--ink);
+    }
+    .hero-outcome em { font-style: normal; color: var(--red); }
+    .hero-sub { font-size: 15.5px; color: var(--ink2); font-weight: 300; line-height: 1.7; max-width: 540px; margin-bottom: 22px; }
+    .hero-scope { font-size: 12.5px; color: var(--muted); font-weight: 300; line-height: 1.6; max-width: 540px; margin-bottom: 24px; border-left: 2px solid var(--border-dk); padding-left: 12px; }
+    .hero-pilot-note { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.04em; margin-top: 14px; }
+    .hero-pilot-note a { color: var(--red); text-decoration: underline; text-underline-offset: 3px; }
     .hero-stat-row { display: flex; gap: 24px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 32px; }
     .hero-stat-row strong { color: var(--ink); font-weight: 500; }
     .hero-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
@@ -66,6 +75,33 @@
     .sp-card p { font-size: 13.5px; color: var(--muted); font-weight: 300; line-height: 1.7; margin-bottom: 14px; }
     .sp-card .cite { margin-top: 4px; }
 
+    /* Condensed coexistence — "where Tether is, and where it isn't" */
+    .coex-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border); background: var(--surface); margin-top: 8px; }
+    .coex-side { padding: 28px; }
+    .coex-side:first-child { border-right: 1px solid var(--border); }
+    .coex-side .coex-h { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .coex-side.is .coex-h { color: var(--green); }
+    .coex-side.isnt .coex-h { color: var(--muted); }
+    .coex-side ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .coex-side li { display: grid; grid-template-columns: 16px 1fr; gap: 8px; font-size: 13.5px; color: var(--ink2); font-weight: 300; line-height: 1.6; }
+    .coex-side.is li::before { content: '✓'; color: var(--green); font-weight: 600; font-family: var(--mono); }
+    .coex-side.isnt li::before { content: '—'; color: var(--muted); font-family: var(--mono); }
+    .coex-side.isnt li strong { color: var(--ink); font-weight: 500; }
+    @media (max-width: 720px) { .coex-strip { grid-template-columns: 1fr; } .coex-side:first-child { border-right: none; border-bottom: 1px solid var(--border); } }
+
+    /* Diligence pillar — top-billed evidence story */
+    .pillar { background: var(--shell); color: var(--shell-ink); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .pillar-inner { max-width: 1200px; margin: 0 auto; padding: 56px 40px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 56px; align-items: center; }
+    .pillar-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #ff6080; margin-bottom: 18px; }
+    .pillar h2 { font-family: var(--cond); font-weight: 700; font-size: clamp(26px, 3vw, 36px); text-transform: uppercase; line-height: 1.05; letter-spacing: -0.01em; margin-bottom: 16px; color: #f4efe2; }
+    .pillar h2 em { font-style: italic; color: #ff6080; }
+    .pillar p { font-size: 14.5px; color: #b8b0a2; font-weight: 300; line-height: 1.75; max-width: 540px; }
+    .pillar p strong { color: #f4efe2; font-weight: 500; }
+    .pillar-proof { border-left: 2px solid #ff6080; padding: 4px 0 4px 18px; display: flex; flex-direction: column; gap: 14px; }
+    .pillar-proof div { font-size: 13.5px; color: #d6cfbd; font-weight: 300; line-height: 1.6; }
+    .pillar-proof strong { color: #f4efe2; font-weight: 500; display: block; font-family: var(--cond); text-transform: uppercase; font-size: 14px; letter-spacing: 0.02em; margin-bottom: 2px; }
+    @media (max-width: 880px) { .pillar-inner { grid-template-columns: 1fr; gap: 32px; padding: 44px 20px; } }
+
     /* CTA band */
     .cta-band { background: var(--ink); color: var(--surface); border-top: 1px solid var(--border); }
     .cta-inner { max-width: 1200px; margin: 0 auto; padding: 64px 40px; display: flex; align-items: center; justify-content: space-between; gap: 40px; }
@@ -94,7 +130,7 @@
 <!-- NAV -->
 <nav class="tc-nav">
   <a href="index.html" class="nav-logo">
-    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#0e0d0a" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
     <span class="nav-wordmark">Tether<span>Connect</span></span>
   </a>
     <button class="nav-menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
@@ -123,15 +159,19 @@
     <div class="hero-left tc-hero-in">
       <div class="hero-eyebrow">The AI-egress governance gap</div>
       <h1>You have controls<br/>on every other<br/>egress lane.<br/><em>AI tools are the gap.</em></h1>
-      <p class="hero-sub">See, control, and prove what your developers send to AI tools — in your own cloud, without slowing them down, and without a root certificate on a single laptop. Tether closes the one egress lane your EDR, CASB, and DLP were never built to watch.</p>
+      <p class="hero-outcome">See it, govern it, and <em>prove it</em> — in your own cloud, with no root certificate on a single laptop.</p>
+      <p class="hero-sub">Tether closes the one egress lane your EDR, CASB, and DLP were never built to watch: what your developers send to AI tools. It surfaces the channel, enforces the floor you set, and leaves evidence your auditor re-verifies offline — without slowing developers down.</p>
+      <p class="hero-scope"><strong style="color:var(--ink);font-weight:500;">Honest about scope:</strong> "see what your developers send" means full prompt content on the tools that route through the proxy (Claude Code, Codex CLI, Aider, Zed, Continue) and attribution-level coverage — who, which vendor — on opaque ones like Copilot chat and Cursor's default flow.</p>
       <div class="hero-stat-row">
         <span><strong>Your cloud.</strong> &nbsp;No Tether-side data lake to leak.</span>
         <span><strong>No MITM cert.</strong> &nbsp;Verify the endpoint yourself.</span>
       </div>
       <div class="hero-actions">
         <a href="contact.html" class="btn-primary">Book a 30-min walkthrough ↗</a>
+        <a href="pilot.html" class="btn-secondary">Prove it free, in your cloud →</a>
         <a href="how-it-works.html" class="btn-secondary">See how it works →</a>
       </div>
+      <p class="hero-pilot-note">Pilot: free up to 25 seats, two weeks, your own cloud — <code style="font-family:var(--mono);">terraform destroy</code> if it doesn't deliver.</p>
     </div>
     <div class="hero-terminal" data-tilt data-tilt-max="4">
       <span data-tilt-glare></span>
@@ -187,7 +227,28 @@
         <p>The only record of what your developers prompted is at the AI vendor. It is not in your SIEM, not on your audit timeline, and not available during incident response.</p>
       </div>
     </div>
-    <p style="font-size:14px;color:var(--ink);font-weight:500;line-height:1.7;margin-top:32px;max-width:760px;">Tether <strong>does not</strong> replace your EDR, CASB, IdP/SSO, or DLP. It covers the AI-egress lane on the developer machine each of them misses, and feeds the SIEM and IdP you already trust. <a href="pilot.html#coexistence" style="color:var(--red);text-decoration:underline;text-underline-offset:3px;">Full coexistence map →</a></p>
+    <p style="font-size:14px;color:var(--ink);font-weight:500;line-height:1.7;margin-top:32px;margin-bottom:16px;max-width:760px;">So "don't we already own this?" has an honest answer: you own most of the stack — Tether covers the one lane it doesn't reach, and feeds the SIEM and IdP you already trust.</p>
+    <div class="coex-strip">
+      <div class="coex-side is">
+        <div class="coex-h">Where Tether is</div>
+        <ul>
+          <li>Sees prompts and completions before they leave, on the tools that route through the proxy</li>
+          <li>Attributes activity to a person, an agent, and a host</li>
+          <li>Blocks the patterns you name; pauses the ambiguous moment for an operator</li>
+          <li>Leaves signed evidence your auditor re-verifies offline</li>
+        </ul>
+      </div>
+      <div class="coex-side isnt">
+        <div class="coex-h">Where Tether isn't</div>
+        <ul>
+          <li><strong>EDR</strong> still does endpoint malware and behavioral threat detection</li>
+          <li><strong>CASB</strong> still does SaaS shadow-IT discovery and posture</li>
+          <li><strong>IdP/SSO</strong> still owns identity; Tether reads from it, doesn't replace it</li>
+          <li><strong>DLP</strong> still does org-wide file-level content classification</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:14px;max-width:760px;">That's the short version. The full 13-row map — including the rows where Tether is only <em>partial</em> — is on the <a href="pilot.html#coexistence" style="color:var(--red);text-decoration:underline;text-underline-offset:3px;">Pilot page</a>.</p>
   </div>
 </section>
 
@@ -206,7 +267,7 @@
       <div class="reality-cell">
         <div class="reality-tag">Breach</div>
         <h3>Incident response has no trail.</h3>
-        <p>A customer record or a live credential surfaces where it shouldn't. You need to scope what was exposed through AI tools and when. The egress lane that carried it never appeared in your SIEM.</p>
+        <p>2 a.m., a credential is being used from an IP you don't recognize. Your IR lead asks the one question that scopes the blast radius: did it go out through an AI tool, and what else went with it? The only record that could answer is at the AI vendor — off your timeline, behind a support ticket, useless to the people on the bridge right now.</p>
       </div>
       <div class="reality-cell">
         <div class="reality-tag">Deadline</div>
@@ -218,6 +279,23 @@
         <h3>Close it before you're asked.</h3>
         <p>Tether turns the blind spot into a governed, audit-ready channel — in your own cloud, with evidence your auditor verifies offline. <a href="pilot.html" style="color:var(--red);text-decoration:underline;text-underline-offset:3px;">Prove it on your own data in two weeks →</a></p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- DILIGENCE PILLAR — top-billed evidence story -->
+<section class="pillar" data-reveal>
+  <div class="pillar-inner">
+    <div>
+      <div class="pillar-eyebrow">The diligence-winner</div>
+      <h2>Evidence your auditor<br/><em>re-verifies without trusting us.</em></h2>
+      <p>Most security tools ask a reviewer to take the vendor's word for it. Tether's strongest card is the opposite: <strong>every decision is recoverable as a signed bundle your auditor checks offline</strong> — no live access to Tether, no re-running our service, no trust in us required. When the question is "does this survive diligence?", that's the answer. It's the same evidence whether a customer audit, a regulator, or an incident review is asking.</p>
+    </div>
+    <div class="pillar-proof">
+      <div><strong>Signed at the source</strong>Every decision carries the Ed25519-signed policy version that made it.</div>
+      <div><strong>Verified offline</strong>Your auditor pulls the bundle and confirms it cryptographically, on their own machine.</div>
+      <div><strong>In your tenant</strong>The record lives in your own cloud — there's no Tether-side copy to request or trust.</div>
+      <div style="font-size:12px;color:#9a9088;">One honest caveat: durable per-request retention depends on your SIEM forwarding — which is why the SIEM adapters ship in the same release. <a href="technical-brief.html#siem" style="color:#ff6080;text-decoration:underline;text-underline-offset:3px;">Technical brief →</a></div>
     </div>
   </div>
 </section>
@@ -238,8 +316,8 @@
       <div class="sp-card">
         <div class="sp-num">02 · GOVERN IT</div>
         <h3>Enforce at the moment of risk — no ticket</h3>
-        <p>Most actions pass untouched. Only genuine risk triggers a just-in-time approval an operator clears in seconds. Safe work is never ticketed; policy reaches the whole fleet fast.</p>
-        <p style="color:var(--ink);font-weight:400;font-size:13px;border-left:2px solid var(--red);padding-left:12px;margin-top:14px;">"Policy is Ed25519-signed and reaches the whole fleet in ~10s."</p>
+        <p>Most actions pass untouched. Only genuine risk triggers a just-in-time approval an operator clears in seconds. Safe work is never ticketed; and because every policy is Ed25519-signed, you can prove which version was in force when each request was decided.</p>
+        <p style="color:var(--ink);font-weight:400;font-size:13px;border-left:2px solid var(--red);padding-left:12px;margin-top:14px;">"Policy you can prove changed — signed, fleet-acknowledged, and propagated in about ten seconds."</p>
       </div>
       <div class="sp-card">
         <div class="sp-num">03 · PROVE IT</div>

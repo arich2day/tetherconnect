@@ -22,6 +22,8 @@
     .sku-card ul { list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 13px; color: var(--ink2); font-weight: 300; line-height: 1.65; }
     .sku-card ul li { display: grid; grid-template-columns: 12px 1fr; gap: 8px; }
     .sku-card ul li::before { content: '·'; color: var(--red); font-weight: 700; }
+    .sku-card ul li.sku-divider { display: block; border-top: 1px solid var(--border); padding-top: 10px; margin-top: 4px; }
+    .sku-card ul li.sku-divider::before { content: none; }
     .vol-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); margin-top: 8px; }
     .vol-table th, .vol-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); text-align: left; }
     .vol-table th:last-child, .vol-table td:last-child { border-right: none; }
@@ -42,7 +44,7 @@
 
 <nav class="tc-nav">
   <a href="index.html" class="nav-logo">
-    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#0e0d0a" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
     <span class="nav-wordmark">Tether<span>Connect</span></span>
   </a>
     <button class="nav-menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
@@ -101,13 +103,15 @@
         <div class="sku-tag" style="color:var(--red);font-weight:600;">[Preview — design partners only]</div>
         <div class="sku-price" style="color:var(--muted);"><s>$36</s> <small style="color:var(--muted);">/ seat / mo</small></div>
         <div class="sku-sub">Pricing on request during preview</div>
+        <p style="font-size:12px;color:var(--ink2);font-weight:300;line-height:1.6;background:var(--red-bg);border:1px solid var(--red-bd);padding:10px 12px;margin-bottom:16px;">Said once, plainly: the workspace controls are <strong style="color:var(--ink);font-weight:500;">advisory today — they watch and record — and become hard enforcement when the managed VSCodium build ships.</strong> Everything below the divider is that post-GA enforcement.</p>
         <ul>
           <li><span>Everything in Connect</span></li>
-          <li><span>Tether Workspace IDE (VSCodium-based, signed binary) <strong style="color:var(--red);">(post-GA)</strong></span></li>
-          <li><span>Managed root CA + TLS termination on workspace egress <strong style="color:var(--red);">(post-GA)</strong></span></li>
-          <li><span>Clipboard JIT, downloads, external links, screen capture <strong style="color:var(--red);">(advisory today; enforced when managed VSCodium ships)</strong></span></li>
-          <li><span>Printing, USB, settings-UI lock <strong style="color:var(--red);">(post-GA)</strong></span></li>
-          <li><span>Custom branding (company name, logo, primary color — visual branding)</span></li>
+          <li><span>Custom branding (company name, logo, primary color)</span></li>
+          <li class="sku-divider"><span style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;">Enforced when managed VSCodium ships ↓</span></li>
+          <li><span>Tether Workspace IDE (VSCodium-based, signed binary)</span></li>
+          <li><span>Managed root CA + TLS termination on workspace egress</span></li>
+          <li><span>Clipboard JIT, downloads, external links, screen capture</span></li>
+          <li><span>Printing, USB, settings-UI lock</span></li>
         </ul>
       </div>
       <div class="sku-card">
@@ -173,12 +177,12 @@
     <h2 class="section-title">Two-week pilot.<br/>Free up to 25 seats.</h2>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:8px;">
       <div>
-        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">Connect tier, in your own cloud, for two weeks at no cost. Includes the operator console, deterministic enforcement, the approval queue, identity sync, SIEM adapters, and posture export. At day 14 you decide: continue at list price, or run <code style="font-family:var(--mono);font-size:12px;">terraform destroy</code> — there's no Tether-side data to expunge. Prepay and lighthouse terms are in the <a href="#discounts" style="color:var(--ink);">Discounts at a glance</a> block.</p>
-        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;">Workspace tier in pilot is available to design partners only. Per-deal terms; a Tether engineer assists installation and the first policy publish. Pilot conversion expectation: 60+ days from first install.</p>
+        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">Connect tier, in your own cloud, for two weeks at no cost. At day 14 you decide: continue at list price, or run <code style="font-family:var(--mono);font-size:12px;">terraform destroy</code> — there's no Tether-side data to expunge. Prepay and lighthouse terms are in the <a href="#discounts" style="color:var(--ink);">Discounts at a glance</a> block.</p>
+        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;">Workspace tier in pilot is available to design partners only, on per-deal terms. The full scope — what's included, the day-by-day plan, success criteria, SLA, and out-of-scope limits — lives on the <a href="pilot.html" style="color:var(--ink);">Pilot page</a> rather than being restated here.</p>
       </div>
       <div>
         <p style="font-size:14px;color:var(--muted);font-weight:300;line-height:1.75;margin-bottom:10px;"><strong style="color:var(--ink);font-weight:500;">Best-effort SLA during pilot.</strong> Production SLA post-GA.</p>
-        <p style="font-size:14px;color:var(--muted);font-weight:300;line-height:1.75;">See the <a href="pilot.html" style="color:var(--ink);">Pilot page</a> for what's included, day-by-day activity, success criteria, and out-of-scope.</p>
+        <p style="font-size:14px;color:var(--muted);font-weight:300;line-height:1.75;">Everything you can verify in the two weeks — and the limits we name up front — is laid out on the <a href="pilot.html" style="color:var(--ink);">Pilot page</a>.</p>
       </div>
     </div>
   </div>
@@ -197,7 +201,7 @@
       </div>
       <div class="faq-item">
         <h3>Why is the judge cost not on the bill?</h3>
-        <p>Model costs vary by 100x across vendors. Folding them into a per-seat number would distort the economics for half our customers. A concrete range to sanity-check against: at the default sample rate, a 50-seat fleet runs roughly $0.20–$8.80/month on a small cloud judge model, and about $0 on a local judge.</p>
+        <p>Model costs vary by 100x across vendors. Folding them into a per-seat number would distort the economics for half our customers. At the default sample rate, judge inference is negligible relative to the model spend your developers already generate — and $0 on a local judge. We'll give you a concrete range for your seat count and judge model on request.</p>
       </div>
       <div class="faq-item">
         <h3>Are custom integrations included?</h3>
@@ -205,7 +209,7 @@
       </div>
       <div class="faq-item">
         <h3>What's the cloud infrastructure cost?</h3>
-        <p>Per-tenant Cloud Run or ECS Fargate runs roughly $15-65 / month on top of the per-seat license, depending on cloud and traffic. Predictable: Cloud Run bills by instance-hour, not per request, so the bill is flat per tenant. You pay your cloud vendor directly.</p>
+        <p>You run one small per-tenant service (Cloud Run on GCP or ECS Fargate on AWS) and pay your cloud vendor directly — plan for roughly a few tens of dollars a month, depending on cloud and traffic. It's predictable because the service bills by instance-hour, not per request, so the bill is flat per tenant. We'll size it for your environment on request.</p>
       </div>
       <div class="faq-item">
         <h3>What is the SLA?</h3>

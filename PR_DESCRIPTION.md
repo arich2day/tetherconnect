@@ -1,5 +1,45 @@
 # Transform the marketing site to lead with business value; move plumbing to a technical brief
 
+> **v2 — reviewer integration (this revision).** Four reviewers (claims auditor, CISO buyer, GTM strategist, design/UX) reviewed v1; the director triaged their notes and this revision applies them as surgical edits on top of v1. No rewrite, same author voice, same design system. The v1 write-up below is unchanged for history; the **v2 changelog** immediately following lists exactly what moved. The founder/team identity item (`about.html TODO(founder-bio)`) was explicitly deferred and left untouched.
+
+## v2 changelog — what this revision changed
+
+### Copy / claims
+1. **`demo.html` simulator — floor/judge boundary fixed (hard).** The "customer record in a prompt" scenario no longer resolves to a clean deterministic Tier-0 BLOCK with an offline-verifiable receipt — a freeform/paraphrased record can't be caught by regex, so Block now explains there's "no regex for 'is this an exfil attempt?'" and routes to the judge/operator (advisory). The deterministic-BLOCK + offline-verifiable-receipt example is now anchored on the **live-credential** scenario (genuinely Tier-0). Internal-token scenario unchanged (also Tier-0).
+2. **`how-it-works.html` tier-card 01** now scopes the floor to "the patterns you can name, on the tools that route through the proxy" (matches controls' wording; no blanket content-blocking implication).
+3. **Coverage honesty scoped at the home hero** (and carried on how-it-works): a new scoping clause states that "see what your developers send" = full prompt content on proxy-routed tools (Claude Code, Codex CLI, Aider, Zed, Continue) and **attribution-level** coverage on opaque ones (Copilot chat, Cursor default flow). how-it-works gained a matching per-tool clause linking to `controls.html#coverage`.
+4. **Per-request durability caveat propagated** to `pilot.html` beat 5 and `demo.html` beat 5 (and surfaced on the home diligence pillar): durable per-request evidence depends on SIEM forwarding; in-memory events don't survive an Overwatch restart. Reuses controls' phrasing; links the brief.
+5. **Unsourced numbers softened** (false precision dropped): pricing judge-cost "$0.20–$8.80/mo" → "negligible relative to your existing model spend… range on request"; "$15–65/mo Cloud Run" → "roughly a few tens of dollars a month… sized on request"; controls "~10K events/day, ~10 MB/day at 50 seats" → "light relative to a typical SIEM ingest budget… sizing range on request."
+6. **Air-gap wording aligned** on `integrations.html` syslog card to match security's hedge ("architecturally coherent… every component supports it"), dropping "the piece that makes a true air-gap deployment work."
+15. **Self-undercutting meta-assurances removed:** "Diligence is exactly where Tether looks better" (demo) and "Not a marketing claim" (security) — the mechanism/component lists now carry the point.
+
+### GTM
+7. **Home hero elevates the outcome.** Kept the gap headline ("AI tools are the gap"), added a headline-tier outcome line ("See it, govern it, and *prove it* — in your own cloud, no root cert") above the fold, and led the sub-copy with what the buyer GETS.
+8. **Offline-verifiable evidence is now a named, top-billed PILLAR** — a dedicated dark "diligence-winner" band on the home page ("Evidence your auditor re-verifies without trusting us"), explicitly tied to the "does this survive diligence?" objection. Previously one of five flat bullets.
+9. **Cost-of-inaction breach beat made scene-level** (home): 2 a.m. incident, IR lead asks what went out through AI tools, the only record is at the vendor — off-timeline, behind a support ticket. No invented facts.
+10. **Condensed coexistence view added up-funnel** (home "reality today" beat): a two-column "Where Tether is / Where Tether isn't" strip (EDR/CASB/IdP/DLP keep their jobs), linking the full 13-row matrix on pilot. Honesty showcase where "don't we already own this?" first fires.
+11. **Dev-facing champion-enablement block added** (`controls.html`): "This isn't spyware" — loopback-only, no root cert, no TLS content read, safe work never ticketed, "check your trust store / run netstat yourself."
+12. **"~10s propagation" demoted** from a standalone stat to a supporting detail under "policy you can prove changed" (home selling-point 02).
+13. **Pilot surfaced as a secondary hero CTA** on the home page above the fold ("Prove it free, in your cloud →") plus a one-line pilot note.
+14. **"Shipped now" walled off from "coming."** `pricing.html` Workspace SKU states the advisory-today/enforced-when-managed-VSCodium-ships limit **once**, in a prominent banner, with a divider separating shipped from post-GA bullets — instead of re-hedging every line.
+
+### Design / UX
+16. **`demo.html` simulator ARIA fixed** — dropped the mismatched `role="radiogroup"` (its children used `aria-pressed`, not `aria-checked`); both the mode column and scenario column are now labelled `role="group"` button sets with `aria-pressed`, matching the single-select toggle behavior.
+17. **`demo.html` operator console restacks on mobile** — added `@media (max-width:600px)` so the fixed 4-col `.op-row` grid no longer overflows at 375px; simulator's three columns also stack at ≤700px.
+18. **`technical-brief.html` architecture SVG** wrapped in a horizontal-scroll fallback (`.arch-scroll`, min-width 680px below 720px) with a scroll hint, so 11px labels stay legible on narrow viewports.
+19. **Contrast (WCAG AA):** footer meta text `#555048` → new `--footer-meta: #8a8378` token (clears AA on dark `--ink`); coex-table "no"/dash cells moved off decorative `--faint` to readable `--muted`; `.coex-table .partial` bumped 11px→12px.
+20. **Token cleanup (no palette change):** nav-logo SVG ink unified `#1a1612` → `#0e0d0a` across all 13 pages (matches resolved `--ink`); dead `:root` fallback hexes removed so documented tokens match what renders; demo's light-surface `#1f7f3a` third-green → `var(--green)` (dark console pill left as intentional motif).
+21. **`controls.html` overlap reduced:** the per-tool coverage matrix table remains solely in the brief (controls carries value prose + a `#coverage` anchor that how-it-works links to); no duplicated matrix on controls.
+22. **Home problem beat differentiated:** "reality today" now also carries the condensed coexistence (mechanism + stack-fit), leaving "what the gap costs you" as the stakes beat — the two no longer re-litigate the same gap.
+23. **`pricing.html` references the pilot page** for day-by-day/SLA/scope/terms instead of restating them; kept only the pricing-relevant facts.
+24. **`demo.html` `<noscript>` fallback added** — a worked example (live-key Block vs. paraphrased-record advisory) so the simulator degrades gracefully; the 5 narrative beats already work without JS.
+25. **Orphaned CSS removed** from `shared.css`: `.marquee-*`, `.intent-table/.intent-row/.intent-cell`, `.particle-canvas` (+ its disable rule and `:not()` guards). Left `.founder-*`, contact-form CSS, `.arch-stacked`, and `[data-tilt-glare]` intact. No `[data-counter]` CSS rules existed to remove.
+
+### Deferred (not actioned this pass)
+- **Founder/team identity** (`about.html TODO(founder-bio)`) — left as the commented placeholder per the director; no founder name/bio/credential invented.
+
+---
+
 ## Summary
 
 The previous build was honest but led with mechanism — it opened pages with *how it's wired* (ports, flags, `*.go:line` chips, the three-tier vocabulary) before it sold *what it does for the business*. This PR inverts that across every public page: each page now leads with the outcome and the one-line proof a skeptic accepts, and all implementation detail is consolidated into a single new, unlinked **`technical-brief.html`** that CTAs and contextual links point to ("Read the technical brief →").

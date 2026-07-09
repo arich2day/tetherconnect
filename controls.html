@@ -16,7 +16,7 @@
 
 <nav class="tc-nav">
   <a href="index.html" class="nav-logo">
-    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#0e0d0a" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
     <span class="nav-wordmark">Tether<span>Connect</span></span>
   </a>
     <button class="nav-menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
@@ -163,7 +163,7 @@
         </div>
         <div class="capability-body">
           <div class="capability-label">Why it matters</div>
-          The AI-egress channel finally shows up where your security team already looks. A platform engineer who knows Splunk or Sentinel wires it up in an afternoon, with no custom development. Plan for roughly 10K events/day, ~10 MB/day at 50 seats — do your own license math.
+          The AI-egress channel finally shows up where your security team already looks. A platform engineer who knows Splunk or Sentinel wires it up in an afternoon, with no custom development. Event volume is light relative to a typical SIEM ingest budget — we'll give you a sizing range for your seat count and tool mix on request, so you can do your own license math.
         </div>
         <div class="capability-body">
           <div class="capability-label">What it does</div>
@@ -219,6 +219,24 @@
   </div>
 </section>
 
+<!-- FOR THE DEVELOPER — forwardable champion enablement -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label red">Forward this to your developers</div>
+    <h2 class="section-title">"This isn't spyware."<br/>Here's the part you can check yourself.</h2>
+    <p class="section-sub">The fastest way to lose a developer-aware org is to make this feel like surveillance. It isn't, and your champion shouldn't have to take that on faith — every claim below is verifiable on the machine.</p>
+    <div style="border:1px solid var(--border-dk);background:var(--bg);padding:28px;margin-top:8px;max-width:860px;">
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:14px;font-size:14px;color:var(--ink2);font-weight:300;line-height:1.7;">
+        <li>· <strong style="color:var(--ink);font-weight:500;">No root certificate on your machine.</strong> Tether doesn't install a corporate CA, so it can't decrypt your banking session, your personal email, or anything else outside the AI routes. Check your trust store — nothing of ours is in it.</li>
+        <li>· <strong style="color:var(--ink);font-weight:500;">The proxy is loopback-only.</strong> It binds to <code style="font-family:var(--mono);font-size:12.5px;">127.0.0.1</code> by default; widening it takes explicit operator config and emits a named startup warning. Run <code style="font-family:var(--mono);font-size:12.5px;">netstat</code> and see for yourself.</li>
+        <li>· <strong style="color:var(--ink);font-weight:500;">It doesn't read TLS-tunneled content.</strong> It classifies the destination and reads prompts only on the AI routes your org configured — not your general web traffic.</li>
+        <li>· <strong style="color:var(--ink);font-weight:500;">Safe work is never ticketed.</strong> The overwhelming majority of prompts pass silently. Only a named risk or a genuinely ambiguous moment ever surfaces a decision — there's no manager watching your ordinary work.</li>
+      </ul>
+    </div>
+    <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:18px;max-width:780px;">The loopback binding and route-scoped inspection are in the <a href="technical-brief.html#dataflow" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
+  </div>
+</section>
+
 <!-- WORKSPACE-TIER — preview / advisory framing -->
 <section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
@@ -270,7 +288,7 @@
 </section>
 
 <!-- AI TOOL COVERAGE -->
-<section style="border-bottom:1px solid var(--border);" data-reveal>
+<section id="coverage" style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Per-tool reality</div>
     <h2 class="section-title">"What about Cursor?"</h2>

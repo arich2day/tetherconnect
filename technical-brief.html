@@ -22,6 +22,15 @@
     .codeblock .c-dim { color: #8f8a7f; } .codeblock .c-green { color: #4cba6a; } .codeblock .c-red { color: #ff6080; } .codeblock .c-blue { color: #6aacff; } .codeblock .c-yellow { color: #f0c040; }
     .arch-diagram { background: var(--surface); border: 1px solid var(--border-dk); padding: 0; margin-top: 8px; }
     .arch-diagram svg { display: block; width: 100%; height: auto; }
+    /* Below ~720px the 11px SVG labels become unreadable when scaled to fit.
+       The .arch-scroll wrapper keeps the diagram at a legible min-width and
+       scrolls horizontally instead of crushing (v2). */
+    .arch-scroll-hint { display: none; }
+    @media (max-width: 720px) {
+      .arch-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .arch-scroll .arch-diagram svg { min-width: 680px; }
+      .arch-scroll-hint { display: block; font-family: var(--mono); font-size: 10.5px; color: var(--muted); letter-spacing: 0.04em; margin-top: 8px; }
+    }
     .tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 8px; border: 1px solid var(--border); }
     .tier-card { border: none; border-right: 1px solid var(--border); padding: 28px; background: var(--surface); }
     .tier-card:last-child { border-right: none; }
@@ -41,7 +50,7 @@
 
 <nav class="tc-nav">
   <a href="index.html" class="nav-logo">
-    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#0e0d0a" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
     <span class="nav-wordmark">Tether<span>Connect</span></span>
   </a>
     <button class="nav-menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
@@ -97,6 +106,7 @@
     <div class="section-label">01 · Architecture</div>
     <h2 class="section-title">Three runtimes. Two trust boundaries.<br/>One signed policy bundle.</h2>
     <p class="section-sub">A loopback Connect proxy and a workspace daemon on the developer machine; a single-tenant Overwatch control plane in the customer's own cloud account. Policy flows one way, signed; events and ACKs flow back.</p>
+    <div class="arch-scroll">
     <div class="arch-diagram">
       <svg viewBox="0 0 1200 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tether architecture diagram">
         <defs>
@@ -179,6 +189,8 @@
         <path d="M880 200 L880 350" class="arrow" marker-end="url(#ah)"/>
       </svg>
     </div>
+    </div>
+    <span class="arch-scroll-hint">Scroll the diagram sideways to read it →</span>
     <p style="font-size:12px;font-family:var(--mono);color:var(--muted);margin-top:12px;letter-spacing:0.04em;">Adapted from <a class="cite" style="vertical-align:baseline;" href="https://github.com/arich2day/project-tether/blob/master/docs/JUDGE_AUTHORITY.md" target="_blank" rel="noopener">docs/JUDGE_AUTHORITY.md</a> and <a class="cite" style="vertical-align:baseline;" href="https://github.com/arich2day/project-tether/blob/master/deploy/README.md" target="_blank" rel="noopener">deploy/README.md</a>.</p>
   </div>
 </section>

@@ -30,10 +30,10 @@
     .rc-v { font-size: 14px; color: var(--ink2); font-weight: 300; line-height: 1.6; }
     .rc-v strong { color: var(--ink); font-weight: 500; }
     .rc-before { color: var(--red); }
-    .rc-after { color: #1f7f3a; }
+    .rc-after { color: var(--green); }
     .rc-block { color: var(--red); }
     .rc-hold { color: #7a4800; }
-    .rc-allow { color: #1f7f3a; }
+    .rc-allow { color: var(--green); }
 
     /* "What this means for you" sidebar */
     .means-box { border: 1px solid var(--border-dk); background: var(--bg); padding: 24px; }
@@ -85,11 +85,25 @@
     .scr-k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-top: 2px; }
     .scr-v { font-size: 13.5px; color: var(--ink2); font-weight: 300; line-height: 1.55; }
     .scr-v strong { color: var(--ink); font-weight: 500; }
-    .scr-block { color: var(--red); } .scr-allow { color: #1f7f3a; } .scr-hold { color: #7a4800; }
+    .scr-block { color: var(--red); } .scr-allow { color: var(--green); } .scr-hold { color: #7a4800; }
     .playback-bar { display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--surface2); border-top: 1px solid var(--border); }
     .play-btn { background: var(--red); color: var(--surface); border: none; padding: 8px 16px; font-family: var(--mono); font-size: 12px; cursor: pointer; letter-spacing: 0.04em; }
     .play-btn:hover { opacity: 0.85; }
     .step-label { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; font-family: var(--mono); }
+
+    /* Mobile: restack the operator console rows so the fixed 4-col grid
+       (80px 1fr 180px 110px) doesn't overflow at 375px (v2). */
+    @media (max-width: 600px) {
+      .op-row, .op-row.head { grid-template-columns: 1fr; gap: 6px; }
+      .op-row.head { display: none; }
+      .op-cell.actions { justify-content: flex-start; }
+      .op-cell.mono { color: var(--muted); }
+    }
+    /* Mobile: the simulator's three columns stack rather than crush to 1px */
+    @media (max-width: 700px) {
+      .sim-wrap { grid-template-columns: 1fr; }
+      .sim-col { border-right: none; border-bottom: 1px solid var(--border); }
+    }
   </style>
 </head>
 <body>
@@ -98,7 +112,7 @@
 
 <nav class="tc-nav">
   <a href="index.html" class="nav-logo">
-    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#0e0d0a" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
     <span class="nav-wordmark">Tether<span>Connect</span></span>
   </a>
     <button class="nav-menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
@@ -269,12 +283,13 @@
           <div class="rc-row"><div class="rc-k">Proof</div><div class="rc-v rc-after"><strong>A signed receipt</strong> tied to the policy version that decided it.</div></div>
           <div class="rc-row"><div class="rc-k">Verification</div><div class="rc-v">Your auditor confirms it offline — no need to trust Tether.</div></div>
           <div class="rc-row"><div class="rc-k">Residency</div><div class="rc-v rc-after">And it never left your cloud.</div></div>
+          <div class="rc-row"><div class="rc-k">The honest caveat</div><div class="rc-v">Durable per-request evidence depends on your SIEM forwarding — in-memory events don't survive an Overwatch restart, which is why the SIEM adapters ship in the same release.</div></div>
         </div>
       </div>
       <aside class="means-box">
         <h4>What this means for you</h4>
         <div class="outcome">The blind spot becomes your strongest evidence.</div>
-        <p>The day an auditor, a regulator, or an incident asks what your developers sent to AI tools, you have an answer — a verifiable one. Diligence is exactly where Tether looks better, because the evidence stands on its own, inside your own tenant.</p>
+        <p>The day an auditor, a regulator, or an incident asks what your developers sent to AI tools, you have an answer — a verifiable one. The evidence stands on its own, inside your own tenant; an auditor re-checks it without taking your word, or Tether's.</p>
         <p style="margin-top:14px;"><a href="technical-brief.html" style="color:var(--red);text-decoration:underline;text-underline-offset:3px;font-weight:500;">Read the technical brief →</a> for the signing chain and the offline verification.</p>
       </aside>
     </div>
@@ -288,17 +303,21 @@
     <h2 class="section-title">Run a risky moment yourself.</h2>
     <p class="section-sub">Pick what a developer is about to do, pick how you'd govern it, and watch the outcome — framed the way your security team would see it: what was at risk, what happened, and the evidence left behind.</p>
 
+    <noscript>
+      <p style="font-size:13.5px;color:var(--ink2);font-weight:300;line-height:1.7;max-width:780px;border-left:2px solid var(--red);padding-left:14px;margin-bottom:8px;">This simulator needs JavaScript to step through the outcomes. One worked example: a developer pastes a <strong>live cloud access key</strong> into an AI editor. On <strong>Block</strong>, the deterministic floor stops it at the source — the key never reaches the vendor — and the decision lands in your SIEM as a signed receipt your auditor verifies offline. A <strong>paraphrased customer record</strong>, by contrast, has no fixed pattern to match, so it routes to the judge and, when genuinely ambiguous, to an operator. The five beats above tell the same story without scripting.</p>
+    </noscript>
+
     <div class="sim-wrap">
       <div class="sim-col">
-        <div class="sim-col-head">What the developer does</div>
-        <div class="sim-col-body">
+        <div class="sim-col-head" id="scenario-label">What the developer does</div>
+        <div class="sim-col-body" role="group" aria-labelledby="scenario-label">
           <button type="button" class="scenario-btn active" aria-pressed="true" onclick="setScenario(0,this)">
             <div class="s-name">Refactor with a live key</div>
             <div class="s-desc">An AI editor request where the selected code contains a live cloud access key.</div>
           </button>
           <button type="button" class="scenario-btn" aria-pressed="false" onclick="setScenario(1,this)">
             <div class="s-name">Customer record in a prompt</div>
-            <div class="s-desc">A real customer record pasted into an AI prompt for context.</div>
+            <div class="s-desc">A paraphrased customer record pasted into an AI prompt for context.</div>
           </button>
           <button type="button" class="scenario-btn" aria-pressed="false" onclick="setScenario(2,this)">
             <div class="s-name">Internal token in a script</div>
@@ -326,7 +345,7 @@
 
       <div class="sim-col">
         <div class="sim-col-head" id="mode-label">How you govern it</div>
-        <div class="sim-col-body" role="radiogroup" aria-labelledby="mode-label">
+        <div class="sim-col-body" role="group" aria-labelledby="mode-label">
           <button type="button" class="mode-tab active" aria-pressed="true" onclick="setMode(0,this)">
             <span class="mt-dot" aria-hidden="true" style="background:var(--red);"></span>
             <span><span class="mt-name">Block</span><span class="mt-sub" style="display:block;">Stop it at the source</span></span>
@@ -413,9 +432,9 @@
       atRisk: ['neutral', 'At risk', 'A live cloud access key, sitting in the selected code.'],
       verdicts: {
         0: [
-          ['block', 'Outcome', 'Stopped at the source. The key never reaches the AI vendor.'],
+          ['block', 'Outcome', 'Stopped at the source, deterministically — a live key matches the floor. It never reaches the AI vendor.'],
           ['neutral', 'Developer sees', 'A clear reason — "this looks like a live credential."'],
-          ['allow', 'Evidence', 'Recorded in your SIEM with the policy version that decided it.']
+          ['allow', 'Evidence', 'A signed receipt your auditor can verify offline — tied to the policy version that decided it.']
         ],
         1: [
           ['hold', 'Outcome', 'Allowed, but the developer is warned and the moment is recorded.'],
@@ -433,19 +452,20 @@
     },
     {
       app: 'AI prompt · pasted context',
-      atRisk: ['neutral', 'At risk', 'A real customer record, pasted in for context.'],
+      atRisk: ['neutral', 'At risk', 'A paraphrased customer record, pasted in for context — no fixed pattern to match.'],
       verdicts: {
         0: [
-          ['block', 'Outcome', 'Stopped before it leaves. The record stays inside your boundary.'],
-          ['allow', 'Evidence', 'A signed receipt your auditor can verify offline.']
+          ['neutral', 'Reality', 'There is no regex for "is this an exfil attempt?" A freeform record won\'t trip the deterministic floor.'],
+          ['hold', 'Outcome', 'So this routes to the judge and, when it\'s genuinely ambiguous, to an operator — not a clean Tier-0 block.'],
+          ['allow', 'Either way', 'Seen, attributed, and recorded — even when the floor can\'t decide it alone.']
         ],
         1: [
           ['hold', 'Outcome', 'Allowed with a nudge — the developer is coached, the moment recorded.'],
-          ['neutral', 'Note', 'Good for grey-area content where you want awareness, not a hard stop.']
+          ['neutral', 'Note', 'A good fit here: grey-area content where you want awareness, not a hard stop the floor can\'t guarantee anyway.']
         ],
         2: [
           ['hold', 'Outcome', 'Paused. An operator gets the context and decides in seconds.'],
-          ['allow', 'Then', 'On approve, the developer unblocks immediately — no ticket filed.']
+          ['allow', 'Then', 'On approve, the developer unblocks immediately — no ticket filed. The decision is on the record.']
         ],
         3: [
           ['allow', 'Outcome', 'Let through — but seen, attributed, and on the record.'],
