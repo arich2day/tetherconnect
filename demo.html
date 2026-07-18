@@ -485,7 +485,11 @@
   const SCENARIOS = [
     {
       app: 'AI editor · a refactor request',
-      prompt: 'Refactor this handler to the new client:\n\nconst s3 = new S3Client({\n  accessKeyId: "AKIAIOSFODNN7EXAMPLE",\n  secretAccessKey: "wJalrXUtnFEMI/K7MDENG/…"\n})',
+      prompts: [
+        'Refactor this handler to the new client:\n\nconst s3 = new S3Client({\n  accessKeyId: "AKIAIOSFODNN7EXAMPLE",\n  secretAccessKey: "wJalrXUtnFEMI/K7MDENG/…"\n})',
+        'Why does the deploy lambda return 403?\n\n[context attached by the editor agent: .env]\nAWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE\nAWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/…',
+        'Add retry logic to this upload:\n\nawait s3.putObject({ Bucket: "acme-prod-exports", Key, Body })\n// creds inlined while debugging:\n// AKIAIOSFODNN7EXAMPLE'
+      ],
       atRisk: ['neutral', 'At risk', 'A live cloud access key, sitting in the selected code.'],
       verdicts: {
         0: [
@@ -509,7 +513,11 @@
     },
     {
       app: 'AI prompt · pasted context',
-      prompt: 'Draft a renewal email. Context on the account: long-time customer Dana M., renewed 14 Mar, card on file ending 4242, flagged churn-risk after two support escalations.',
+      prompts: [
+        'Draft a renewal email. Context on the account: long-time customer Dana M., renewed 14 Mar, card on file ending 4242, flagged churn-risk after two support escalations.',
+        'Summarize this support thread for the handoff doc: ticket 4831 — Dana M. reports a double charge on the card ending 4242, refunded 12 Mar, callback number 415-555-0142 on file.',
+        'Write a churn-risk note: account Meridian Health, contact D. Moreau, ARR $48k, renewal 14 Mar, exec sponsor left in February.'
+      ],
       atRisk: ['neutral', 'At risk', 'A paraphrased customer record, pasted in for context — no fixed pattern to match.'],
       verdicts: {
         0: [
@@ -533,7 +541,11 @@
     },
     {
       app: 'Shell script · an AI endpoint',
-      prompt: 'curl api.openai.com/v1/chat/completions -d \'{"messages":[{"role":"user",\n  "content":"why does deploy auth fail? token=int_svc_9f3a-EXAMPLE"}]}\'',
+      prompts: [
+        'curl api.openai.com/v1/chat/completions -d \'{"messages":[{"role":"user",\n  "content":"why does deploy auth fail? token=int_svc_9f3a-EXAMPLE"}]}\'',
+        'ci-triage.sh pipes the failing build log to the model:\n\n"explain this failure: request rejected — Authorization: Bearer int_svc_9f3a-EXAMPLE (svc-deploy)"',
+        'nightly job drafts release notes from the deploy log:\n\n"deployed api@4.12 with DEPLOY_TOKEN=int_dep_77c1-EXAMPLE — summarize what changed"'
+      ],
       atRisk: ['neutral', 'At risk', 'An internal API token, headed out in the request body.'],
       verdicts: {
         0: [
@@ -558,6 +570,11 @@
 
   let scenarioIdx = 0;
   let modeIdx = 0;
+  const promptIdx = [0, 0, 0];
+  function promptRow(i) {
+    const n = SCENARIOS[i].prompts.length;
+    return ['prompt', 'Prompt ' + (promptIdx[i] + 1) + '/' + n, SCENARIOS[i].prompts[promptIdx[i]]];
+  }
   document.addEventListener('DOMContentLoaded', resetStage);
 
   function setScenario(i, btn) {
@@ -583,8 +600,8 @@
   }
   function resetStage() {
     document.getElementById('stageBody').innerHTML = '';
-    emitRow('prompt', 'Prompt', SCENARIOS[scenarioIdx].prompt);
-    emitRow('neutral', 'Ready', 'Click Run to see what happens to it.');
+    emitRow.apply(null, promptRow(scenarioIdx));
+    emitRow('neutral', 'Ready', 'Click Run to see what happens to it. Each run submits a different sample prompt.');
     document.getElementById('stepLabel').textContent = 'Ready';
   }
   function kindClass(kind) {
@@ -605,10 +622,11 @@
     document.getElementById('stageBody').innerHTML = '';
     document.getElementById('stepLabel').textContent = 'Running …';
     const sc = SCENARIOS[scenarioIdx];
-    const rows = [['prompt', 'Prompt', sc.prompt], sc.atRisk].concat(sc.verdicts[modeIdx]);
+    const rows = [promptRow(scenarioIdx), sc.atRisk].concat(sc.verdicts[modeIdx]);
+    promptIdx[scenarioIdx] = (promptIdx[scenarioIdx] + 1) % sc.prompts.length;
     let i = 0;
     const tick = () => {
-      if (i >= rows.length) { document.getElementById('stepLabel').textContent = 'Done'; return; }
+      if (i >= rows.length) { document.getElementById('stepLabel').textContent = 'Done — run again for the next sample'; return; }
       const [kind, label, text] = rows[i++];
       emitRow(kind, label, text);
       setTimeout(tick, 420);
