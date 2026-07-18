@@ -99,19 +99,19 @@ textarea:focus-visible,
 }
 
 :root {
-  /* Remapped to GLC where semantics line up; original fallbacks preserved. */
-  --bg:        var(--color-paper,        #f0ebe3);
-  --surface:   var(--color-paper-raised, #f7f3ee);
+  /* Semantic tokens mapped onto the GLC palette above. These ARE what renders. */
+  --bg:        var(--color-paper);
+  --surface:   var(--color-paper-raised);
   --surface2:  #ede8e0;                            /* Tether extension */
-  --surface3:  var(--color-paper-deep,   #e6e0d8);
-  --border:    var(--color-rule,         #c8c0b4);
+  --surface3:  var(--color-paper-deep);
+  --border:    var(--color-rule);
   --border-dk: #9a9088;                            /* Tether extension */
-  --ink:       var(--color-ink,          #1a1612);
-  --ink2:      var(--color-ink-60,       #3d3530);
-  --muted:     var(--color-ink-40,       #6b6259);
-  --faint:     var(--color-ink-25,       #9a9088);
-  --red:       var(--color-flag,         #c8001e);
-  --red-bg:    var(--color-flag-soft,    #fde8ec);
+  --ink:       var(--color-ink);
+  --ink2:      var(--color-ink-60);
+  --muted:     var(--color-ink-40);
+  --faint:     var(--color-ink-25);
+  --red:       var(--color-flag);
+  --red-bg:    var(--color-flag-soft);
   --red-bd:    #e8a0ac;
   --green:     #006630;
   --green-bg:  #e6f4ec;
@@ -122,9 +122,11 @@ textarea:focus-visible,
   --blue:      #003880;                            /* Tether extension */
   --blue-bg:   #e6eef8;
   --blue-bd:   #9ab8e8;
-  --shell:     var(--color-shell,        #141210); /* dark surface */
-  --shell-mute:var(--color-shell-mute,   #1c1a16);
-  --shell-ink: var(--color-shell-ink,    #d6cfbd);
+  --shell:     var(--color-shell);                 /* dark surface */
+  --shell-mute:var(--color-shell-mute);
+  --shell-ink: var(--color-shell-ink);
+  /* Footer meta text on dark --ink, lightened to clear WCAG AA (v2) */
+  --footer-meta: #8a8378;
   --mono:      'IBM Plex Mono', monospace;
   --cond:      'IBM Plex Sans Condensed', sans-serif;
   --sans:      'IBM Plex Sans', sans-serif;
@@ -268,7 +270,7 @@ body {
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #555048;
+  color: var(--footer-meta);
   margin-bottom: 16px;
   padding-bottom: 8px;
   border-bottom: 1px solid #2a2520;
@@ -292,7 +294,7 @@ body {
 .footer-domains a {
   font-family: var(--mono);
   font-size: 11px;
-  color: #555048;
+  color: var(--footer-meta);
   text-decoration: none;
   letter-spacing: 0.06em;
   transition: color 0.15s;
@@ -305,7 +307,7 @@ body {
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #555048;
+  color: var(--footer-meta);
   margin-bottom: 16px;
   padding-bottom: 8px;
   border-bottom: 1px solid #2a2520;
@@ -341,7 +343,7 @@ body {
 .footer-bottom p {
   font-family: var(--mono);
   font-size: 10px;
-  color: #555048;
+  color: var(--footer-meta);
   letter-spacing: 0.06em;
 }
 
@@ -353,7 +355,7 @@ body {
 .footer-bottom-links a {
   font-family: var(--mono);
   font-size: 10px;
-  color: #555048;
+  color: var(--footer-meta);
   text-decoration: none;
   letter-spacing: 0.06em;
   transition: color 0.15s;
@@ -664,81 +666,9 @@ body {
   50%      { transform: translate3d(60px, -40px, 0) scale(1.2) rotate(8deg); }
 }
 
-/* ─── Intent comparison table (index + product) ──────────────────── */
-.intent-table {
-  border: 1px solid var(--border);
-  margin-top: 8px;
-  background: var(--bg);
-}
-.intent-row {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr 1.3fr;
-  border-bottom: 1px solid var(--border);
-}
-.intent-row:last-child { border-bottom: none; }
-.intent-row.head {
-  background: var(--surface2);
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.intent-row.head > div {
-  padding: 14px 20px;
-  border-right: 1px solid var(--border);
-}
-.intent-row.head > div:last-child { border-right: none; }
-.intent-cell {
-  padding: 22px 20px;
-  border-right: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--muted);
-  font-weight: 300;
-  line-height: 1.7;
-}
-.intent-cell:last-child { border-right: none; }
-.intent-cell.payload {
-  background: var(--surface);
-  font-family: var(--mono);
-  font-size: 11.5px;
-  color: var(--ink2);
-  line-height: 1.6;
-}
-.intent-cell .badge { margin-bottom: 10px; }
-.intent-cell p { margin-top: 4px; }
-
-@media (max-width: 760px) {
-  .intent-row { grid-template-columns: 1fr; }
-  .intent-cell { border-right: none; border-bottom: 1px solid var(--border); }
-  .intent-row.head > div { border-right: none; border-bottom: 1px solid var(--border); }
-}
-.particle-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 1; }
-.hero > *:not(.particle-canvas):not(.wave-canvas):not(.aurora-layer),
-.page-hero > *:not(.particle-canvas):not(.wave-canvas):not(.aurora-layer) { position: relative; z-index: 2; }
-
-/* ─── Marquee proof bar ──────────────────────────────────────────── */
-.marquee-track {
-  display: flex;
-  overflow: hidden;
-  flex: 1;
-  min-width: 0;
-  mask-image: linear-gradient(90deg, transparent 0, var(--bg) 28px, var(--bg) calc(100% - 28px), transparent 100%);
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, var(--bg) 28px, var(--bg) calc(100% - 28px), transparent 100%);
-}
-.marquee-content {
-  display: flex;
-  gap: 32px;
-  flex-shrink: 0;
-  padding-right: 32px;
-  animation: marquee-slide 36s linear infinite;
-  will-change: transform;
-}
-.marquee-track:hover .marquee-content { animation-play-state: paused; }
-@keyframes marquee-slide {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(-100%, 0, 0); }
-}
+/* Hero layers stack above the decorative canvas (v2: particle-canvas removed) */
+.hero > *:not(.wave-canvas):not(.aurora-layer),
+.page-hero > *:not(.wave-canvas):not(.aurora-layer) { position: relative; z-index: 2; }
 
 /* Scroll reveal — single element */
 [data-reveal] {
@@ -1031,8 +961,10 @@ body {
 .coex-table td.col-cap { color: var(--ink); font-weight: 400; }
 .coex-table td.center { text-align: center; font-family: var(--mono); font-size: 12px; }
 .coex-table .yes { color: var(--green); font-weight: 600; }
-.coex-table .no { color: var(--faint); }
-.coex-table .partial { color: var(--amber); font-size: 11px; }
+/* Coex "—" / "no" cells carry meaning (a real coverage gap), so they use
+   readable --muted rather than decorative --faint (WCAG AA, v2). */
+.coex-table .no { color: var(--muted); }
+.coex-table .partial { color: var(--amber); font-size: 12px; }
 
 /* Beat sidebar (demo) */
 .beat-sidebar {
@@ -1268,5 +1200,5 @@ body {
   [data-reveal],
   [data-reveal-group] > * { opacity: 1 !important; transform: none !important; }
   [data-tilt] { transform: none !important; }
-  .particle-canvas, .wave-canvas, .aurora-layer { display: none !important; }
+  .wave-canvas, .aurora-layer { display: none !important; }
 }

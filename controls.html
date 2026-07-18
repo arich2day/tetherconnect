@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Controls — Tether</title>
-  <meta name="description" content="What Tether ships today. Each BUILT capability with what it does on the developer machine, why your security org cares, and the line of code it runs through."/>
+  <meta name="description" content="You set the AI-egress policy floor and it's enforced consistently across the fleet. Eight capabilities, each led by why it matters to your security org, then what it does."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
@@ -16,7 +16,7 @@
 
 <nav class="tc-nav">
   <a href="index.html" class="nav-logo">
-    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#1a1612" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
+    <svg aria-hidden="true" focusable="false" viewBox="0 0 26 26" fill="none"><rect x="1" y="1" width="24" height="24" stroke="#0e0d0a" stroke-width="1.5"/><rect x="6" y="6" width="14" height="14" stroke="#d82018" stroke-width="1.5"/><rect x="11" y="11" width="4" height="4" fill="#d82018"/></svg>
     <span class="nav-wordmark">Tether<span>Connect</span></span>
   </a>
     <button class="nav-menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Open menu">
@@ -41,9 +41,9 @@
 <div class="page-hero">
   <canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas>
   <div class="page-hero-inner tc-hero-in">
-    <div class="page-hero-eyebrow">What you actually need</div>
-    <h1>Three things at the<br/>dev-machine layer.<br/><em>Built today.</em></h1>
-    <p class="page-hero-sub">Visibility into prompts and completions, tied to identity, agent, and host. Deterministic enforcement on patterns you can name. Cryptographic evidence — exportable to SIEM, SOC 2, and FedRAMP — that the published policy is the one that decided each request.</p>
+    <div class="page-hero-eyebrow">What you control</div>
+    <h1>You set the policy floor.<br/>It's enforced the same way<br/><em>across the whole fleet.</em></h1>
+    <p class="page-hero-sub">You decide what's never allowed to leave for an AI tool — and that decision is enforced consistently on every developer machine, then proven in evidence your auditor can check. You see prompts and completions tied to a person, an agent, and a host. You block the patterns you can name. And you can show, after the fact, exactly which policy decided each request.</p>
   </div>
 </div>
 
@@ -76,157 +76,164 @@
 <!-- BUILT CAPABILITIES — WHAT IT DOES TODAY / WHY IT MATTERS -->
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label">Built today</div>
-    <h2 class="section-title">Eight capabilities,<br/>each citation-grade.</h2>
-    <p class="section-sub">Each row is a BUILT or PARTIAL capability from the read-only review. PARTIAL is scoped honestly — what's in production today, what's reserved for the managed VSCodium build.</p>
+    <div class="section-label">What you get</div>
+    <h2 class="section-title">Eight capabilities.<br/>Why each one matters — then what it does.</h2>
+    <p class="section-sub">Value first, mechanism second. The line of code behind every claim is in the <a href="technical-brief.html" style="color:var(--ink);">technical brief</a> for anyone who has to validate it.</p>
 
     <div style="margin-top:8px;">
       <div class="capability-row">
         <div class="capability-name">
-          <h3>Loopback-only by default</h3>
-          <p>Connect proxy on 127.0.0.1:11435 — does not require system-wide rerouting.</p>
-          <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/main.go#L98-L103" target="_blank" rel="noopener">proxy/main.go:98-103</a>
-        </div>
-        <div class="capability-body">
-          <div class="capability-label">What it does today</div>
-          Binds to <code>127.0.0.1</code> by default. Operators can widen via <code>bind_host</code> or <code>TETHER_PROXY_BIND_HOST</code>, but the proxy emits a named startup warning. <strong>No root CA is installed on the developer machine.</strong> CONNECT tunnels are byte-copied bidirectionally — Tether classifies the destination host and does not decrypt the tunnel.
+          <h3>No surveillance backlash</h3>
+          <p>Govern the AI channel without a root certificate on a single laptop.</p>
         </div>
         <div class="capability-body">
           <div class="capability-label">Why it matters</div>
-          Developer-aware orgs in 2026 push back hard on corporate root CAs because the same CA that decrypts a Cursor call decrypts the developer's banking session. Tether's loopback posture gives your CISO a real differentiator vs. CASB/DLP stacks that require CA installation — without overclaiming. The trade is that an agent that does not honor <code>HTTP_PROXY</code> is not governed.
+          Developer-aware orgs push back hard on corporate root certificates — the same cert that decrypts a Cursor call decrypts a developer's banking session. Tether governs the egress channel without that cert, so you get the control and skip the fight. It's a real differentiator over CASB/DLP stacks that demand a CA install.
+        </div>
+        <div class="capability-body">
+          <div class="capability-label">What it does</div>
+          The proxy runs locally and never decrypts TLS-tunneled content. It classifies the destination and reads the prompt only on the configured AI routes you've approved. The honest trade: a tool that refuses to route through the proxy isn't governed — we'll tell you which ones those are.
         </div>
       </div>
 
       <div class="capability-row">
         <div class="capability-name">
-          <h3>Deterministic blocklist floor (Tier 0)</h3>
-          <p>Compiled regex over the embedded floor plus operator-promoted patterns.</p>
-          <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/blocklist.go#L138" target="_blank" rel="noopener">blocklist.go:138</a>
-          <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/proxy_core.go#L114-L117" target="_blank" rel="noopener">proxy_core.go:114-117</a>
-        </div>
-        <div class="capability-body">
-          <div class="capability-label">What it does today</div>
-          Returns HTTP 403 with reason text on match. The forward path is not reached. The embedded floor is immutable; operators add patterns via signed policy. False-positive remediation lives in the <code>AllowlistPatterns</code> field — a 10-second turnaround once published.
+          <h3>A floor you can name and rely on</h3>
+          <p>The patterns you define are blocked deterministically — no model, no opinion.</p>
         </div>
         <div class="capability-body">
           <div class="capability-label">Why it matters</div>
-          For known credential formats (AWS access keys, GitHub tokens, internal customer-ID regexes you author in week one), Tier 0 is the strong guarantee — no model, no network, no opinion. This is the layer a SOC 2 CC8 auditor can attest against because the decision is deterministic and reproducible offline.
+          For known credential formats and the internal customer-ID patterns you author in week one, you get a guarantee, not a probability — no model in the path, no network call, no judgment. This is the layer a SOC 2 CC8 auditor can attest against, because the decision is deterministic and reproducible.
+        </div>
+        <div class="capability-body">
+          <div class="capability-label">What it does</div>
+          Matching content is blocked at the source with a clear reason; nothing leaves. The base floor is immutable; you add your own patterns through signed policy, and a false-positive fix reaches the fleet in about ten seconds.
         </div>
       </div>
 
       <div class="capability-row">
         <div class="capability-name">
-          <h3>Ed25519-signed policy distribution</h3>
-          <p>Bundles signed in Overwatch, verified by the proxy, ACKed by hostname.</p>
-          <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/policy-signing.js#L122-L150" target="_blank" rel="noopener">policy-signing.js:122-150</a>
-          <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/policy_signing.go#L171-L203" target="_blank" rel="noopener">policy_signing.go:171-203</a>
-        </div>
-        <div class="capability-body">
-          <div class="capability-label">What it does today</div>
-          The control plane signs <code>{schemaVersion, version, controls, publishedAt}</code> at publish. Each proxy verifies before applying — TOFU-pinned per-tenant public key, fail-closed on mismatch. Monotonic version blocks replay. Policy poll interval is 10 seconds; ACKs include <code>{hostname, version, appliedAt}</code> so Overwatch shows real fleet-adoption state.
+          <h3>Policy that reaches everyone, fast</h3>
+          <p>Author once; the whole fleet enforces it in about ten seconds, tamper-proof.</p>
         </div>
         <div class="capability-body">
           <div class="capability-label">Why it matters</div>
-          Most enterprise policy-distribution mechanisms take minutes to hours to propagate; a 10-second bound matters during incident response. Signed bundles map to SOC 2 CC8 change-management evidence — your auditor decides what they accept. The chain is: Overwatch signs, the proxy verifies, the response stamps the version, the auditor re-verifies offline.
+          Most policy-distribution takes minutes to hours; a ten-second bound matters during an incident. Because each policy is cryptographically signed and a developer can't downgrade or replay an old one, you get change-management evidence that maps cleanly to SOC 2 CC8 — your auditor decides what they accept.
+        </div>
+        <div class="capability-body">
+          <div class="capability-label">What it does</div>
+          The control plane signs each published policy; every machine verifies it before applying and acknowledges with its hostname and version, so you see real fleet-adoption state. A failed verification is discarded — the machine keeps the last good policy or blocks egress.
         </div>
       </div>
 
       <div class="capability-row">
         <div class="capability-name">
-          <h3>Hardware-adaptive local model judge</h3>
-          <p>Four hardware tiers: metal / cuda / cpu-modern / cpu-low. Customer-supplied model.</p>
-          <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/judge_selector.go#L76-L93" target="_blank" rel="noopener">judge_selector.go:76-93</a>
-        </div>
-        <div class="capability-body">
-          <div class="capability-label">What it does today</div>
-          The proxy probes hardware on startup and selects from a catalog of judge profiles. Two runtimes are supported: local Ollama (per-vendor model overrides) and cloud OpenAI-compatible. Async by default at a 3% sample rate, hard-capped at 10%. Mandatory escalations on novel-agent, novel-destination, and large-body. Sync-blocking is opt-in via <code>cloud_judge_can_block</code> with a default 800 ms timeout.
+          <h3>A judge you supply — and pay nothing for</h3>
+          <p>Weigh ambiguous content with your own model. On-prem capable.</p>
         </div>
         <div class="capability-body">
           <div class="capability-label">Why it matters</div>
-          The judge is customer-supplied — model spend goes to the customer's vendor, not Tether. This keeps the per-seat economics honest. On-prem teams run local Ollama and stay within their boundary; air-gap teams get a coherent path. The sync-block plus fail-closed-on-timeout posture closes the structural exfiltration window a network adversary would otherwise exploit by delaying judge calls.
+          The judge is customer-supplied: model spend goes to your own vendor, not to a Tether markup, which keeps per-seat economics honest. On-prem and air-gapped teams run a local model and never leave their boundary. And it fails closed — a network adversary can't defeat a block by stalling the judge.
+        </div>
+        <div class="capability-body">
+          <div class="capability-label">What it does</div>
+          For content the floor can't name, the proxy can consult a model you provide — a local one or your own cloud vendor — to weigh risk, with sampling you tune so cost stays predictable. Genuinely novel or oversized requests are always escalated for a look.
         </div>
       </div>
 
       <div class="capability-row">
         <div class="capability-name">
-          <h3>Three-tier judge authority</h3>
-          <p>Tier 0 always blocks · Tier 1 sync fail-closed (opt-in) · Tier 2 advisory cannot block.</p>
-          <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/docs/JUDGE_AUTHORITY.md" target="_blank" rel="noopener">docs/JUDGE_AUTHORITY.md</a>
-        </div>
-        <div class="capability-body">
-          <div class="capability-label">What it does today</div>
-          The proxy compiles tier authority into the request path as distinct branches — not a single configurable knob. Tier 0 cannot be opted out of at runtime. Tier 1 is <strong>configurable; sync-block opt-in at deploy time. When enabled, blocks in-band and fails closed on timeout.</strong> Tier 2's goroutine has no handle on the already-sent response — advisory is a code invariant, not a policy choice.
+          <h3>Honest about who can block, and when</h3>
+          <p>You always know whether a decision was a guarantee or an advisory.</p>
         </div>
         <div class="capability-body">
           <div class="capability-label">Why it matters</div>
-          "The judge said ALLOWED" and "the request was allowed" are two different statements that depend on the tier in effect. Tether labels which one applies at any moment, in the event record and in the response header. Full breakdown on <a href="how-it-works.html#judge-authority" style="color:var(--ink);">/how-it-works · Judge authority</a>.
+          "The judge said allowed" and "the request was allowed" are different statements, and a control that blurs them isn't one you can stand behind to an auditor. Tether labels which is true for every decision — so you can trust the floor as a hard guarantee and treat advisory signal as exactly that.
+        </div>
+        <div class="capability-body">
+          <div class="capability-label">What it does</div>
+          Enforcement runs in three distinct tiers: a floor that always blocks, an opt-in synchronous check that blocks and fails closed, and an advisory pass that records but cannot change the request it observed. The exact authority of each is in the <a href="technical-brief.html#authority" style="color:var(--ink);">technical brief →</a>
         </div>
       </div>
 
       <div class="capability-row">
         <div class="capability-name">
-          <h3>SIEM adapters — Splunk HEC · Sentinel · syslog</h3>
-          <p>Splunk HEC, Microsoft Sentinel via HMAC-signed Log Analytics, syslog RFC 5424 UDP.</p>
-          <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/siem-adapters.js#L36" target="_blank" rel="noopener">siem-adapters.js:36</a>
-        </div>
-        <div class="capability-body">
-          <div class="capability-label">What it does today</div>
-          Every event fans out to all registered SIEM adapters in parallel. Splunk HEC, Sentinel via the SharedKey HMAC-SHA256 Log Analytics path, syslog RFC 5424 over UDP via Node's <code>dgram</code>. Shared 5-attempt exponential-backoff retry. HMAC-SHA256 outbound webhooks ride the same fan-out infrastructure.
+          <h3>Lands in the SIEM you already run</h3>
+          <p>Splunk, Microsoft Sentinel, or syslog — your platform team writes no code.</p>
         </div>
         <div class="capability-body">
           <div class="capability-label">Why it matters</div>
-          Your platform team writes zero code to put Tether events in the SIEM you already pay for. A platform engineer who knows Splunk or Sentinel can wire the adapter in an afternoon. Volume to plan against: roughly 10K events/day, ~10 MB/day at 50 seats. Do your own license math.
+          The AI-egress channel finally shows up where your security team already looks. A platform engineer who knows Splunk or Sentinel wires it up in an afternoon, with no custom development. Event volume is light relative to a typical SIEM ingest budget — we'll give you a sizing range for your seat count and tool mix on request, so you can do your own license math.
+        </div>
+        <div class="capability-body">
+          <div class="capability-label">What it does</div>
+          Every event fans out in parallel to the SIEM adapters you register, with built-in retry. Signed outbound webhooks ride the same path for anything else downstream — filtered so each receiver sees only what it cares about.
         </div>
       </div>
 
       <div class="capability-row">
         <div class="capability-name">
-          <h3>SCIM directory sync via Jackson</h3>
-          <p>HMAC-signed webhook · role-from-groups mapping · full audit trail.</p>
-          <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/auth-providers/jackson.js#L205-L291" target="_blank" rel="noopener">jackson.js:205-291</a>
-        </div>
-        <div class="capability-body">
-          <div class="capability-label">What it does today</div>
-          BoxyHQ Jackson handles SAML/OIDC and directory-sync. The SCIM webhook is HMAC-SHA256-signed. <code>user.created</code> / <code>user.updated</code> / <code>user.deleted</code> map to roles via group name (<code>Overwatch Admins</code> / <code>Overwatch Operators</code> / default viewer; group names are env-configurable). Every provision and deprovision lands in the audit trail.
+          <h3>Operator seats from your own directory</h3>
+          <p>SSO and SCIM via your IdP — no separate user list to manage.</p>
         </div>
         <div class="capability-body">
           <div class="capability-label">Why it matters</div>
-          Operator seats are provisioned from the customer's IdP — no manual user-management in Tether. A deprovision in Okta or Entra cuts the operator's access within the Jackson sync window. Maps to CC6 logical-access controls — your auditor evaluates the evidence.
+          Nobody manages users in yet another console. Seats are provisioned from your IdP, role follows group membership, and a deprovision in Okta or Entra cuts access automatically — every change audited. This maps to CC6 logical-access controls your auditor already understands.
+        </div>
+        <div class="capability-body">
+          <div class="capability-label">What it does</div>
+          SAML and OIDC sign-in plus directory sync run through a managed identity layer. Group names map to admin, operator, or viewer roles, and every provision, update, and deprovision lands in the audit trail.
         </div>
       </div>
 
       <div class="capability-row">
         <div class="capability-name">
-          <h3>Device posture export — four formats</h3>
-          <p>Tether-native JSON · Okta Device Trust · Microsoft Graph managedDevice · CSV.</p>
-          <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/posture-export.js#L217-L228" target="_blank" rel="noopener">posture-export.js:217-228</a>
-        </div>
-        <div class="capability-body">
-          <div class="capability-label">What it does today</div>
-          <code>GET /api/v1/devices/posture/export</code> in <code>tether</code>, <code>okta</code>, <code>entra</code>, or <code>csv</code> formats, with <code>?compliantOnly=</code> and <code>?since=</code> filters. The Okta envelope plugs into Device Trust attestation. The Entra shape mirrors <code>GET /deviceManagement/managedDevices</code> with the <code>extensions.aiSecurityPosture</code> namespace.
+          <h3>Device posture your IdP can read</h3>
+          <p>Conditional access sees Tether's signal in a format it already understands.</p>
         </div>
         <div class="capability-body">
           <div class="capability-label">Why it matters</div>
-          Your IdP's conditional-access policy reads Tether posture without a custom converter. A non-compliant developer machine — proxy off, daemon stale — drops out of the device-trust set automatically. The Okta and Entra teams already understand the formats; the platform team does not need to translate.
+          Your conditional-access policy reads Tether posture without a custom converter. A machine that's fallen out of compliance — proxy off, agent stale — drops out of the device-trust set automatically. Your Okta and Entra teams already know the shapes; nobody has to translate.
+        </div>
+        <div class="capability-body">
+          <div class="capability-label">What it does</div>
+          Posture exports in Tether-native, Okta Device Trust, Microsoft Graph managedDevice, and CSV formats, with filters for compliant-only and since-a-date. Each mirrors the receiver's existing schema so it drops into your conditional-access rules.
         </div>
       </div>
 
       <div class="capability-row">
         <div class="capability-name">
-          <h3>Reproducible enforcement attestation</h3>
-          <p><code>X-Tether-Policy-Version</code> on every response · auditors verify offline.</p>
-          <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/docs/ATTESTATION.md" target="_blank" rel="noopener">docs/ATTESTATION.md</a>
-        </div>
-        <div class="capability-body">
-          <div class="capability-label">What it does today</div>
-          Every blocked 403 and every forwarded response carries <code>X-Tether-Policy-Version</code>. Every event and judge review stamps the active <code>policyVersion</code>. <code>GET /api/v1/policy/versions/&lt;version&gt;</code> returns the signed bundle. An auditor runs Ed25519 verification offline (<code>openssl pkeyutl -verify</code>) against the controls in force.
+          <h3>Evidence your auditor verifies without you</h3>
+          <p>Every decision proves which signed policy made it — checked offline.</p>
         </div>
         <div class="capability-body">
           <div class="capability-label">Why it matters</div>
-          For FedRAMP and CMMC Level 2, per-request provenance is what turns a policy from "claimed" into "evidenced" — your auditor pulls the bundle, runs Ed25519 offline, and reads the controls in force. The honest caveat: in-memory events expire on Overwatch restart unless your SIEM adapter forwards them — that's why the SIEM adapters are part of the same release.
+          For FedRAMP and CMMC, per-request provenance is what turns a policy from "claimed" into "evidenced." Your auditor pulls the signed bundle, verifies it offline, and reads the controls in force — without trusting Tether to vouch for itself. That's the difference between a story and proof.
+        </div>
+        <div class="capability-body">
+          <div class="capability-label">What it does</div>
+          Every decision carries the policy version that made it, and that version is recoverable as a signed bundle anyone can verify offline. The honest caveat: durable per-request retention depends on your SIEM forwarding — which is why the SIEM adapters ship in the same release.
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- FOR THE DEVELOPER — forwardable champion enablement -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label red">Forward this to your developers</div>
+    <h2 class="section-title">"This isn't spyware."<br/>Here's the part you can check yourself.</h2>
+    <p class="section-sub">The fastest way to lose a developer-aware org is to make this feel like surveillance. It isn't, and your champion shouldn't have to take that on faith — every claim below is verifiable on the machine.</p>
+    <div style="border:1px solid var(--border-dk);background:var(--bg);padding:28px;margin-top:8px;max-width:860px;">
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:14px;font-size:14px;color:var(--ink2);font-weight:300;line-height:1.7;">
+        <li>· <strong style="color:var(--ink);font-weight:500;">No root certificate on your machine.</strong> Tether doesn't install a corporate CA, so it can't decrypt your banking session, your personal email, or anything else outside the AI routes. Check your trust store — nothing of ours is in it.</li>
+        <li>· <strong style="color:var(--ink);font-weight:500;">The proxy is loopback-only.</strong> It binds to <code style="font-family:var(--mono);font-size:12.5px;">127.0.0.1</code> by default; widening it takes explicit operator config and emits a named startup warning. Run <code style="font-family:var(--mono);font-size:12.5px;">netstat</code> and see for yourself.</li>
+        <li>· <strong style="color:var(--ink);font-weight:500;">It doesn't read TLS-tunneled content.</strong> It classifies the destination and reads prompts only on the AI routes your org configured — not your general web traffic.</li>
+        <li>· <strong style="color:var(--ink);font-weight:500;">Safe work is never ticketed.</strong> The overwhelming majority of prompts pass silently. Only a named risk or a genuinely ambiguous moment ever surfaces a decision — there's no manager watching your ordinary work.</li>
+      </ul>
+    </div>
+    <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:18px;max-width:780px;">The loopback binding and route-scoped inspection are in the <a href="technical-brief.html#dataflow" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
   </div>
 </section>
 
@@ -234,83 +241,69 @@
 <section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Workspace tier — advisory today</div>
-    <h2 class="section-title">Clipboard, downloads, external links<br/>— shipping in the managed VSCodium build.</h2>
-    <p class="section-sub">The workspace daemon is in production and produces the right decision plus a <code>WORKSPACE_COACHED</code> audit on every fire. The IDE-side enforcement seam lives in the managed VSCodium artifact, which post-dates the Connect tier.</p>
+    <h2 class="section-title">Clipboard, downloads, external links —<br/>visible and recorded now, enforced next.</h2>
+    <p class="section-sub">We're plain about this: the workspace controls watch and record today, and gain hard enforcement when the managed IDE build ships. You get the visibility and the audit trail now; you'll get the block later. We'd rather you know that going in.</p>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:8px;">
       <div>
-        <div class="capability-label">What's available in pilot today</div>
+        <div class="capability-label">What you get in pilot today</div>
         <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;font-size:14px;color:var(--ink2);font-weight:300;line-height:1.7;">
-          <li>· <strong style="color:var(--ink);font-weight:500;">Daemon decisions and audit.</strong> Clipboard / downloads / external links / screen capture / coach mode all return correct decisions and emit events.</li>
-          <li>· <strong style="color:var(--ink);font-weight:500;">VS Code extension.</strong> Shipped. Tier-2 env injection (opt-in), SCIM identity sync, agent inventory.</li>
-          <li>· <strong style="color:var(--ink);font-weight:500;">MCP <code>tether_may_i_*</code> tools.</strong> Voluntary surface for cooperative agents — <code>needs_approval</code> rides the JIT queue.</li>
+          <li>· <strong style="color:var(--ink);font-weight:500;">Visibility and audit on every workspace action.</strong> Clipboard, downloads, external links, screen capture, and coach mode all surface a decision and emit an event you can see.</li>
+          <li>· <strong style="color:var(--ink);font-weight:500;">VS Code extension.</strong> Shipped — identity sync, agent inventory, and opt-in coverage for the terminals VS Code spawns.</li>
+          <li>· <strong style="color:var(--ink);font-weight:500;">Cooperative-agent approvals.</strong> Agents that ask permission can route through the same just-in-time approval queue your operators already watch.</li>
         </ul>
       </div>
       <div>
-        <div class="capability-label">Preview / 90-day roadmap</div>
+        <div class="capability-label">What's next</div>
         <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;font-size:14px;color:var(--ink2);font-weight:300;line-height:1.7;">
-          <li>· <strong style="color:var(--ink);font-weight:500;">Managed VSCodium artifact.</strong> Signed installer for macOS / Windows / Linux. 4-8 engineering weeks of signing infrastructure away.</li>
-          <li>· <strong style="color:var(--ink);font-weight:500;">Cursor and JetBrains.</strong> VS Code shipped. Cursor and JetBrains extensions on the 90-day roadmap.</li>
-          <li>· <strong style="color:var(--ink);font-weight:500;">Per-request attestation hardening.</strong> Tamper-evident per-version bundle retention. Today: append-only <code>policy-audit.jsonl</code>. SQLite-backed durable stores post-GA.</li>
+          <li>· <strong style="color:var(--ink);font-weight:500;">Managed IDE build.</strong> A signed installer for macOS, Windows, and Linux turns the advisory workspace controls into hard enforcement.</li>
+          <li>· <strong style="color:var(--ink);font-weight:500;">More editors.</strong> VS Code is shipped; Cursor and JetBrains are on the near-term roadmap.</li>
+          <li>· <strong style="color:var(--ink);font-weight:500;">Durable evidence retention.</strong> Tamper-evident, long-horizon retention of every signed policy version, for teams that need full forensic history.</li>
         </ul>
       </div>
     </div>
+    <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:28px;max-width:780px;">The exact state of each workspace control — what's enforcing versus advisory, and the roadmap behind it — is in the <a href="technical-brief.html#scope" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
   </div>
 </section>
 
 <!-- JIT LOOP — operator UX -->
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label">JIT loop</div>
-    <h2 class="section-title">Just-in-time access requests.<br/>From the developer's IDE to the operator's queue.</h2>
-    <p class="section-sub">JIT fires when a workspace axis (clipboard, downloads, external links, screen capture) is set to <code>request</code> mode. The daemon pauses the action and posts to Overwatch; the operator decides.</p>
+    <div class="section-label">Just-in-time approval</div>
+    <h2 class="section-title">A risky moment, governed —<br/>without filing a developer ticket.</h2>
+    <p class="section-sub">When a moment genuinely needs a human, the developer doesn't open a ticket and wait a day. The action pauses, an operator gets the context, and a decision comes back in seconds. Safe work never triggers any of this.</p>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:8px;">
       <div>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:12px;"><strong style="color:var(--ink);font-weight:500;">Trigger.</strong> The workspace daemon's policy axis (e.g., <code>clipboard.mode</code>) is set to <code>request</code>. The action does not run until a decision is returned.</p>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:12px;"><strong style="color:var(--ink);font-weight:500;">Operator decides.</strong> Request lands in <code>/access-requests</code> in the Overwatch console. Default SLA is a 5-minute TTL per <code>PILOT.md</code>; tunable per axis.</p>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;"><strong style="color:var(--ink);font-weight:500;">Timeout.</strong> Behavior on expiry is configurable per axis — block, allow, or fall through to coach (advisory). The daemon emits an audit event either way.</p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:12px;"><strong style="color:var(--ink);font-weight:500;">The developer stays in flow.</strong> The risky action pauses in place rather than failing or filing a ticket. Approve, and they continue immediately — no context switch, no support queue.</p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:12px;"><strong style="color:var(--ink);font-weight:500;">The operator gets what they need to decide.</strong> Who, what, and the matched policy land in one console view. The default target is a five-minute decision window, tunable to your team.</p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;"><strong style="color:var(--ink);font-weight:500;">It's auditable either way.</strong> Approve, deny, or let it time out — every outcome is recorded, and you choose the safe default when no one answers in time.</p>
       </div>
       <div>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:12px;"><strong style="color:var(--ink);font-weight:500;">MCP path.</strong> Cooperative agents that speak the MCP <code>tether_may_i_*</code> surface can escalate the same way — the <code>needs_approval</code> result rides the JIT queue and the operator UI is the same.</p>
-        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/workspace/main.go#L349-L402" target="_blank" rel="noopener">workspace/main.go:349-402</a>
-        &nbsp;
-        <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/overwatch/api/server.js" target="_blank" rel="noopener">overwatch/api/server.js</a>
-        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:14px;">See the operator-decides beat on the <a href="demo.html" style="color:var(--ink);">demo page</a> for the rendered console view.</p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:12px;"><strong style="color:var(--ink);font-weight:500;">Cooperative agents use the same lane.</strong> An AI agent that asks permission before acting routes into the very same approval queue your operators already watch — one console, one workflow.</p>
+        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:14px;">See the operator decide in seconds on the <a href="demo.html" style="color:var(--ink);font-weight:500;">demo →</a> The request-and-decide machinery is in the <a href="technical-brief.html#siem" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- AI TOOL COVERAGE -->
-<section style="border-bottom:1px solid var(--border);" data-reveal>
+<section id="coverage" style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Per-tool reality</div>
     <h2 class="section-title">"What about Cursor?"</h2>
-    <p class="section-sub">Coverage depends on whether the tool honors a base-URL override. Three tiers; honest about each.</p>
+    <p class="section-sub">How much Tether sees depends on the tool — and we're specific about each one rather than implying it's all the same.</p>
 
-    <div class="table-scroll">
-    <table class="coex-table">
-      <caption class="visually-hidden">Per-tool AI agent coverage: architecture, best Tether tier today, what Tether sees, and the honest gap.</caption>
-      <thead><tr>
-        <th scope="col">Tool</th>
-        <th scope="col">Architecture</th>
-        <th scope="col">Best tier today</th>
-        <th scope="col">What we see</th>
-        <th scope="col">Honest gap</th>
-      </tr></thead>
-      <tbody>
-        <tr><td class="col-cap">Claude Code</td><td>Anthropic CLI, Node.js</td><td>Tier B (configured-upstream)</td><td>Full prompt + response stream, tool-use blocks, file attachments</td><td>MCP servers need their own coverage</td></tr>
-        <tr><td class="col-cap">OpenAI Codex CLI</td><td>OpenAI CLI</td><td>Tier B</td><td>Full prompt, response, tool calls</td><td>Non-OpenAI provider configs need local prefix</td></tr>
-        <tr><td class="col-cap">Aider</td><td>Open-source Python CLI</td><td>Tier B</td><td>Full prompt, response, every file attached, every diff applied</td><td>None at Tier B</td></tr>
-        <tr><td class="col-cap">Zed</td><td>Native Rust editor</td><td>Tier B</td><td>Full prompt, response, file context</td><td>Custom provider added after install drops to Tier A until re-sync</td></tr>
-        <tr><td class="col-cap">VS Code + Continue / Copilot</td><td>VS Code extension</td><td>Tier A on Copilot · Tier B on Continue</td><td>Copilot: vendor + identity. Continue: full content</td><td>Copilot's prompt path is opaque — Tier A is the honest claim</td></tr>
-        <tr><td class="col-cap">Cursor</td><td>Closed-source VS Code fork</td><td>Tier B on BYOK · Tier A on default flow</td><td>BYOK: full content. Default: vendor + identity</td><td>Default flow on unmanaged devices: prompt content not visible</td></tr>
-        <tr><td class="col-cap">Browser-only (ChatGPT.com)</td><td>Web app</td><td>—</td><td>Network destination via your existing CASB</td><td>Not in Tether's scope. Browser extension on roadmap; not shipping today</td></tr>
-      </tbody>
-    </table>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:8px;">
+      <div>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;"><strong style="color:var(--ink);font-weight:500;">For the CLI agents and editors your developers actually live in</strong> — Claude Code, Codex CLI, Aider, Zed, Continue — Tether reads the full prompt and response and enforces against it. That's the deep-visibility case, and it covers the tools doing the heavy lifting.</p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;">For tools with an opaque path — Copilot's chat, Cursor's default flow on unmanaged devices — Tether still attributes the activity to a person and a vendor and can block the destination, but it won't claim to read prompt content it can't see. We say so plainly rather than overselling. And every decision records how the agent was identified — explicitly, inferred from headers, or unattributed — so the audit distinguishes solid attribution from a guess.</p>
+      </div>
+      <div>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;"><strong style="color:var(--ink);font-weight:500;">Bring the two tools your developers use most.</strong> In the walkthrough we'll show you exactly what Tether sees on each — full content, or attribution-only — and where the honest gaps are, before you commit to anything.</p>
+        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">The full per-tool coverage matrix — architecture, best tier, what's seen, and the honest gap for each — is in the <a href="technical-brief.html#coverage" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
+      </div>
     </div>
-    <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:20px;max-width:780px;">Full per-tool detail lives in the current AI-tool coverage matrix on master. Bring the two tools your developers actually use; we will walk you through what Tether sees on each.</p>
   </div>
 </section>
 
