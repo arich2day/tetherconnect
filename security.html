@@ -136,13 +136,8 @@
     <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:32px;margin-top:8px;">
       <div>
         <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">The proxy sets <code>X-Tether-Policy-Version: &lt;version&gt;</code> on every blocked 403 and every forwarded response. Every <code>AI_PROXY_REQUEST</code> event sent to Overwatch carries <code>policyVersion</code>. Every judge review carries it too.</p>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">An auditor with the event ID does four things:</p>
-        <ol style="list-style:none;display:flex;flex-direction:column;gap:10px;font-size:13.5px;color:var(--ink2);font-weight:300;line-height:1.7;counter-reset:item;">
-          <li style="display:grid;grid-template-columns:24px 1fr;gap:8px;"><span style="font-family:var(--mono);color:var(--red);">1.</span><span>Pull the signed bundle: <code>GET /api/v1/policy/versions/&lt;version&gt;</code>.</span></li>
-          <li style="display:grid;grid-template-columns:24px 1fr;gap:8px;"><span style="font-family:var(--mono);color:var(--red);">2.</span><span>Pull the public key: <code>GET /api/v1/policy/public-key</code>. Confirm <code>keyId</code> matches.</span></li>
-          <li style="display:grid;grid-template-columns:24px 1fr;gap:8px;"><span style="font-family:var(--mono);color:var(--red);">3.</span><span>Run Ed25519 verification offline: <code>openssl pkeyutl -verify ...</code>.</span></li>
-          <li style="display:grid;grid-template-columns:24px 1fr;gap:8px;"><span style="font-family:var(--mono);color:var(--red);">4.</span><span>Read the <code>controls</code> object in the verified payload. That is the policy in force at decision time.</span></li>
-        </ol>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">An auditor with the event ID makes one call. <code>GET /api/v1/attestation/&lt;eventId&gt;</code> returns a single artifact: the decision, the signed policy bundle that made it, and the tenant's Ed25519 public key.</p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">A standalone verifier — <code>tools/verify-attestation.js</code>, zero dependencies — re-checks that artifact offline: the Ed25519 signature, the binding of the decision to its policy version, and the exact controls in force. The signed bundle pins the judge model, so the attestation also covers which model decided. An auditor re-verifies a decision offline, cryptographically.</p>
         <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:16px;">The chain — from the policy version on a request, to the signed bundle, to an offline signature check, to the controls in force — is the reproducible enforcement attestation. See the <a href="technical-brief.html#attestation" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
       </div>
       <div style="background:var(--bg);border:1px solid var(--border-dk);padding:28px;">
@@ -259,7 +254,7 @@
       </div>
       <div style="padding:28px;border-right:1px solid var(--border);">
         <div style="font-family:var(--cond);font-weight:700;font-size:16px;text-transform:uppercase;margin-bottom:10px;">FedRAMP relevance</div>
-        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;">Per-request attestation linking <code>event.id</code> to the active signed bundle is unusual at this stage. Federal buyers care deeply about per-request provenance — this is the highest-leverage capability for that market.</p>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;">Per-request attestation an auditor re-verifies offline — decision, signed bundle, and public key in one artifact — is unusual at this stage, and it is the property federal-grade diligence looks for: per-request provenance that doesn't rest on trusting the vendor. We claim no FedRAMP status or authorization; we produce the evidence that kind of diligence asks for.</p>
       </div>
       <div style="padding:28px;">
         <div style="font-family:var(--cond);font-weight:700;font-size:16px;text-transform:uppercase;margin-bottom:10px;">AI governance</div>

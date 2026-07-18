@@ -86,6 +86,7 @@
     .scr-v { font-size: 13.5px; color: var(--ink2); font-weight: 300; line-height: 1.55; }
     .scr-v strong { color: var(--ink); font-weight: 500; }
     .scr-block { color: var(--red); } .scr-allow { color: var(--green); } .scr-hold { color: #7a4800; }
+    .scr-prompt { font-family: var(--mono); font-size: 11.5px; line-height: 1.6; color: var(--ink); background: var(--surface2); border: 1px solid var(--border); padding: 9px 11px; white-space: pre-wrap; word-break: break-word; }
     .playback-bar { display: flex; align-items: center; gap: 14px; padding: 14px; background: var(--surface2); border-top: 1px solid var(--border); }
     .play-btn { background: var(--red); color: var(--surface); border: none; padding: 8px 16px; font-family: var(--mono); font-size: 12px; cursor: pointer; letter-spacing: 0.04em; }
     .play-btn:hover { opacity: 0.85; }
@@ -484,6 +485,7 @@
   const SCENARIOS = [
     {
       app: 'AI editor · a refactor request',
+      prompt: 'Refactor this handler to the new client:\n\nconst s3 = new S3Client({\n  accessKeyId: "AKIAIOSFODNN7EXAMPLE",\n  secretAccessKey: "wJalrXUtnFEMI/K7MDENG/…"\n})',
       atRisk: ['neutral', 'At risk', 'A live cloud access key, sitting in the selected code.'],
       verdicts: {
         0: [
@@ -507,6 +509,7 @@
     },
     {
       app: 'AI prompt · pasted context',
+      prompt: 'Draft a renewal email. Context on the account: long-time customer Dana M., renewed 14 Mar, card on file ending 4242, flagged churn-risk after two support escalations.',
       atRisk: ['neutral', 'At risk', 'A paraphrased customer record, pasted in for context — no fixed pattern to match.'],
       verdicts: {
         0: [
@@ -530,6 +533,7 @@
     },
     {
       app: 'Shell script · an AI endpoint',
+      prompt: 'curl api.openai.com/v1/chat/completions -d \'{"messages":[{"role":"user",\n  "content":"why does deploy auth fail? token=int_svc_9f3a-EXAMPLE"}]}\'',
       atRisk: ['neutral', 'At risk', 'An internal API token, headed out in the request body.'],
       verdicts: {
         0: [
@@ -554,6 +558,7 @@
 
   let scenarioIdx = 0;
   let modeIdx = 0;
+  document.addEventListener('DOMContentLoaded', resetStage);
 
   function setScenario(i, btn) {
     scenarioIdx = i;
@@ -577,13 +582,16 @@
     resetStage();
   }
   function resetStage() {
-    document.getElementById('stageBody').innerHTML = '<div class="stage-card-row"><div class="scr-k">Ready</div><div class="scr-v">Click Run to see the outcome.</div></div>';
+    document.getElementById('stageBody').innerHTML = '';
+    emitRow('prompt', 'Prompt', SCENARIOS[scenarioIdx].prompt);
+    emitRow('neutral', 'Ready', 'Click Run to see what happens to it.');
     document.getElementById('stepLabel').textContent = 'Ready';
   }
   function kindClass(kind) {
     if (kind === 'block') return 'scr-block';
     if (kind === 'allow') return 'scr-allow';
     if (kind === 'hold') return 'scr-hold';
+    if (kind === 'prompt') return 'scr-prompt';
     return '';
   }
   function emitRow(kind, label, text) {
@@ -597,7 +605,7 @@
     document.getElementById('stageBody').innerHTML = '';
     document.getElementById('stepLabel').textContent = 'Running …';
     const sc = SCENARIOS[scenarioIdx];
-    const rows = [sc.atRisk].concat(sc.verdicts[modeIdx]);
+    const rows = [['prompt', 'Prompt', sc.prompt], sc.atRisk].concat(sc.verdicts[modeIdx]);
     let i = 0;
     const tick = () => {
       if (i >= rows.length) { document.getElementById('stepLabel').textContent = 'Done'; return; }

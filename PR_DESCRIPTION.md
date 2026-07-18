@@ -184,4 +184,35 @@ A "The real thing" section between beat 5 and the simulator: native `<video cont
 
 Non-Tether marks (e.g., EDR "partial (process-level)" on agent attribution, CASB/DLP "depends" on the root-CA row) match or under-claim relative to the existing 13-row table on `pilot.html#coexistence`; no mark was adjusted in Tether's favor.
 
+---
+
+## Routing-framing correction + attestation/attribution strengthening
+
+### What changed
+
+**`technical-brief.html` — routing framing corrected (factual fix).**
+- Architecture SVG: arrow label `HTTP_PROXY` → `BASE_URL override` (the `→ 127.0.0.1:11435` line below it is unchanged; label fits the same gap, and there is no `.arch-stacked` markup in this file to mirror).
+- Dataflow step 01 ("Agent dials the proxy") rewritten to the real default mechanism: the VS Code extension injects vendor base-URL overrides (`OPENAI_BASE_URL` / `ANTHROPIC_BASE_URL` pointed at the proxy's vendor paths) via VS Code's `environmentVariableCollection`, scoped to VS Code-spawned terminals only — never `HTTP_PROXY`, never system-wide, never overriding a value the developer already set; the agent's SDK then dials `127.0.0.1:11435` as it would the vendor endpoint. Process-scoped `HTTP_PROXY` (with `NO_PROXY` covering loopback + Overwatch) is now framed as the optional/advanced path for CONNECT-tier host visibility. Existing loopback-bind fact and `main.go:98-103` chip kept; new plain-text chip `docs/PROXY_ENV_SCOPING.md` added (no href, no line numbers).
+- §08 scope/threat rows reworded off "honors/bypasses HTTP_PROXY": out-of-scope bullet is now "Tools the override doesn't reach" (spawned outside VS Code's terminals, binds its own endpoint, or ignores the process-scoped proxy in the advanced setup); the MCP bullet says "never inherits the base-URL override"; the Shadow-AI "Covered" qualifier is now "For tools that route through the proxy — the base-URL override, or process-scoped HTTP_PROXY in the advanced setup"; the out-of-scope threat row is retitled "Tools that bypass the proxy." Coverage claims neither shrunk nor grown.
+- Page-local `.cite-plain` style added: the existing cite-chip look without the `↗` glyph or link hover, for private-repo sources.
+
+**Attestation + attribution strengthened (existing sections only; no new pages/sections).**
+- `security.html` "Per-request attestation": the four-step manual chain is replaced by the shipped one-call flow — `GET /api/v1/attestation/<eventId>` returns one artifact (decision + signed policy bundle + tenant Ed25519 public key); `tools/verify-attestation.js` (standalone, zero dependencies) re-checks it offline; the signed bundle pins the judge model, so the attestation covers which model decided; "an auditor re-verifies a decision offline, cryptographically" lands. Existing "technical brief →" links and honest caveats kept.
+- `security.html` FedRAMP-relevance cell sharpened to the diligence-wedge framing — the property federal-grade diligence looks for — with an explicit "we claim no FedRAMP status or authorization" line. No new compliance claims.
+- `controls.html` per-tool coverage prose: one value-level sentence added — every decision records how the agent was identified (explicitly, inferred from headers, or unattributed) so the audit distinguishes solid attribution from a guess. Header name deliberately kept off the ops page.
+- `technical-brief.html` §07: integrated into the existing chain section — the one-call endpoint and single-artifact shape, `tools/verify-attestation.js` zero-dependency offline verification (signature + policy-version binding + controls), `controls.judge.model` pinning (the verifier prints it), and the `X-Tether-Agent-Source` header with its three provenance values (`explicit` / `header-heuristic` / `unattributed`) recorded in the event and judge record. Codeblock extended with the curl/node one-call lines. New cites are plain-text chips; no fabricated line numbers.
+
+### Appendix — new claims to source (owner-provided)
+
+| Claim | Source (owner-provided path) | Where claimed |
+|---|---|---|
+| Default routing = injected vendor base-URL overrides via `environmentVariableCollection`, VS Code-spawned terminals only, never system-wide, never overrides an existing value | `docs/PROXY_ENV_SCOPING.md` | brief §01 SVG label, §02 step 01, §08 scope rows |
+| Optional/advanced = process-scoped `HTTP_PROXY` + `NO_PROXY` (loopback + Overwatch) for CONNECT-tier host visibility | `docs/PROXY_ENV_SCOPING.md` | brief §02 step 01, §08 scope rows |
+| One-call attestation artifact: decision + signed policy bundle + tenant Ed25519 public key | `GET /api/v1/attestation/:eventId` | security attestation section, brief §07 |
+| Zero-dependency offline verifier: Ed25519 signature + policy-version binding + controls in force | `tools/verify-attestation.js` | security attestation section, brief §07 |
+| Attribution provenance recorded per decision (`explicit` / `header-heuristic` / `unattributed`) in event, judge record, and response header | `X-Tether-Agent-Source` | controls (value-level, no header name), brief §07 |
+| Judge model pinned inside the Ed25519-signed policy bundle; verifier prints it | `controls.judge.model` | security attestation section, brief §07 |
+
+**Note:** the product repo was not accessible from this session. All source paths above are owner-provided and cited as plain text — no line numbers cited, and no repo deep links added for these claims.
+
 https://claude.ai/code/session_01U4egp9pL2VjsrsVAPS2PdE

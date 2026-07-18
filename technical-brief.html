@@ -20,6 +20,10 @@
     .brief-toc a:hover .toc-name { color: var(--red); }
     .codeblock { background: var(--shell); color: var(--shell-ink); padding: 24px; font-family: var(--mono); font-size: 12px; line-height: 1.8; border: 1px solid var(--border-dk); overflow-x: auto; }
     .codeblock .c-dim { color: #8f8a7f; } .codeblock .c-green { color: #4cba6a; } .codeblock .c-red { color: #ff6080; } .codeblock .c-blue { color: #6aacff; } .codeblock .c-yellow { color: #f0c040; }
+    /* Plain-text citation chip — same chip, no link. For sources in the private
+       product repo where a deep link would be fabricated. */
+    .cite-plain::before { content: none; }
+    .cite-plain:hover { color: var(--muted); border-color: var(--border); }
     .arch-diagram { background: var(--surface); border: 1px solid var(--border-dk); padding: 0; margin-top: 8px; }
     .arch-diagram svg { display: block; width: 100%; height: auto; }
     /* Below ~720px the 11px SVG labels become unreadable when scaled to fit.
@@ -140,7 +144,7 @@
         <text x="50" y="103" class="ttl">Coding agent</text>
         <text x="50" y="123" class="sub">Claude Code · Cursor · Copilot · Codex CLI</text>
         <text x="50" y="142" class="sub">Aider · Zed · VS Code extension</text>
-        <text x="280" y="115" class="lbl">HTTP_PROXY</text>
+        <text x="280" y="115" class="lbl">BASE_URL override</text>
         <text x="280" y="130" class="lbl">→ 127.0.0.1:11435</text>
         <rect x="40" y="190" width="460" height="120" class="box-em"/>
         <text x="50" y="213" class="ttl">Connect proxy <tspan class="red">· loopback only</tspan></text>
@@ -206,8 +210,9 @@
         <div class="block-title">
           <h3>Agent dials the proxy</h3>
           <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/main.go#L98-L103" target="_blank" rel="noopener">main.go:98-103</a>
+          <span class="cite cite-plain">docs/PROXY_ENV_SCOPING.md</span>
         </div>
-        <div class="block-body">The coding agent reads <code>HTTP_PROXY</code> from its environment and opens a connection to <code>127.0.0.1:11435</code>. The proxy is loopback-bound by default; widening requires explicit operator config (<code>bind_host</code> / <code>TETHER_PROXY_BIND_HOST</code>) and emits a named startup warning. The VS Code extension can opt-in to set the env var for terminals VS Code spawns — Tier 2 agents are governed without separate dev setup.</div>
+        <div class="block-body">By default, the VS Code extension injects vendor base-URL overrides — <code>OPENAI_BASE_URL</code> / <code>ANTHROPIC_BASE_URL</code> pointed at the proxy's vendor paths — via VS Code's <code>environmentVariableCollection</code>, scoped to the terminals VS Code spawns. Never <code>HTTP_PROXY</code>, never system-wide, and never overriding a value the developer already set. The agent's SDK reads the override and dials <code>127.0.0.1:11435</code> exactly as it would the vendor endpoint. The proxy is loopback-bound by default; widening requires explicit operator config (<code>bind_host</code> / <code>TETHER_PROXY_BIND_HOST</code>) and emits a named startup warning. Optional, for CONNECT-tier host visibility: an operator can point an agent's process <code>HTTP_PROXY</code> at the proxy — process-scoped, with <code>NO_PROXY</code> covering loopback and Overwatch, never system-wide.</div>
       </div>
       <div>
         <div class="block-num">02</div>
@@ -425,6 +430,12 @@
           <li style="display:grid;grid-template-columns:24px 1fr;gap:8px;"><span style="font-family:var(--mono);color:var(--red);">4.</span><span>Read the <code>controls</code> object in the verified payload. That is the policy in force at decision time.</span></li>
         </ol>
         <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:16px;">Chain: <code>event.policyVersion → signed bundle → Ed25519 verify → controls</code>. <a class="cite" style="vertical-align:baseline;" href="https://github.com/arich2day/project-tether/blob/master/docs/ATTESTATION.md" target="_blank" rel="noopener">docs/ATTESTATION.md</a></p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-top:16px;">The four steps collapse into one call. <code>GET /api/v1/attestation/&lt;eventId&gt;</code> returns a single artifact — the decision, the signed policy bundle that made it, and the tenant's Ed25519 public key. <code>tools/verify-attestation.js</code> is a standalone verifier with zero dependencies; it re-checks the artifact offline: the Ed25519 signature, the binding of the decision to its policy version, and the exact controls in force. It also prints <code>controls.judge.model</code> — the judge model tag is pinned inside the signed bundle, so a verified decision attests which model was in force. Version drift cannot silently change enforcement.</p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-top:14px;">Every decision also records how the agent was identified — <code>explicit</code>, <code>header-heuristic</code>, or <code>unattributed</code> — in the event, in the judge record, and in the <code>X-Tether-Agent-Source</code> response header. The audit distinguishes trustworthy attribution from a header guess.</p>
+        <div style="margin-top:12px;">
+          <span class="cite cite-plain">overwatch API /api/v1/attestation/:eventId</span>
+          <span class="cite cite-plain">tools/verify-attestation.js</span>
+        </div>
         <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:14px;"><strong style="color:var(--ink);font-weight:500;">Honest caveat.</strong> In-memory events do not survive Overwatch restart unless your SIEM adapter forwards them. The persistent audit trail is <code>policy-audit.jsonl</code> for policy publish actions; per-request event durability depends on SIEM forwarding. Tamper-evident per-version bundle retention (append-only WORM) is a documented gap for deployments requiring full forensic retention.</p>
       </div>
       <div class="codeblock" style="font-size:11.5px;">
@@ -442,7 +453,14 @@
         <span class="c-blue">}</span><br/>
         <br/>
         $ openssl pkeyutl -verify ...<br/>
-        <span class="c-green">Signature Verified Successfully</span>
+        <span class="c-green">Signature Verified Successfully</span><br/>
+        <br/>
+        <span class="c-dim">// or the one-call path</span><br/>
+        $ curl -s overwatch/api/v1/attestation/&lt;eventId&gt;<br/>
+        <span class="c-dim">// → decision + signed bundle + tenant public key</span><br/>
+        $ node tools/verify-attestation.js<br/>
+        <span class="c-green">Ed25519 signature verified</span> · policy binding OK<br/>
+        <span class="c-yellow">controls.judge.model</span>: <span class="c-green">"&lt;pinned-model-tag&gt;"</span>
       </div>
     </div>
   </div>
@@ -467,8 +485,8 @@
         <ul style="list-style:none;display:flex;flex-direction:column;gap:14px;font-size:14px;color:var(--ink2);font-weight:300;line-height:1.7;">
           <li><strong style="color:var(--ink);font-weight:500;">TLS-tunneled body inspection.</strong> The Connect proxy does not perform TLS interception. No root CA is installed on the developer machine. Workspace-tier TLS termination is reserved for the future managed VSCodium build.</li>
           <li><strong style="color:var(--ink);font-weight:500;">Workspace daemon enforcement.</strong> Clipboard, downloads, external links, screen capture, and coach mode are <strong>advisory today</strong>. The daemon returns the right decision and emits the audit; the IDE-side enforcement seam ships with the managed VSCodium artifact.</li>
-          <li><strong style="color:var(--ink);font-weight:500;">Tools that bypass HTTP_PROXY.</strong> An extension or CLI agent that binds its own socket bypasses the proxy. Tether governs the AI-egress lane for the tools your developers are authorized to use.</li>
-          <li><strong style="color:var(--ink);font-weight:500;">MCP servers that hardcode their own endpoint.</strong> MCP-bound traffic that bypasses <code>HTTP_PROXY</code> does not pass through the loopback proxy. Recommendation: allowlist MCP endpoints at the host-classification layer; monitor for novel destinations. Cooperative MCP agents that speak <code>tether_may_i_*</code> stay in scope — <a class="cite" style="vertical-align:baseline;" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/mcp.go" target="_blank" rel="noopener">warden/cmd/proxy/mcp.go</a>.</li>
+          <li><strong style="color:var(--ink);font-weight:500;">Tools the override doesn't reach.</strong> An agent spawned outside VS Code's terminals doesn't inherit the injected base-URL override, and an extension or CLI that binds its own endpoint bypasses the proxy either way — as does a tool that ignores the process-scoped <code>HTTP_PROXY</code> in the advanced setup. Tether governs the AI-egress lane for the tools your developers are authorized to use.</li>
+          <li><strong style="color:var(--ink);font-weight:500;">MCP servers that hardcode their own endpoint.</strong> MCP-bound traffic that never inherits the base-URL override does not pass through the loopback proxy. Recommendation: allowlist MCP endpoints at the host-classification layer; monitor for novel destinations. Cooperative MCP agents that speak <code>tether_may_i_*</code> stay in scope — <a class="cite" style="vertical-align:baseline;" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/mcp.go" target="_blank" rel="noopener">warden/cmd/proxy/mcp.go</a>.</li>
         </ul>
       </div>
     </div>
@@ -487,7 +505,7 @@
         <div style="display:grid;grid-template-columns:1fr 2fr 1.2fr;gap:0;padding:18px 0;border-bottom:1px solid var(--border);">
           <div style="padding-right:24px;"><div style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;color:var(--ink);margin-bottom:4px;">Shadow AI tools</div><div style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;color:var(--muted);text-transform:uppercase;">Unapproved coding agents</div></div>
           <div style="padding-right:24px;font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">Extensions or CLIs that make AI API calls outside the approved toolchain. The proxy classifies the destination host on the CONNECT tunnel; unapproved vendors are blockable.</div>
-          <div style="font-size:13.5px;"><span class="badge badge-green">Covered</span> &nbsp; For tools that honor HTTP_PROXY.</div>
+          <div style="font-size:13.5px;"><span class="badge badge-green">Covered</span> &nbsp; For tools that route through the proxy — the base-URL override, or process-scoped HTTP_PROXY in the advanced setup.</div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 2fr 1.2fr;gap:0;padding:18px 0;border-bottom:1px solid var(--border);">
           <div style="padding-right:24px;"><div style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;color:var(--ink);margin-bottom:4px;">Policy tampering</div><div style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;color:var(--muted);text-transform:uppercase;">Local config changes</div></div>
@@ -514,8 +532,8 @@
           <div style="font-size:13.5px;"><span class="badge badge-muted">Partial</span></div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 2fr 1.2fr;gap:0;padding:18px 0;border-bottom:1px solid var(--border);">
-          <div style="padding-right:24px;"><div style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;color:var(--ink);margin-bottom:4px;">Tools that bypass HTTP_PROXY</div><div style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;color:var(--muted);text-transform:uppercase;">Rogue extensions, custom TLS stacks</div></div>
-          <div style="padding-right:24px;font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">An extension that binds its own socket or hardcodes an endpoint bypasses the loopback proxy. Socket-level egress provenance binding is not in the codebase.</div>
+          <div style="padding-right:24px;"><div style="font-family:var(--cond);font-weight:700;font-size:15px;text-transform:uppercase;color:var(--ink);margin-bottom:4px;">Tools that bypass the proxy</div><div style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;color:var(--muted);text-transform:uppercase;">Rogue extensions, custom TLS stacks</div></div>
+          <div style="padding-right:24px;font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">An agent spawned outside VS Code's terminals doesn't inherit the base-URL override; an extension that binds its own socket or hardcodes an endpoint bypasses the loopback proxy — so does one that ignores the process-scoped HTTP_PROXY in the advanced setup. Socket-level egress provenance binding is not in the codebase.</div>
           <div style="font-size:13.5px;"><span class="badge badge-muted">Partial</span> &nbsp; Mitigation: managed VSCodium for high-control environments.</div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 2fr 1.2fr;gap:0;padding:18px 0;border-bottom:1px solid var(--border);">
