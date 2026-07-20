@@ -10,3 +10,13 @@ The dormant "The real thing" section on `demo.html` (search for `TODO(demo-captu
 | `shot-3-access.png` | Still of the just-in-time approval queue. |
 
 No other step is needed: the section's CSS is already live in `demo.html`.
+
+## Founder photo
+
+The founder section on `about.html` is live and references one image:
+
+| File | What it is |
+|---|---|
+| `founder-alvin-richburg.jpg` | Headshot of Alvin Richburg. Square crop recommended (rendered 1:1, `object-fit: cover`, top-anchored). Keep it a plain Git blob (no LFS); a web-optimized JPG under ~1 MB is ideal. |
+
+Until this file is added the section still renders cleanly — it falls back to an "AR" monogram tile in place of the photo, so nothing looks broken. Drop the file in with this exact name and the real photo appears automatically.

@@ -15,21 +15,15 @@
     .moment-box p + p { margin-top: 16px; }
 
     .founder-card { display: grid; grid-template-columns: 200px 1fr; gap: 32px; padding: 32px; background: var(--surface); border: 1px solid var(--border); margin-bottom: 24px; align-items: start; }
-    .founder-photo-placeholder {
-      aspect-ratio: 1 / 1;
-      background: var(--surface2);
-      border: 1px dashed var(--border-dk);
-      display: flex; align-items: center; justify-content: center;
-      font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
-      color: var(--muted); text-align: center; padding: 16px;
-      text-transform: uppercase;
-    }
+    .founder-photo { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; object-position: center top; display: block; border: 1px solid var(--border); }
+    .founder-initials { aspect-ratio: 1 / 1; background: var(--surface2); border: 1px solid var(--border); align-items: center; justify-content: center; font-family: var(--cond); font-weight: 700; font-size: 56px; letter-spacing: 0.02em; color: var(--muted); }
     .founder-meta h3 { font-family: var(--cond); font-weight: 700; font-size: 20px; text-transform: uppercase; margin-bottom: 4px; }
     .founder-role { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--red); margin-bottom: 14px; }
     .founder-bio { font-size: 14px; color: var(--ink2); font-weight: 300; line-height: 1.75; }
+    .founder-bio + .founder-bio { margin-top: 12px; }
     @media (max-width: 720px) {
       .founder-card { grid-template-columns: 1fr; }
-      .founder-photo-placeholder { aspect-ratio: 16 / 9; }
+      .founder-photo, .founder-initials { aspect-ratio: 16 / 9; }
     }
 
     .belief { padding: 24px 0; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 32px 1fr; gap: 16px; }
@@ -77,7 +71,7 @@
   </div>
 </div>
 
-<!-- THE PROBLEM SHAPE — moved from founder-moment placeholder. Founder section is hidden in v2; see TODO below. -->
+<!-- THE PROBLEM SHAPE -->
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label red">The shape under the visibility problem</div>
@@ -90,8 +84,28 @@
   </div>
 </section>
 
-<!-- TODO(founder-bio): name=?, role=?, prior-credential=? — section intentionally hidden in v2.
-     Reinstate the <section class="founder-card"> block here when real bio, role, credential, and photo are ready. -->
+<!-- WHO'S BEHIND IT -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Who's behind it</div>
+    <h2 class="section-title">The person, not a<br/>logo wall.</h2>
+    <div class="founder-card" style="max-width:840px;">
+      <div class="founder-photo-wrap">
+        <img class="founder-photo" src="assets/founder-alvin-richburg.jpg"
+             alt="Alvin Richburg, founder of Tether Connect"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="founder-initials" aria-hidden="true" style="display:none;">AR</div>
+      </div>
+      <div class="founder-meta">
+        <h3>Alvin Richburg</h3>
+        <div class="founder-role">Founder</div>
+        <p class="founder-bio">Alvin is a long-time cybersecurity professional whose work has centered on securing workloads and assets for the most sensitive customers — the ones who don't get to be wrong.</p>
+        <p class="founder-bio">He started Tether Connect because the controls that governed the last decade of data egress — regex DLP, allowlists, signature scanners — were built for an enumerable world, and the generative surface developers now work on isn't one. Tether governs the request where it still carries the prompt body and the identity: on the developer's machine, before it reaches the model.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 
 <!-- WHAT WE BELIEVE -->
