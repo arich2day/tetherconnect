@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Controls — Tether</title>
-  <meta name="description" content="You set the AI-egress policy floor and it's enforced consistently across the fleet. Eight capabilities, each led by why it matters to your security org, then what it does."/>
+  <meta name="description" content="You decide what your developers can't send to AI tools, and Tether enforces it the same way on every machine. Eight things it does, each with why it matters and how it works."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
@@ -42,8 +42,8 @@
   <canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas>
   <div class="page-hero-inner tc-hero-in">
     <div class="page-hero-eyebrow">What you control</div>
-    <h1>You set the policy floor.<br/>It's enforced the same way<br/><em>across the whole fleet.</em></h1>
-    <p class="page-hero-sub">You decide what's never allowed to leave for an AI tool — and that decision is enforced consistently on every developer machine, then proven in evidence your auditor can check. You see prompts and completions tied to a person, an agent, and a host. You block the patterns you can name. And you can show, after the fact, exactly which policy decided each request.</p>
+    <h1>You decide what can't leave for an AI tool.<br/>Tether enforces it the same way<br/><em>on every machine.</em></h1>
+    <p class="page-hero-sub">You decide what's never allowed to leave for an AI tool. Tether enforces that on every developer machine, and keeps proof your auditor can check. You see prompts and replies tied to a person, an agent, and a machine. You block the patterns you can name. And later, you can show exactly which rule decided each request.</p>
   </div>
 </div>
 
@@ -51,8 +51,8 @@
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label red">The spec</div>
-    <h2 class="section-title">A clean AI-egress control is three properties at once.</h2>
-    <p class="section-sub">A vendor who sells you one of the three is selling you a piece of an answer.</p>
+    <h2 class="section-title">A control worth trusting does three things at once.</h2>
+    <p class="section-sub">A vendor who sells you one of the three is selling you part of an answer.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);background:var(--surface);">
       <div style="padding:32px 28px;border-right:1px solid var(--border);">
         <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--red);margin-bottom:14px;">01 · VISIBILITY</div>
@@ -62,7 +62,7 @@
       <div style="padding:32px 28px;border-right:1px solid var(--border);">
         <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--red);margin-bottom:14px;">02 · ENFORCEMENT</div>
         <h3 style="font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;">Deterministic on patterns you can name</h3>
-        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">A regulated buyer needs a layer that blocks by policy alone — no model in the path, no opinion. The judge is additive; it is not the floor.</p>
+        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">A regulated buyer needs a layer that blocks by policy alone — no model in the path, no opinion. The judge is an extra layer on top, not the guarantee.</p>
       </div>
       <div style="padding:32px 28px;">
         <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--red);margin-bottom:14px;">03 · EVIDENCE</div>
@@ -77,8 +77,8 @@
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">What you get</div>
-    <h2 class="section-title">Eight capabilities.<br/>Why each one matters — then what it does.</h2>
-    <p class="section-sub">Value first, mechanism second. The line of code behind every claim is in the <a href="technical-brief.html" style="color:var(--ink);">technical brief</a> for anyone who has to validate it.</p>
+    <h2 class="section-title">Eight capabilities.<br/>Why each one matters — then how it works.</h2>
+    <p class="section-sub">Why it matters first, mechanism second. The exact code behind every claim is in the <a href="technical-brief.html" style="color:var(--ink);">technical brief</a> for anyone who has to check it.</p>
 
     <div style="margin-top:8px;">
       <div class="capability-row">
@@ -92,7 +92,7 @@
         </div>
         <div class="capability-body">
           <div class="capability-label">What it does</div>
-          The proxy runs locally and never decrypts TLS-tunneled content. It classifies the destination and reads the prompt only on the configured AI routes you've approved. The honest trade: a tool that refuses to route through the proxy isn't governed — we'll tell you which ones those are.
+          The proxy runs locally and never decrypts TLS-tunneled content. It classifies the destination and reads the prompt only on the AI routes you've approved. One limit: a tool that refuses to route through the proxy isn't governed. We'll tell you which ones those are.
         </div>
       </div>
 
@@ -143,12 +143,12 @@
 
       <div class="capability-row">
         <div class="capability-name">
-          <h3>Honest about who can block, and when</h3>
-          <p>You always know whether a decision was a guarantee or an advisory.</p>
+          <h3>Which decisions block, and which just advise</h3>
+          <p>You always know whether a decision was a hard block or an advisory note.</p>
         </div>
         <div class="capability-body">
           <div class="capability-label">Why it matters</div>
-          "The judge said allowed" and "the request was allowed" are different statements, and a control that blurs them isn't one you can stand behind to an auditor. Tether labels which is true for every decision — so you can trust the floor as a hard guarantee and treat advisory signal as exactly that.
+          "The judge said allowed" and "the request was allowed" are different statements, and a control that blurs them isn't one you can stand behind to an auditor. Tether labels which is true for every decision, so you can trust a hard block as a guarantee and treat an advisory note as exactly that.
         </div>
         <div class="capability-body">
           <div class="capability-label">What it does</div>
@@ -212,7 +212,7 @@
         </div>
         <div class="capability-body">
           <div class="capability-label">What it does</div>
-          Every decision carries the policy version that made it, and that version is recoverable as a signed bundle anyone can verify offline. The honest caveat: durable per-request retention depends on your SIEM forwarding — which is why the SIEM adapters ship in the same release.
+          Every decision carries the policy version that made it, and that version is recoverable as a signed bundle anyone can verify offline. One caveat: durable per-request retention depends on your SIEM forwarding, which is why the SIEM adapters ship in the same release.
         </div>
       </div>
     </div>
@@ -224,7 +224,7 @@
   <div class="wrap section-pad">
     <div class="section-label red">Forward this to your developers</div>
     <h2 class="section-title">"This isn't spyware."<br/>Here's the part you can check yourself.</h2>
-    <p class="section-sub">The fastest way to lose a developer-aware org is to make this feel like surveillance. It isn't, and your champion shouldn't have to take that on faith — every claim below is verifiable on the machine.</p>
+    <p class="section-sub">The fastest way to lose a room full of developers is to make this feel like surveillance. It doesn't, and nobody should have to take that on faith. Every claim below, a developer can check on their own machine.</p>
     <div style="border:1px solid var(--border-dk);background:var(--bg);padding:28px;margin-top:8px;max-width:860px;">
       <ul style="list-style:none;display:flex;flex-direction:column;gap:14px;font-size:14px;color:var(--ink2);font-weight:300;line-height:1.7;">
         <li>· <strong style="color:var(--ink);font-weight:500;">No root certificate on your machine.</strong> Tether doesn't install a corporate CA, so it can't decrypt your banking session, your personal email, or anything else outside the AI routes. Check your trust store — nothing of ours is in it.</li>
@@ -242,7 +242,7 @@
   <div class="wrap section-pad">
     <div class="section-label">Workspace tier — advisory today</div>
     <h2 class="section-title">Clipboard, downloads, external links —<br/>visible and recorded now, enforced next.</h2>
-    <p class="section-sub">We're plain about this: the workspace controls watch and record today, and gain hard enforcement when the managed IDE build ships. You get the visibility and the audit trail now; you'll get the block later. We'd rather you know that going in.</p>
+    <p class="section-sub">Today these controls watch and record. They gain hard enforcement when the managed IDE build ships. So you get the visibility and the audit trail now, and the block later.</p>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:8px;">
       <div>
@@ -292,16 +292,16 @@
   <div class="wrap section-pad">
     <div class="section-label">Per-tool reality</div>
     <h2 class="section-title">"What about Cursor?"</h2>
-    <p class="section-sub">How much Tether sees depends on the tool — and we're specific about each one rather than implying it's all the same.</p>
+    <p class="section-sub">How much Tether sees depends on the tool. Here's each one, specifically.</p>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:8px;">
       <div>
         <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;"><strong style="color:var(--ink);font-weight:500;">For the CLI agents and editors your developers actually live in</strong> — Claude Code, Codex CLI, Aider, Zed, Continue — Tether reads the full prompt and response and enforces against it. That's the deep-visibility case, and it covers the tools doing the heavy lifting.</p>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;">For tools with an opaque path — Copilot's chat, Cursor's default flow on unmanaged devices — Tether still attributes the activity to a person and a vendor and can block the destination, but it won't claim to read prompt content it can't see. We say so plainly rather than overselling. And every decision records how the agent was identified — explicitly, inferred from headers, or unattributed — so the audit distinguishes solid attribution from a guess.</p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;">For tools with an opaque path — Copilot's chat, Cursor's default flow on unmanaged devices — Tether still ties the activity to a person and a vendor and can block the destination, but it doesn't read prompt content it can't see. And every decision records how the agent was identified — explicitly, inferred from headers, or unattributed — so the audit distinguishes solid attribution from a guess.</p>
       </div>
       <div>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;"><strong style="color:var(--ink);font-weight:500;">Bring the two tools your developers use most.</strong> In the walkthrough we'll show you exactly what Tether sees on each — full content, or attribution-only — and where the honest gaps are, before you commit to anything.</p>
-        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">The full per-tool coverage matrix — architecture, best tier, what's seen, and the honest gap for each — is in the <a href="technical-brief.html#coverage" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;"><strong style="color:var(--ink);font-weight:500;">Bring the two tools your developers use most.</strong> In the walkthrough we'll show you exactly what Tether sees on each — full content, or attribution-only — and where the gaps are, before you commit to anything.</p>
+        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">The full per-tool coverage matrix — architecture, best tier, what's seen, and the gap for each — is in the <a href="technical-brief.html#coverage" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
       </div>
     </div>
   </div>
@@ -324,7 +324,7 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <div class="footer-brand-name">Tether<span>Connect</span></div>
-      <p>AI-egress visibility-and-enforcement for developer machines.</p>
+      <p>See and control what your developers send to AI tools.</p>
       <div class="footer-domains">
         <a href="https://tetherconnect.app">tetherconnect.app</a>
         <a href="https://ai-security.app">ai-security.app</a>

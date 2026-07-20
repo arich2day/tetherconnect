@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Tether — AI-egress visibility and enforcement on the developer machine</title>
-  <meta name="description" content="Tether is a visibility-and-enforcement layer for AI-tool egress on the developer machine. Every decision carries a signed policy version your auditor re-verifies offline. SIEM, SCIM, and posture export your security org can audit."/>
+  <title>Tether — See and control what your developers send to AI tools</title>
+  <meta name="description" content="Tether shows you what your developers send to AI tools like Claude Code, Cursor, and Copilot, blocks the risky moments, and keeps signed proof for auditors — all inside your own cloud, with no certificate on developer laptops."/>
   <link rel="canonical" href="https://tetherconnect.app/"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -157,21 +157,21 @@
   <canvas class="wave-canvas" data-waves data-density="13000" aria-hidden="true"></canvas>
   <div class="hero-inner">
     <div class="hero-left tc-hero-in">
-      <div class="hero-eyebrow">The AI-egress governance gap</div>
-      <h1>You have controls<br/>on every other<br/>egress lane.<br/><em>AI tools are the gap.</em></h1>
-      <p class="hero-outcome">See it, govern it, and <em>prove it</em> — in your own cloud, with no root certificate on a single laptop.</p>
-      <p class="hero-sub">Tether closes the one egress lane your EDR, CASB, and DLP were never built to watch: what your developers send to AI tools. It surfaces the channel, enforces the floor you set, and leaves evidence your auditor re-verifies offline — without slowing developers down.</p>
-      <p class="hero-scope"><strong style="color:var(--ink);font-weight:500;">Honest about scope:</strong> "see what your developers send" means full prompt content on the tools that route through the proxy (Claude Code, Codex CLI, Aider, Zed, Continue) and attribution-level coverage — who, which vendor — on opaque ones like Copilot chat and Cursor's default flow.</p>
+      <div class="hero-eyebrow">Security for AI coding tools</div>
+      <h1>Your developers put<br/>your data into AI tools<br/>every day.<br/><em>You can't see what leaves.</em></h1>
+      <p class="hero-outcome">Tether shows you what your team sends to AI tools, blocks what's dangerous, and keeps proof you can hand to an auditor — all inside your own cloud.</p>
+      <p class="hero-sub">Code, secrets, and customer data go into Claude Code, Cursor, Copilot, and the rest all day long. The security tools you already own can't read any of it. Tether runs on the developer's machine, shows you that traffic, stops the risky moments, and keeps a signed record — without getting in your developers' way.</p>
+      <p class="hero-scope">How much you see depends on the tool. For the ones that connect through Tether — Claude Code, Codex CLI, Aider, Zed, Continue — you see the full prompt. For the ones that don't, like Copilot chat or Cursor's default mode, you still see who used them and which AI vendor they hit.</p>
       <div class="hero-stat-row">
-        <span><strong>Your cloud.</strong> &nbsp;No Tether-side data lake to leak.</span>
-        <span><strong>No MITM cert.</strong> &nbsp;Verify the endpoint yourself.</span>
+        <span><strong>Runs in your cloud.</strong> &nbsp;No copy of your data on our side to leak.</span>
+        <span><strong>No certificate on laptops.</strong> &nbsp;Nothing decrypts your traffic.</span>
       </div>
       <div class="hero-actions">
         <a href="contact.html" class="btn-primary">Book a 30-min walkthrough ↗</a>
-        <a href="pilot.html" class="btn-secondary">Prove it free, in your cloud →</a>
+        <a href="pilot.html" class="btn-secondary">Start a free pilot →</a>
         <a href="how-it-works.html" class="btn-secondary">See how it works →</a>
       </div>
-      <p class="hero-pilot-note">Pilot: free up to 25 seats, two weeks, your own cloud — <code style="font-family:var(--mono);">terraform destroy</code> if it doesn't deliver.</p>
+      <p class="hero-pilot-note">Free for up to 25 developers, two weeks, in your own cloud. If it's not for you, delete it — there's nothing on our side to clean up.</p>
     </div>
     <div class="hero-terminal" data-tilt data-tilt-max="4">
       <span data-tilt-glare></span>
@@ -204,7 +204,7 @@
   <div class="wrap section-pad">
     <div class="section-label red">The reality today</div>
     <h2 class="section-title">Your developers use AI tools every day.<br/>Your stack does not see what leaves with them.</h2>
-    <p class="section-sub">Four things are true at the same time. None of the controls you already pay for closes them.</p>
+    <p class="section-sub">You already pay for tools to stop data from leaking out. Here's why none of them catch what goes into an AI tool.</p>
     <div class="reality-grid" data-reveal-group>
       <div class="reality-cell">
         <div class="reality-tag">EDR</div>
@@ -227,7 +227,7 @@
         <p>The only record of what your developers prompted is at the AI vendor. It is not in your SIEM, not on your audit timeline, and not available during incident response.</p>
       </div>
     </div>
-    <p style="font-size:14px;color:var(--ink);font-weight:500;line-height:1.7;margin-top:32px;margin-bottom:16px;max-width:760px;">So "don't we already own this?" has an honest answer: you own most of the stack — Tether covers the one lane it doesn't reach, and feeds the SIEM and IdP you already trust.</p>
+    <p style="font-size:14px;color:var(--ink);font-weight:500;line-height:1.7;margin-top:32px;margin-bottom:16px;max-width:760px;">You already own most of what you need. Tether covers the one gap the others can't reach — and sends everything it sees straight into the SIEM and identity tools you already run.</p>
     <div class="coex-strip">
       <div class="coex-side is">
         <div class="coex-h">Where Tether is</div>
@@ -257,7 +257,7 @@
   <div class="wrap section-pad">
     <div class="section-label red">What the gap costs you</div>
     <h2 class="section-title">The day this matters is the day<br/>you can't answer the question.</h2>
-    <p class="section-sub">Three moments put real stakes on the blind spot. In every one, "we don't have a record" is the wrong answer to be giving.</p>
+    <p class="section-sub">Three moments when "we don't have a record" is a very expensive thing to say.</p>
     <div class="reality-grid" data-reveal-group>
       <div class="reality-cell">
         <div class="reality-tag">Audit</div>
@@ -277,7 +277,7 @@
       <div class="reality-cell">
         <div class="reality-tag">The fix</div>
         <h3>Close it before you're asked.</h3>
-        <p>Tether turns the blind spot into a governed, audit-ready channel — in your own cloud, with evidence your auditor verifies offline. <a href="pilot.html" style="color:var(--red);text-decoration:underline;text-underline-offset:3px;">Prove it on your own data in two weeks →</a></p>
+        <p>Tether turns that blind spot into a clear, recorded view you can stand up in your own cloud — with proof your auditor can check for themselves. <a href="pilot.html" style="color:var(--red);text-decoration:underline;text-underline-offset:3px;">Try it on your own data in two weeks →</a></p>
       </div>
     </div>
   </div>
@@ -287,15 +287,15 @@
 <section class="pillar" data-reveal>
   <div class="pillar-inner">
     <div>
-      <div class="pillar-eyebrow">The diligence-winner</div>
-      <h2>Evidence your auditor<br/><em>re-verifies without trusting us.</em></h2>
-      <p>Most security tools ask a reviewer to take the vendor's word for it. Tether's strongest card is the opposite: <strong>every decision is recoverable as a signed bundle your auditor checks offline</strong> — no live access to Tether, no re-running our service, no trust in us required. When the question is "does this survive diligence?", that's the answer. It's the same evidence whether a customer audit, a regulator, or an incident review is asking.</p>
+      <div class="pillar-eyebrow">Proof, not promises</div>
+      <h2>Proof your auditor can check<br/><em>without taking our word for it.</em></h2>
+      <p>Most security tools ask your auditor to trust a vendor dashboard. Tether does the opposite: <strong>every decision it makes is saved as a signed record your auditor can verify on their own laptop</strong> — no access to us, no reason to trust us. That's the answer to "will this hold up in an audit?" — and it's the same answer whether it's a customer, a regulator, or your own incident team asking.</p>
     </div>
     <div class="pillar-proof">
       <div><strong>Signed at the source</strong>Every decision carries the Ed25519-signed policy version that made it.</div>
       <div><strong>Verified offline</strong>Your auditor pulls the bundle and confirms it cryptographically, on their own machine.</div>
       <div><strong>In your tenant</strong>The record lives in your own cloud — there's no Tether-side copy to request or trust.</div>
-      <div style="font-size:12px;color:#9a9088;">One honest caveat: durable per-request retention depends on your SIEM forwarding — which is why the SIEM adapters ship in the same release. <a href="technical-brief.html#siem" style="color:#ff6080;text-decoration:underline;text-underline-offset:3px;">Technical brief →</a></div>
+      <div style="font-size:12px;color:#9a9088;">Keeping that record for the long term means forwarding it to your SIEM — which is why the SIEM connectors ship in the same release. <a href="technical-brief.html#siem" style="color:#ff6080;text-decoration:underline;text-underline-offset:3px;">Technical brief →</a></div>
     </div>
   </div>
 </section>
@@ -304,45 +304,45 @@
 <section data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">What you get</div>
-    <h2 class="section-title">Five outcomes — and a one-line proof<br/>a skeptic actually accepts.</h2>
-    <p class="section-sub">No social proof, because we don't claim customers we don't have. Verifiability instead: every claim here is something you can check yourself during a two-week pilot on your own data.</p>
+    <h2 class="section-title">Five things Tether does —<br/>and how you check each one yourself.</h2>
+    <p class="section-sub">We're new, so we won't wave a wall of customer logos at you. Instead, every claim below is something you can confirm yourself in a two-week pilot, on your own data.</p>
     <div class="sp-grid" data-reveal-group>
       <div class="sp-card">
         <div class="sp-num">01 · SEE IT</div>
-        <h3>See the AI-egress channel you're blind to</h3>
-        <p>Prompts, completions, and the developer behind them land in the security view and stream to your SIEM — the AI lane your other tools treat as just another approved host.</p>
-        <p style="color:var(--ink);font-weight:400;font-size:13px;border-left:2px solid var(--red);padding-left:12px;margin-top:14px;">"It streams to the SIEM you already run, inside your own tenant."</p>
+        <h3>See what your team sends to AI tools</h3>
+        <p>The prompt, the AI's reply, and the developer who sent it all show up in one view and flow into your SIEM — the traffic your other tools wave through as just another trusted website.</p>
+        <p style="color:var(--ink);font-weight:400;font-size:13px;border-left:2px solid var(--red);padding-left:12px;margin-top:14px;">Check it yourself: it lands in the SIEM you already run, inside your own cloud.</p>
       </div>
       <div class="sp-card">
         <div class="sp-num">02 · GOVERN IT</div>
-        <h3>Enforce at the moment of risk — no ticket</h3>
-        <p>Most actions pass untouched. Only genuine risk triggers a just-in-time approval an operator clears in seconds. Safe work is never ticketed; and because every policy is Ed25519-signed, you can prove which version was in force when each request was decided.</p>
-        <p style="color:var(--ink);font-weight:400;font-size:13px;border-left:2px solid var(--red);padding-left:12px;margin-top:14px;">"Policy you can prove changed — signed, fleet-acknowledged, and propagated in about ten seconds."</p>
+        <h3>Stop the dangerous moments, leave the rest alone</h3>
+        <p>Almost everything passes straight through. Only a genuinely risky request gets held for a quick approval — cleared in seconds. Normal work never gets flagged, and every rule is signed, so you can always prove which one was in force when a request was decided.</p>
+        <p style="color:var(--ink);font-weight:400;font-size:13px;border-left:2px solid var(--red);padding-left:12px;margin-top:14px;">Check it yourself: change a rule and watch it reach every machine in about ten seconds.</p>
       </div>
       <div class="sp-card">
         <div class="sp-num">03 · PROVE IT</div>
-        <h3>Turn a blind spot into audit-ready evidence</h3>
-        <p>Every decision carries a signed policy version. The blind spot becomes a record you can hand to an auditor — and they confirm it without taking your word for it.</p>
-        <p style="color:var(--ink);font-weight:400;font-size:13px;border-left:2px solid var(--red);padding-left:12px;margin-top:14px;">"Your auditor re-verifies the evidence offline, without trusting us."</p>
+        <h3>Hand an auditor proof they can check</h3>
+        <p>Every decision is saved with the signed rule that made it. What used to be a blind spot becomes a clean record you can give to an auditor — and they can confirm it's real without taking your word for it.</p>
+        <p style="color:var(--ink);font-weight:400;font-size:13px;border-left:2px solid var(--red);padding-left:12px;margin-top:14px;">Check it yourself: your auditor verifies the record offline, with no access to us.</p>
       </div>
     </div>
     <div class="sp-grid" data-reveal-group style="border-top:none;">
       <div class="sp-card">
-        <div class="sp-num">04 · NO BACKLASH</div>
-        <h3>Adopt it without the surveillance fight</h3>
-        <p>No root certificate on developer machines. Tether doesn't read TLS-tunneled content — it governs the egress channel, it doesn't read over a developer's shoulder.</p>
-        <p style="color:var(--ink);font-weight:400;font-size:13px;border-left:2px solid var(--red);padding-left:12px;margin-top:14px;">"No root cert on developer machines — check the endpoint yourself."</p>
+        <div class="sp-num">04 · NO PUSHBACK</div>
+        <h3>Roll it out without a fight from developers</h3>
+        <p>Nothing gets installed that can decrypt a developer's traffic, and there's no certificate on their laptop. Tether watches the AI channel — it isn't reading over anyone's shoulder — so it doesn't feel like surveillance.</p>
+        <p style="color:var(--ink);font-weight:400;font-size:13px;border-left:2px solid var(--red);padding-left:12px;margin-top:14px;">Check it yourself: no certificate on the laptop — your developers can confirm it.</p>
       </div>
       <div class="sp-card">
-        <div class="sp-num">05 · STACK FIT</div>
-        <h3>Slots into the stack you already trust</h3>
-        <p>It reads your IdP and device-trust posture and writes to your SIEM. No rip-and-replace; it extends EDR, CASB, IdP, and DLP rather than competing with them.</p>
-        <p style="color:var(--ink);font-weight:400;font-size:13px;border-left:2px solid var(--red);padding-left:12px;margin-top:14px;">"Reads your IdP and device-trust posture, writes to your SIEM, day one."</p>
+        <div class="sp-num">05 · FITS YOUR STACK</div>
+        <h3>Works with the tools you already have</h3>
+        <p>It reads from your existing sign-on and device-trust setup and writes to your existing SIEM. Nothing to rip out — it adds the one thing your current tools miss and leaves the rest doing their jobs.</p>
+        <p style="color:var(--ink);font-weight:400;font-size:13px;border-left:2px solid var(--red);padding-left:12px;margin-top:14px;">Check it yourself: it reads your sign-on and device posture and writes to your SIEM on day one.</p>
       </div>
       <div class="sp-card" style="background:var(--surface);">
-        <div class="sp-num">FOR THE CHAMPION</div>
-        <h3>Want the machinery?</h3>
-        <p>Every claim above maps to a line on master — the proxy, the signing chain, the SIEM adapters, the attestation. The technical brief lays it out in full, with citations, for the person who has to validate it.</p>
+        <div class="sp-num">FOR THE ENGINEER</div>
+        <h3>Want to see under the hood?</h3>
+        <p>Every claim above points to the exact code behind it — the proxy, the signing chain, the SIEM connectors, the audit records. The technical brief lays it all out, with sources, for whoever has to vet it.</p>
         <a href="technical-brief.html" style="color:var(--red);text-decoration:underline;text-underline-offset:3px;font-size:13.5px;font-weight:500;display:inline-block;margin-top:8px;">Read the technical brief →</a>
       </div>
     </div>
@@ -353,8 +353,8 @@
 <div class="cta-band" data-reveal>
   <div class="cta-inner">
     <div class="cta-text">
-      <h2>Prove it on your own data.</h2>
-      <p>Free up to 25 seats, two weeks, in your own cloud. <code style="font-family:var(--mono);font-size:12px;color:var(--surface);">terraform destroy</code> if it doesn't deliver — there's no Tether-side data to expunge.</p>
+      <h2>Try it on your own data.</h2>
+      <p>Free for up to 25 developers, two weeks, in your own cloud. If it's not for you, tear it down — there's nothing on our side to delete.</p>
     </div>
     <div class="cta-actions">
       <a href="contact.html" class="btn-primary-inv">Book a 30-min walkthrough ↗</a>
@@ -370,7 +370,7 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <div class="footer-brand-name">Tether<span>Connect</span></div>
-      <p>AI-egress visibility-and-enforcement for developer machines.</p>
+      <p>See and control what your developers send to AI tools.</p>
       <div class="footer-domains">
         <a href="https://tetherconnect.app">tetherconnect.app</a>
         <a href="https://ai-security.app">ai-security.app</a>

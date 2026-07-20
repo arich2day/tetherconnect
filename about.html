@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>About — Tether</title>
-  <meta name="description" content="Why we built Tether. What we believe. What we are building toward in the next 90-180 days."/>
+  <meta name="description" content="Why we built Tether, what we believe, and what we're building over the next 90 to 180 days."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
@@ -67,19 +67,19 @@
   <div class="page-hero-inner tc-hero-in">
     <div class="page-hero-eyebrow">About</div>
     <h1>Why we built Tether.</h1>
-    <p class="page-hero-sub">The shape of the AI-egress problem on the developer machine, the moment that convinced us the existing controls would not close it, and the 90-180 day cut of what we are building next.</p>
+    <p class="page-hero-sub">The problem we set out to close, why the controls you already own don't reach it, and what we're building over the next 90 to 180 days.</p>
   </div>
 </div>
 
 <!-- THE PROBLEM SHAPE -->
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label red">The shape under the visibility problem</div>
-    <h2 class="section-title">Rules don't work on<br/>a generative surface.</h2>
+    <div class="section-label red">The harder problem</div>
+    <h2 class="section-title">You can't write a rule<br/>for a paraphrase.</h2>
 
     <div class="moment-box">
-      <p>The deeper problem under the visibility one is that rules don't work on a generative surface. Regex DLP, allowlists, signature scanners — these were built for an enumerable world. Developers using AI tools don't paste literal <code>SECRET_KEY=</code>; they paraphrase, refactor, brainstorm. There is no regex for "is this an exfil attempt?"</p>
-      <p>The dev-machine layer was the right place to close the gap because that's where the request still has the prompt body and the identity attached. Cloud proxies you can walk around are policy documents with a certificate attached.</p>
+      <p>Seeing the traffic is only half of it. The harder half: you can't write a rule for what a developer types into an AI tool. Regex DLP, allowlists, signature scanners — they were built for a world you could list out. Developers don't paste a literal <code>SECRET_KEY=</code>. They paraphrase, refactor, and think out loud. There's no regex for "is this an exfil attempt?"</p>
+      <p>So we work on the developer's machine, where the request still carries the full prompt and the identity of who sent it. A cloud proxy a developer can route around is just a policy document with a certificate attached.</p>
     </div>
   </div>
 </section>
@@ -88,7 +88,7 @@
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Who's behind it</div>
-    <h2 class="section-title">The person, not a<br/>logo wall.</h2>
+    <h2 class="section-title">The person behind it.</h2>
     <div class="founder-card" style="max-width:840px;">
       <div class="founder-photo-wrap">
         <img class="founder-photo" src="assets/founder-alvin-richburg.jpeg"
@@ -100,7 +100,7 @@
         <h3>Alvin Richburg</h3>
         <div class="founder-role">Founder</div>
         <p class="founder-bio">Alvin is a long-time cybersecurity professional whose work has centered on securing workloads and assets for the most sensitive customers — the ones who don't get to be wrong.</p>
-        <p class="founder-bio">He started Tether Connect because the controls that governed the last decade of data egress — regex DLP, allowlists, signature scanners — were built for an enumerable world, and the generative surface developers now work on isn't one. Tether governs the request where it still carries the prompt body and the identity: on the developer's machine, before it reaches the model.</p>
+        <p class="founder-bio">He started Tether Connect because the controls that governed the last decade of data loss — regex DLP, allowlists, signature scanners — were built for a world you could enumerate. The way developers work with AI isn't that world. Tether governs the request where it still carries the prompt and the identity: on the developer's machine, before it reaches the model.</p>
       </div>
     </div>
   </div>
@@ -150,7 +150,7 @@
 <section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Building toward · 90–180 days</div>
-    <h2 class="section-title">Three things on the next 90–180 day cut.</h2>
+    <h2 class="section-title">Three things we're building next.</h2>
 
     <div style="max-width:840px;display:flex;flex-direction:column;gap:24px;margin-top:8px;">
       <div style="padding:24px;background:var(--bg);border:1px solid var(--border);">
@@ -201,7 +201,7 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <div class="footer-brand-name">Tether<span>Connect</span></div>
-      <p>AI-egress visibility-and-enforcement for developer machines.</p>
+      <p>See and control what your developers send to AI tools.</p>
       <div class="footer-domains">
         <a href="https://tetherconnect.app">tetherconnect.app</a>
         <a href="https://ai-security.app">ai-security.app</a>

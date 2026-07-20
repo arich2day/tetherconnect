@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Security — Tether</title>
-  <meta name="description" content="Cryptography, per-tenant isolation, data residency, no-MITM-CA stance, three-tier judge authority, per-request attestation, fail-closed-on-judge-timeout, written security-disclosure policy."/>
+  <title>Security — How Tether protects your data — Tether</title>
+  <meta name="description" content="Tether runs in your own cloud, so your data never lands on our side. It installs no certificate that can decrypt traffic. And every decision it makes is signed, so your auditor can check it offline. The full threat model — what Tether covers and what it doesn't — is here too."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
@@ -60,9 +60,9 @@
 <div class="page-hero">
   <canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas>
   <div class="page-hero-inner tc-hero-in">
-    <div class="page-hero-eyebrow">Security architecture</div>
-    <h1>One new auditable<br/>control. <em>No MITM CA.</em><br/>No data-residency exposure.</h1>
-    <p class="page-hero-sub">Cryptographic policy distribution, per-tenant isolation in your cloud account, per-request attestation, fail-closed-on-judge-timeout, three-tier judge authority. The honest threat model — in and out of scope — at the bottom.</p>
+    <div class="page-hero-eyebrow">How Tether keeps your data safe</div>
+    <h1>One control you can<br/>audit. <em>No certificate on laptops.</em><br/>Your data stays in your cloud.</h1>
+    <p class="page-hero-sub">Tether runs in your own cloud, so your data never lands on our side. It installs no certificate that can decrypt your developers' traffic. And every decision it makes is signed, so your auditor can check it offline. The full threat model — what Tether covers and what it doesn't — is at the bottom of this page.</p>
   </div>
 </div>
 
@@ -70,27 +70,27 @@
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">Design principles</div>
-    <h2 class="section-title">Four principles<br/>shaping every decision.</h2>
+    <h2 class="section-title">Four rules we build<br/>every decision on.</h2>
     <div class="principle-grid" data-reveal-group>
       <div class="principle-card">
         <div class="principle-num">Principle 01</div>
         <h3>Fail closed</h3>
-        <p>When the agent cannot verify a current policy — network loss, signature mismatch, judge timeout in sync mode — it defaults to blocking. An agent that fails open is not a control.</p>
+        <p>If the agent can't confirm it's running a current, valid policy, it blocks. That can happen when the network drops, a signature doesn't match, or a synchronous judge check times out. A control that fails open isn't a control.</p>
       </div>
       <div class="principle-card">
         <div class="principle-num">Principle 02</div>
         <h3>No trust without verification</h3>
-        <p>Policy is applied only after Ed25519 signature verification with a per-tenant public key pinned on first use. A policy that fails verification is discarded — the agent keeps enforcing the last verified policy or blocks egress entirely.</p>
+        <p>A policy only takes effect after the agent verifies its signature against your tenant's own key, pinned the first time it sees it. Fail that check and the policy is thrown out — the agent keeps enforcing the last good one, or blocks egress outright. The signatures are Ed25519.</p>
       </div>
       <div class="principle-card">
         <div class="principle-num">Principle 03</div>
-        <h3>Payload never leaves for analysis</h3>
-        <p>The deterministic floor and (when enabled) the judge run against the prompt locally. If you configure a cloud judge, calls go to the model vendor you chose — never a Tether-hosted service. A local judge keeps every decision on-device.</p>
+        <h3>Your prompts don't leave for analysis</h3>
+        <p>The pattern checks and, when you turn it on, the judge both run against the prompt right on the machine. Point the judge at a cloud vendor and those calls go to the model vendor you chose — never to anything Tether hosts. Point it at a local model and every decision stays on the device.</p>
       </div>
       <div class="principle-card">
         <div class="principle-num">Principle 04</div>
         <h3>Defense in depth</h3>
-        <p>A deterministic floor, an opt-in synchronous check, an advisory async review, signed policy distribution, and an audited console — independent layers, each capable of catching what the others miss. Advisory findings can be promoted into the floor, turning evidence into future enforcement.</p>
+        <p>Several independent layers, each able to catch what the others miss: a deterministic pattern floor, an optional synchronous check, an advisory background review, signed policy delivery, and a console that logs everything. When the background review flags something new, you can promote it into the floor so it blocks next time.</p>
       </div>
     </div>
   </div>
@@ -99,18 +99,18 @@
 <!-- NO MITM ROOT CA -->
 <section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label red">No MITM root CA on the developer machine</div>
-    <h2 class="section-title">The proxy does not<br/>intercept TLS.</h2>
+    <div class="section-label red">No certificate that can decrypt traffic</div>
+    <h2 class="section-title">Tether never<br/>decrypts your traffic.</h2>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:8px;">
       <div>
-        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:16px;"><strong style="color:var(--ink);font-weight:500;">The Connect proxy is loopback-only and does not perform TLS interception.</strong> CONNECT tunnels are byte-copied bidirectionally. The proxy classifies the destination host on the CONNECT path and reads the request body only when an agent is pointed at the configured-upstream HTTP route (Tier B in the coverage taxonomy).</p>
-        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:16px;">No root certificate is installed on the developer's machine. The same CA that decrypts a Cursor call decrypts the developer's banking session — Tether does not put either of those into play.</p>
-        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;">Workspace-tier TLS termination is reserved for the future managed VSCodium build — an opt-in CA install on a managed device, not a sneak-install on every developer's laptop.</p>
+        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:16px;"><strong style="color:var(--ink);font-weight:500;">The Connect proxy runs on loopback only and never intercepts TLS.</strong> It copies encrypted tunnels straight through, byte for byte. It reads the destination host to decide what to allow, and it reads the request body only when an agent is pointed at the configured-upstream HTTP route (Tier B in the coverage taxonomy).</p>
+        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:16px;">Nothing installs a root certificate on the developer's machine. A certificate that can decrypt a Cursor call can just as easily decrypt someone's banking session. Tether never puts one in play.</p>
+        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;">The one place Tether does terminate TLS is the Workspace tier, and that's still coming: an opt-in certificate on a managed VSCodium build, on a managed device — never quietly pushed to every developer's laptop.</p>
       </div>
       <div style="background:var(--bg);border:1px solid var(--border-dk);padding:28px;">
         <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);margin-bottom:12px;">Why this matters to you</div>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">You get the control without the thing developers and privacy teams fight hardest: a corporate certificate that can decrypt anything on the machine. Tether doesn't generate one, inject one, or read TLS-tunneled content.</p>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;">It's a claim you can check yourself — there is no Tether root certificate to find in the trust store on any laptop. The source comment and the host-classification path are in the <a href="technical-brief.html#scope" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">You get the control without the thing developers and privacy teams push back on hardest: a corporate certificate that can decrypt anything on the machine. Tether doesn't create one, install one, or read inside encrypted tunnels.</p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;">You can check this yourself. Open the trust store on any laptop and there's no Tether certificate to find. The source comment and the host-classification path are in the <a href="technical-brief.html#scope" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
       </div>
     </div>
   </div>
@@ -121,8 +121,8 @@
   <div class="wrap section-pad">
     <div class="section-label">Three-tier judge authority</div>
     <h2 class="section-title">Who can block what,<br/>when, and how to tell.</h2>
-    <p class="section-sub" style="max-width:780px;">In one sentence: <strong style="color:var(--ink);font-weight:500;">Tier 0 always blocks; Tier 1 is configurable — sync-block opt-in at deploy time, fail-closed on timeout when enabled; Tier 2 records but cannot block.</strong></p>
-    <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.7;max-width:780px;margin-top:-20px;">The full breakdown — what each tier can block, when, and how a decision is labelled so you never confuse an advisory signal with a guarantee — lives in the <a href="technical-brief.html#authority" style="color:var(--ink);"><strong>technical brief · judge authority →</strong></a>, with the code citations behind every line.</p>
+    <p class="section-sub" style="max-width:780px;">Here's the whole model: <strong style="color:var(--ink);font-weight:500;">Tier 0 always blocks. Tier 1 is yours to configure — you opt into synchronous blocking at deploy time, and when it's on it fails closed on a timeout. Tier 2 records but never blocks.</strong></p>
+    <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.7;max-width:780px;margin-top:-20px;">The full breakdown lives in the <a href="technical-brief.html#authority" style="color:var(--ink);"><strong>technical brief · judge authority →</strong></a> — what each tier can block, when, and how every decision is labelled so you never mistake an advisory signal for a guarantee, with the code citations behind each line.</p>
   </div>
 </section>
 
@@ -131,23 +131,23 @@
   <div class="wrap section-pad">
     <div class="section-label">Per-request attestation</div>
     <h2 class="section-title">X-Tether-Policy-Version<br/>on every response.</h2>
-    <p class="section-sub">Ed25519 policy signing proves which bundle Overwatch signed and distributed. Per-request attestation closes the gap from <em>which bundle exists</em> to <em>which bundle decided this specific request.</em></p>
+    <p class="section-sub">Signing proves which policy bundle Overwatch published. Per-request attestation goes one step further — it proves <em>which bundle decided this exact request.</em></p>
 
     <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:32px;margin-top:8px;">
       <div>
         <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">The proxy sets <code>X-Tether-Policy-Version: &lt;version&gt;</code> on every blocked 403 and every forwarded response. Every <code>AI_PROXY_REQUEST</code> event sent to Overwatch carries <code>policyVersion</code>. Every judge review carries it too.</p>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">An auditor with the event ID makes one call. <code>GET /api/v1/attestation/&lt;eventId&gt;</code> returns a single artifact: the decision, the signed policy bundle that made it, and the tenant's Ed25519 public key.</p>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">A standalone verifier — <code>tools/verify-attestation.js</code>, zero dependencies — re-checks that artifact offline: the Ed25519 signature, the binding of the decision to its policy version, and the exact controls in force. The signed bundle pins the judge model, so the attestation also covers which model decided. An auditor re-verifies a decision offline, cryptographically.</p>
-        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:16px;">The chain — from the policy version on a request, to the signed bundle, to an offline signature check, to the controls in force — is the reproducible enforcement attestation. See the <a href="technical-brief.html#attestation" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">Your auditor takes the event ID and makes one call. <code>GET /api/v1/attestation/&lt;eventId&gt;</code> returns a single artifact: the decision, the signed policy bundle that made it, and your tenant's Ed25519 public key.</p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">A standalone verifier — <code>tools/verify-attestation.js</code>, with zero dependencies — re-checks that artifact offline: the signature, the link between the decision and its policy version, and the exact controls in force. The signed bundle also pins the judge model, so the check covers which model decided. Your auditor confirms a single decision offline, with math.</p>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:16px;">That chain — from the policy version on a request, to the signed bundle, to an offline signature check, to the controls in force — is what makes a decision reproducible. See the <a href="technical-brief.html#attestation" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
       </div>
       <div style="background:var(--bg);border:1px solid var(--border-dk);padding:28px;">
         <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);margin-bottom:12px;">The point for your auditor</div>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">The evidence stands on its own. Your auditor pulls the signed bundle for the version that decided a request and verifies the signature offline — a standard cryptographic check they run with their own tools. If it verifies, the controls in the bundle are provably the ones in force at decision time.</p>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;">No re-running Tether. No taking our word for it. The exact response shape and the verification command are in the <a href="technical-brief.html#attestation" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">The evidence stands on its own. Your auditor pulls the signed bundle for the version that decided a request and verifies the signature offline — a standard cryptographic check they run with their own tools. If it verifies, the controls in that bundle are provably the ones in force when the decision was made.</p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;">Nothing to re-run. Nothing to take on faith. The exact response shape and the verification command are in the <a href="technical-brief.html#attestation" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
       </div>
     </div>
 
-    <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:24px;max-width:780px;"><strong style="color:var(--ink);font-weight:500;">Honest caveats.</strong> In-memory events do not survive Overwatch restart unless your SIEM adapter forwards them. The persistent audit trail is <code>policy-audit.jsonl</code> for policy publish actions — per-request event durability depends on SIEM forwarding. Tamper-evident per-version bundle retention (append-only WORM) is a documented gap for deployments requiring full forensic retention.</p>
+    <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:24px;max-width:780px;"><strong style="color:var(--ink);font-weight:500;">Two limits to know.</strong> In-memory events don't survive an Overwatch restart unless your SIEM adapter forwards them. The durable audit trail on disk is <code>policy-audit.jsonl</code>, which covers policy-publish actions — per-request event durability depends on SIEM forwarding. And tamper-evident, append-only (WORM) retention of every version bundle is a known gap for deployments that need full forensic retention.</p>
   </div>
 </section>
 
@@ -158,12 +158,12 @@
     <h2 class="section-title">Your cloud account.<br/>Your secrets. Your buckets.</h2>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:8px;">
       <div>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;"><strong style="color:var(--ink);font-weight:500;">Overwatch is provisioned in the customer's cloud account.</strong> One Cloud Run service (GCP) or ECS service (AWS) per tenant. Per-tenant GCS bucket / EFS file system for state. Per-tenant Secret Manager / Secrets Manager for tokens and the policy signing key.</p>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;">No traffic flows through Tether-owned servers. The custom domain terminates on your Cloud Run instance. For EU and regulated buyers, customer data stays in your <code>eu-west-1</code> or <code>europe-west1</code> region by virtue of where you deploy.</p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;"><strong style="color:var(--ink);font-weight:500;">Overwatch runs in your own cloud account.</strong> One Cloud Run service on GCP, or one ECS service on AWS, per tenant. Each tenant gets its own GCS bucket or EFS file system for state, and its own Secret Manager for tokens and the policy signing key.</p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;">No traffic passes through a Tether-owned server. Your custom domain terminates on your own Cloud Run instance. If you're in the EU or under regional rules, your data stays in your <code>eu-west-1</code> or <code>europe-west1</code> region simply because that's where you deployed it.</p>
       </div>
       <div>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;"><strong style="color:var(--ink);font-weight:500;">The honest qualification.</strong> If you configure a cloud judge with OpenAI or another vendor, prompt previews flow to that vendor. This is your choice — the architecture supports a fully on-prem judge (a local model) that keeps all data within your environment.</p>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;">Air-gap is architecturally coherent: a local proxy, a local judge, an on-prem control plane, and the syslog path — every component supports running with no internet dependency. The deploy detail is in the <a href="technical-brief.html#architecture" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;"><strong style="color:var(--ink);font-weight:500;">One thing to decide.</strong> If you point the judge at a cloud vendor like OpenAI, prompt previews go to that vendor. That's your call — Tether also supports a fully on-prem judge, a local model that keeps everything inside your environment.</p>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;">You can run the whole thing air-gapped. The proxy, the judge, the control plane, and the syslog path each work with no internet dependency. The deploy detail is in the <a href="technical-brief.html#architecture" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
       </div>
     </div>
   </div>
@@ -174,35 +174,35 @@
   <div class="wrap section-pad">
     <div class="section-label">Threat model</div>
     <h2 class="section-title">What Tether covers.<br/>And what it does not.</h2>
-    <p class="section-sub">Honest security posture requires a clear threat model. Tether is purpose-built for a specific set of risks on the developer-machine AI-egress lane.</p>
+    <p class="section-sub">Tether is built for one job: the risks that show up when a developer sends data to an AI tool. Here's what that covers, and where it stops.</p>
 
     <div style="margin-bottom:40px;">
-      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px;padding-bottom:8px;border-bottom:2px solid var(--ink);">In scope — Tether addresses these</div>
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:8px;padding-bottom:8px;border-bottom:2px solid var(--ink);">In scope — Tether covers these</div>
       <div class="threat-row">
-        <div class="threat-cell"><div class="threat-name">Inadvertent data exfil</div><div class="threat-sub">Developer carelessness</div></div>
-        <div class="threat-cell">Developers pasting proprietary code, credentials, or PII into AI completions or chat interfaces. Tier 0 floor + sync judge catch known patterns and fail-closed-on-timeout configurations.</div>
-        <div class="threat-cell"><span class="badge badge-green">Covered</span> &nbsp; For known patterns and configurations that route through the proxy.</div>
+        <div class="threat-cell"><div class="threat-name">Data sent by accident</div><div class="threat-sub">Developer carelessness</div></div>
+        <div class="threat-cell">A developer pastes proprietary code, a credential, or personal data into an AI prompt or chat. The Tier 0 floor and the synchronous judge catch known patterns, and fail closed on a timeout when you set them to.</div>
+        <div class="threat-cell"><span class="badge badge-green">Covered</span> &nbsp; For known patterns and setups that route through the proxy.</div>
       </div>
       <div class="threat-row">
         <div class="threat-cell"><div class="threat-name">Shadow AI tools</div><div class="threat-sub">Unapproved coding agents</div></div>
-        <div class="threat-cell">Developers installing extensions or CLIs that make AI API calls outside the approved toolchain. The proxy classifies the destination host on the CONNECT tunnel; unapproved vendors are blockable.</div>
+        <div class="threat-cell">A developer installs an extension or CLI that calls an AI API outside the approved toolchain. The proxy reads the destination host on the CONNECT tunnel, so you can block unapproved vendors.</div>
         <div class="threat-cell"><span class="badge badge-green">Covered</span> &nbsp; For tools that route through the proxy.</div>
       </div>
       <div class="threat-row">
         <div class="threat-cell"><div class="threat-name">Policy tampering</div><div class="threat-sub">Local config changes</div></div>
-        <div class="threat-cell">A developer attempting to modify, downgrade, or replay an older policy. Ed25519 verification with monotonic version blocks both tampering and replay.</div>
+        <div class="threat-cell">A developer tries to change, downgrade, or replay an old policy. Signature verification plus a monotonic version number stops both tampering and replay.</div>
         <div class="threat-cell"><span class="badge badge-green">Covered</span></div>
       </div>
       <div class="threat-row">
-        <div class="threat-cell"><div class="threat-name">Compliance evidence gaps</div><div class="threat-sub">Audit readiness</div></div>
-        <div class="threat-cell">Inability to demonstrate technical controls. An append-only policy audit plus per-request attestation produce auditable evidence.</div>
+        <div class="threat-cell"><div class="threat-name">Gaps in your audit evidence</div><div class="threat-sub">Audit readiness</div></div>
+        <div class="threat-cell">You can't show an auditor that your technical controls actually worked. The append-only policy audit and per-request attestation give you evidence they can check.</div>
         <div class="threat-cell"><span class="badge badge-green">Covered</span></div>
       </div>
     </div>
 
     <div>
-      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border);">Out of scope — and we say so plainly</div>
-      <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;max-width:780px;margin-top:16px;">Tether is an endpoint product for the AI-egress lane, not a universal net. It doesn't govern server-side AI traffic from your pipelines, browser-only AI tools (that's your CASB's job today), agents that deliberately bypass the proxy, or a motivated insider with full machine access — it raises the cost there, it isn't a deterrent. We'd rather you read the honest edges than discover them. The full out-of-scope threat model, row by row, is in the <a href="technical-brief.html#scope" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
+      <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border);">Out of scope — what Tether doesn't do</div>
+      <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;max-width:780px;margin-top:16px;">Tether covers the developer's machine, not everything. It doesn't watch server-side AI traffic from your pipelines. It doesn't cover browser-only AI tools — that's your CASB's job today. And it won't stop an agent built to bypass the proxy, or a determined insider with full control of the machine; it raises the cost there, but it isn't a wall. The full out-of-scope list, row by row, is in the <a href="technical-brief.html#scope" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
     </div>
   </div>
 </section>
@@ -246,7 +246,7 @@
   <div class="wrap section-pad">
     <div class="section-label">Compliance evidence</div>
     <h2 class="section-title">What we produce.<br/>Not what we sign for you.</h2>
-    <p class="section-sub">Tether is not itself SOC 2 or ISO 27001 certified — your auditor evaluates Tether as a control in your environment. What we produce is auditable evidence your auditor can map.</p>
+    <p class="section-sub">Tether isn't itself SOC 2 or ISO 27001 certified. Your auditor evaluates it as a control in your environment, and what it produces is evidence they can map to your program.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);background:var(--bg);">
       <div style="padding:28px;border-right:1px solid var(--border);">
         <div style="font-family:var(--cond);font-weight:700;font-size:16px;text-transform:uppercase;margin-bottom:10px;">SOC 2 evidence</div>
@@ -254,11 +254,11 @@
       </div>
       <div style="padding:28px;border-right:1px solid var(--border);">
         <div style="font-family:var(--cond);font-weight:700;font-size:16px;text-transform:uppercase;margin-bottom:10px;">FedRAMP relevance</div>
-        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;">Per-request attestation an auditor re-verifies offline — decision, signed bundle, and public key in one artifact — is unusual at this stage, and it is the property federal-grade diligence looks for: per-request provenance that doesn't rest on trusting the vendor. We claim no FedRAMP status or authorization; we produce the evidence that kind of diligence asks for.</p>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;">Your auditor can re-verify any single decision offline — the decision, the signed bundle, and the public key all arrive in one artifact. That kind of per-request provenance, which doesn't rest on trusting the vendor, is exactly what federal-grade diligence looks for. We claim no FedRAMP status or authorization. We produce the evidence that kind of diligence asks for.</p>
       </div>
       <div style="padding:28px;">
         <div style="font-family:var(--cond);font-weight:700;font-size:16px;text-transform:uppercase;margin-bottom:10px;">AI governance</div>
-        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;">Documented technical controls over AI data handling, audit trail of AI usage decisions, risk-based evaluation, policy versioning. Map this to your AI-governance program; we don't pretend to interpret the EU AI Act for you.</p>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;">Documented technical controls over AI data handling, an audit trail of AI-usage decisions, risk-based evaluation, and policy versioning. Map it to your AI-governance program — we won't pretend to interpret the EU AI Act for you.</p>
       </div>
     </div>
   </div>
@@ -281,7 +281,7 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <div class="footer-brand-name">Tether<span>Connect</span></div>
-      <p>AI-egress visibility-and-enforcement for developer machines.</p>
+      <p>See and control what your developers send to AI tools.</p>
       <div class="footer-domains">
         <a href="https://tetherconnect.app">tetherconnect.app</a>
         <a href="https://ai-security.app">ai-security.app</a>
