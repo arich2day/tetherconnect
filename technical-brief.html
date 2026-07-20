@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Technical brief — Tether</title>
-  <meta name="description" content="The implementation detail behind every claim on the Tether site: loopback proxy internals, the three-tier judge authority, Ed25519 policy signing, SIEM/SCIM/posture wiring, the architecture and dataflow, the honest scope, and the offline attestation chain — with path:line citations."/>
+  <meta name="description" content="The implementation detail behind every claim on the Tether site: loopback proxy internals, the three-tier judge authority, Ed25519 policy signing, SIEM/SCIM/posture wiring, the architecture and dataflow, the real scope and limits, and the offline attestation chain — with path:line citations."/>
   <meta name="robots" content="noindex"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -81,7 +81,7 @@
   <div class="page-hero-inner tc-hero-in">
     <div class="page-hero-eyebrow">Technical brief · for the engineer who vets it</div>
     <h1>The plumbing,<br/>in full. <em>Verify it yourself.</em></h1>
-    <p class="page-hero-sub">The marketing pages sell the outcome. This page is the receipt. Every mechanism behind those claims is here — ports, flags, timeouts, the three enforcement tiers, the signing and verification chain, the SIEM/SCIM/posture wiring, and the honest limits — each pinned to a line on <code>master</code>. Bring it to your security review and check the code against the claim.</p>
+    <p class="page-hero-sub">The marketing pages sell the outcome. This page is the receipt. Every mechanism behind those claims is here — ports, flags, timeouts, the three enforcement tiers, the signing and verification chain, the SIEM/SCIM/posture wiring, and where the limits are — each pinned to a line on <code>master</code>. Bring it to your security review and check the code against the claim.</p>
   </div>
 </div>
 
@@ -98,7 +98,7 @@
       <a href="#judge"><span class="toc-num">05</span><span class="toc-name">The judge &amp; hardware tiers</span></a>
       <a href="#siem"><span class="toc-num">06</span><span class="toc-name">SIEM, SCIM &amp; posture wiring</span></a>
       <a href="#attestation"><span class="toc-num">07</span><span class="toc-name">Offline attestation chain</span></a>
-      <a href="#scope"><span class="toc-num">08</span><span class="toc-name">Honest scope &amp; threat model</span></a>
+      <a href="#scope"><span class="toc-num">08</span><span class="toc-name">Scope &amp; threat model</span></a>
       <a href="#coverage"><span class="toc-num">09</span><span class="toc-name">Per-tool coverage matrix</span></a>
     </div>
   </div>
@@ -280,7 +280,7 @@
         <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/warden/cmd/proxy/proxy_core.go#L245" target="_blank" rel="noopener">proxy_core.go:245</a>
       </div>
     </div>
-    <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:32px;max-width:780px;">For known patterns, Tier 0 is the strong guarantee. For novel content, Tier 1 blocks if the operator opted in. For TLS-tunneled traffic that does not route through the configured plaintext upstream, the proxy classifies the destination host but does not read the body — see <a href="#scope" style="color:var(--ink);">Honest scope</a> below.</p>
+    <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:32px;max-width:780px;">For known patterns, Tier 0 is the strong guarantee. For novel content, Tier 1 blocks if the operator opted in. For TLS-tunneled traffic that does not route through the configured plaintext upstream, the proxy classifies the destination host but does not read the body — see <a href="#scope" style="color:var(--ink);">Scope &amp; threat model</a> below.</p>
   </div>
 </section>
 
@@ -436,7 +436,7 @@
           <span class="cite cite-plain">overwatch API /api/v1/attestation/:eventId</span>
           <span class="cite cite-plain">tools/verify-attestation.js</span>
         </div>
-        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:14px;"><strong style="color:var(--ink);font-weight:500;">Honest caveat.</strong> In-memory events do not survive Overwatch restart unless your SIEM adapter forwards them. The persistent audit trail is <code>policy-audit.jsonl</code> for policy publish actions; per-request event durability depends on SIEM forwarding. Tamper-evident per-version bundle retention (append-only WORM) is a documented gap for deployments requiring full forensic retention.</p>
+        <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:14px;"><strong style="color:var(--ink);font-weight:500;">One limit.</strong> In-memory events do not survive Overwatch restart unless your SIEM adapter forwards them. The persistent audit trail is <code>policy-audit.jsonl</code> for policy publish actions; per-request event durability depends on SIEM forwarding. Tamper-evident per-version bundle retention (append-only WORM) is a documented gap for deployments requiring full forensic retention.</p>
       </div>
       <div class="codeblock" style="font-size:11.5px;">
         $ curl -s overwatch/api/v1/policy/versions/42<br/>
@@ -469,7 +469,7 @@
 <!-- 08 SCOPE & THREAT MODEL -->
 <section id="scope" style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label">08 · Honest scope</div>
+    <div class="section-label">08 · Scope &amp; threat model</div>
     <h2 class="section-title">What the proxy sees,<br/>and what it does not.</h2>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:8px;">
       <div>
