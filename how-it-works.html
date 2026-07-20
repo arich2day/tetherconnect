@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>How it works — Tether</title>
-  <meta name="description" content="Governance over the AI-egress channel with near-zero developer friction. A proxy on the machine, a control plane in your own cloud, and an audit trail your auditor verifies offline. Most actions pass; only real risk prompts an approval."/>
+  <meta name="description" content="See what your developers send to AI tools, block the risky moments, and keep proof your auditor can check — all in your own cloud. A small proxy on the machine, a control plane in your cloud, and a record verified offline. Most requests pass; only real risk stops for approval."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
@@ -74,8 +74,8 @@
   <canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas>
   <div class="page-hero-inner tc-hero-in">
     <div class="page-hero-eyebrow">How it works</div>
-    <h1>Governance over the AI channel.<br/>With <em>near-zero</em> developer friction.</h1>
-    <p class="page-hero-sub">You get visibility, enforcement, and audit-ready evidence over what your developers send to AI tools — running in your own cloud. Most actions pass untouched; only a genuinely risky moment ever prompts an approval. Three things make that work: a proxy on the machine, a control plane in your cloud, and an audit trail your auditor can verify.</p>
+    <h1>See what your developers send to AI.<br/>Control it <em>without slowing them down.</em></h1>
+    <p class="page-hero-sub">You see what your developers send to AI tools, block the risky moments, and keep proof your auditor can check — all in your own cloud. Most requests pass without anyone noticing. Only a genuinely risky one ever stops for approval. Three pieces make that work: a small proxy on the machine, a control plane in your cloud, and a record your auditor can verify.</p>
   </div>
 </div>
 
@@ -83,8 +83,8 @@
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label red">Why this shape</div>
-    <h2 class="section-title">The AI lane opens on the developer's machine.<br/>So that's where you get to govern it.</h2>
-    <p class="section-sub">A cloud proxy a developer can route around is a policy document with a certificate attached. Your EDR sees the connection but not what's inside it. Tether puts the control right where the risk is — at the moment a prompt leaves — and answers to a control plane your security org owns and authenticates. The result you care about: you see the channel, you set the floor, and you can prove both, without a heavy rollout your developers will resent.</p>
+    <h2 class="section-title">AI requests leave from the developer's machine.<br/>So that's where Tether watches them.</h2>
+    <p class="section-sub">A cloud proxy your developers can route around is just a policy document with a certificate attached. Your EDR sees the connection but not what's inside it. Tether puts the control where the risk is — the moment a prompt leaves the machine — and reports to a control plane your security team owns and signs into. So you see the traffic, you set the rules, and you can prove both. No heavy rollout your developers will resent.</p>
   </div>
 </section>
 
@@ -93,7 +93,7 @@
   <div class="wrap section-pad">
     <div class="section-label">The three things</div>
     <h2 class="section-title">A proxy on the machine. A control plane in your cloud.<br/>An audit trail you can prove.</h2>
-    <p class="section-sub">Each one buys you a specific outcome. The machinery behind them — ports, the signing chain, the enforcement tiers — lives in the technical brief for whoever needs to validate it.</p>
+    <p class="section-sub">Each one does a specific job. The machinery behind them — the ports, the signing chain, the enforcement tiers — lives in the technical brief for whoever needs to check it.</p>
     <div class="tier-grid" data-reveal-group>
       <div class="tier-card">
         <div class="tier-num">01 · ON THE MACHINE</div>
@@ -141,7 +141,7 @@
         <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">For the genuinely ambiguous moment, an operator gets a just-in-time request with the context to decide quickly. The developer is unblocked the moment they approve.</p>
       </div>
     </div>
-    <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:28px;max-width:780px;">This tiered behavior is the whole point: the floor catches what you can name, a customer-supplied judge weighs the rest, and only real risk reaches a human. The exact tier authority — what can block, when, and how you tell — is in the <a href="technical-brief.html#authority" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
+    <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:28px;max-width:780px;">That's the whole point. The rules you write catch what you can name. A judge you supply weighs the rest. Only real risk reaches a person. Exactly what each tier can block, when, and how you tell them apart is in the <a href="technical-brief.html#authority" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
   </div>
 </section>
 
@@ -149,8 +149,8 @@
 <section id="how-it-fits" style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
     <div class="section-label">How Tether fits</div>
-    <h2 class="section-title">Every category you run keeps its job.<br/>Each one leaves the same lane open.</h2>
-    <p class="section-sub" style="max-width:760px;">Six categories cover most security stacks. Each does its job well — and each stops short of the same place, for structural reasons rather than vendor shortcomings: the direct API call a coding agent makes from the developer machine to its LLM vendor. Tether is additive. It governs that one lane and feeds what it sees back to the tools you already run.</p>
+    <h2 class="section-title">Every tool you run keeps its job.<br/>Each one stops at the same blind spot.</h2>
+    <p class="section-sub" style="max-width:760px;">Six categories cover most security stacks. Each does its job well. And each stops short of the same place — not because the vendor fell short, but because of where the traffic goes: the direct API call a coding agent makes from the machine to its AI vendor. Tether adds to what you have. It covers that one call and feeds what it sees back to the tools you already run.</p>
     <div class="fit-grid" data-reveal-group>
       <div class="fit-cell">
         <div class="fit-tag">Network / SWG / SASE</div>
@@ -217,7 +217,7 @@
       </table>
     </div>
     <p style="font-size:12px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:14px;max-width:780px;"><sup style="color:var(--red);">†</sup> Tether's mark here carries the site's standing scope: full prompt content on the tools that route through the proxy, attribution-level coverage on opaque ones — the <a href="controls.html#coverage" style="color:var(--ink);">per-tool reality is on Controls</a>. <sup style="color:var(--red);">‡</sup> "depends" means content inspection at that layer generally rides on a TLS-interception certificate, though host-level control and some endpoint DLP variants don't; "—" for supply-chain gateways means the row doesn't apply — they gate installs, not traffic.</p>
-    <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:18px;max-width:780px;">Read the table the way it's marked: Tether owns one lane — AI egress at the developer machine — and is a dash everywhere else on purpose. Every other category keeps the job you bought it for; they're complementary, not competing. The full 13-row EDR / CASB / IdP / DLP matrix is on the <a href="pilot.html#coexistence" style="color:var(--red);text-decoration:underline;text-underline-offset:3px;">Pilot page</a>, and the mechanics behind every Tether row are in the <a href="technical-brief.html" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
+    <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:18px;max-width:780px;">Read the table the way it's marked: Tether covers one thing — AI traffic leaving the developer's machine — and is a dash everywhere else on purpose. Every other category keeps the job you bought it for. They work alongside Tether, not against it. The full 13-row EDR / CASB / IdP / DLP matrix is on the <a href="pilot.html#coexistence" style="color:var(--red);text-decoration:underline;text-underline-offset:3px;">Pilot page</a>, and the mechanics behind every Tether row are in the <a href="technical-brief.html" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
   </div>
 </section>
 
@@ -239,7 +239,7 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <div class="footer-brand-name">Tether<span>Connect</span></div>
-      <p>AI-egress visibility-and-enforcement for developer machines.</p>
+      <p>See and control what your developers send to AI tools.</p>
       <div class="footer-domains">
         <a href="https://tetherconnect.app">tetherconnect.app</a>
         <a href="https://ai-security.app">ai-security.app</a>
