@@ -17,6 +17,6 @@ The founder section on `about.html` is live and references one image:
 
 | File | What it is |
 |---|---|
-| `founder-alvin-richburg.jpg` | Headshot of Alvin Richburg. Square crop recommended (rendered 1:1, `object-fit: cover`, top-anchored). Keep it a plain Git blob (no LFS); a web-optimized JPG under ~1 MB is ideal. |
+| `founder-alvin-richburg.jpeg` | Headshot of Alvin Richburg. Rendered 1:1 with `object-fit: cover`, top-anchored, so a portrait crop frames the face. Keep it a plain Git blob (no LFS). |
 
-Until this file is added the section still renders cleanly — it falls back to an "AR" monogram tile in place of the photo, so nothing looks broken. Drop the file in with this exact name and the real photo appears automatically.
+If this file is missing the section still renders cleanly — it falls back to an "AR" monogram tile in place of the photo, so nothing looks broken.
