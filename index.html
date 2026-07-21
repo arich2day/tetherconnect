@@ -83,9 +83,9 @@
     .coex-side.is .coex-h { color: var(--green); }
     .coex-side.isnt .coex-h { color: var(--muted); }
     .coex-side ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .coex-side li { display: grid; grid-template-columns: 16px 1fr; gap: 8px; font-size: 13.5px; color: var(--ink2); font-weight: 300; line-height: 1.6; }
-    .coex-side.is li::before { content: '✓'; color: var(--green); font-weight: 600; font-family: var(--mono); }
-    .coex-side.isnt li::before { content: '—'; color: var(--muted); font-family: var(--mono); }
+    .coex-side li { position: relative; padding-left: 24px; font-size: 13.5px; color: var(--ink2); font-weight: 300; line-height: 1.6; }
+    .coex-side.is li::before { content: '✓'; position: absolute; left: 0; top: 0; color: var(--green); font-weight: 600; font-family: var(--mono); }
+    .coex-side.isnt li::before { content: '—'; position: absolute; left: 0; top: 0; color: var(--muted); font-family: var(--mono); }
     .coex-side.isnt li strong { color: var(--ink); font-weight: 500; }
     @media (max-width: 720px) { .coex-strip { grid-template-columns: 1fr; } .coex-side:first-child { border-right: none; border-bottom: 1px solid var(--border); } }
 
