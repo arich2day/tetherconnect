@@ -52,14 +52,15 @@
     <svg class="icon-close" aria-hidden="true" focusable="false" viewBox="0 0 18 18"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
   </button>
 <ul class="nav-links" id="nav-links">
+    <li><a href="index.html">Home</a></li>
     <li><a href="how-it-works.html">How it works</a></li>
-    <li><a href="controls.html">Controls</a></li>
-    <li><a href="integrations.html">Integrations</a></li>
+    <li><a href="controls.html">Platform</a></li>
     <li><a href="pilot.html">Pilot</a></li>
-    <li><a href="demo.html">Demo</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
     <li><a href="security.html">Security</a></li>
-    <li><a href="pricing.html" class="active">Pricing</a></li>
-    <li class="nav-cta-li"><a href="contact.html" class="nav-cta">Book a 30-min walkthrough</a></li>
+    <li><a href="use-cases.html">Use cases</a></li>
+    <li><a href="demo.html">Demo</a></li>
+    <li class="nav-cta-li"><a href="pilot.html" class="nav-cta">Get pilot - free 25 seats</a></li>
   </ul>
 </nav>
 
@@ -98,21 +99,17 @@
           <li><span>MCP <code>tether_may_i_*</code> voluntary surface</span></li>
         </ul>
       </div>
-      <div class="sku-card featured">
-        <div class="sku-name">Workspace</div>
-        <div class="sku-tag" style="color:var(--red);font-weight:600;">[Preview — design partners only]</div>
-        <div class="sku-price" style="color:var(--muted);"><s>$36</s> <small style="color:var(--muted);">/ seat / mo</small></div>
-        <div class="sku-sub">Pricing on request during preview</div>
-        <p style="font-size:12px;color:var(--ink2);font-weight:300;line-height:1.6;background:var(--red-bg);border:1px solid var(--red-bd);padding:10px 12px;margin-bottom:16px;">One limit, stated once: the Workspace controls are <strong style="color:var(--ink);font-weight:500;">advisory today — they watch and record. They become hard enforcement when the managed VSCodium build ships.</strong> Everything below the divider is that post-launch enforcement.</p>
+      <div class="sku-card featured" style="opacity:0.85;">
+        <div class="sku-name">Workspace — managed-IDE enforcement</div>
+        <div class="sku-tag" style="color:var(--red);font-weight:600;">Design partners only · coming soon</div>
+        <p style="font-size:13px;color:var(--ink2);font-weight:300;line-height:1.7;margin-bottom:18px;">No public price during preview — per-deal terms. A Tether engineer helps with install and your first policy publish.</p>
         <ul>
           <li><span>Everything in Connect</span></li>
-          <li><span>Custom branding (company name, logo, primary color)</span></li>
-          <li class="sku-divider"><span style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;">Enforced when managed VSCodium ships ↓</span></li>
+          <li><span>Custom branding</span></li>
           <li><span>Tether Workspace IDE (VSCodium-based, signed binary)</span></li>
-          <li><span>Managed root CA + TLS termination on workspace egress</span></li>
-          <li><span>Clipboard JIT, downloads, external links, screen capture</span></li>
-          <li><span>Printing, USB, settings-UI lock</span></li>
+          <li><span>Hard enforcement for clipboard JIT, downloads, external links, screen capture — when the managed build ships</span></li>
         </ul>
+        <p style="margin-top:18px;"><a href="pilot.html" style="font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:0.04em;color:var(--red);text-decoration:underline;text-underline-offset:3px;">Apply as a design partner →</a></p>
       </div>
       <div class="sku-card">
         <div class="sku-name">Overwatch Enterprise</div>
@@ -150,6 +147,9 @@
     </table>
     </div>
     <p style="font-size:13px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:14px;max-width:780px;">Workspace volume tiers are withheld until GA — pricing on request during preview. Education and qualified non-profits: 50% off list (see <a href="#discounts" style="color:var(--ink);">Discounts at a glance</a>).</p>
+    <div style="background:var(--green-bg);border:1px solid var(--border);padding:16px;margin-top:24px;max-width:780px;font-size:14px;color:var(--ink2);font-weight:300;line-height:1.7;">
+      <strong style="color:var(--ink);font-weight:600;">Worth it?</strong> One customer record or cloud key that leaks through an AI tool can cost far more than a year of Tether. And the judge/inference runs on a model you bring — so there's no extra per-request AI cost from us.
+    </div>
   </div>
 </section>
 
@@ -167,6 +167,20 @@
       <li style="display:grid;grid-template-columns:200px 1fr;gap:16px;padding-bottom:14px;border-bottom:1px solid var(--border);"><strong style="color:var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:0.06em;">Early-stage startups</strong><span>&lt;$5M ARR and &lt;25 seats: Connect free for 12 months.</span></li>
       <li style="display:grid;grid-template-columns:200px 1fr;gap:16px;"><strong style="color:var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:0.06em;">Education / non-profit</strong><span>50% off list for qualified accounts.</span></li>
     </ul>
+    <div id="calc" style="border:1px solid var(--border); background:var(--surface); padding:16px; margin-top:16px;">
+  <label style="font-family:var(--mono); font-size:12px;">Seats: <input type="number" id="seats" value="100" min="1" style="border:1px solid var(--border); background:var(--bg); color:var(--ink); padding:4px 6px; width:90px; font-family:var(--mono);" oninput="calcPrice()"></label>
+  <div id="calc-out" style="margin-top:12px; font-size:14px; color:var(--ink2);"></div>
+</div>
+<script>
+function calcPrice(){
+ var s=parseInt(document.getElementById('seats').value)||0;
+ var per=s<50?18:s<250?15:s<1000?12:10;
+ var base=s<50?0:s<250?1500:s<1000?2500:4000;
+ var mo=s*per+base;
+ document.getElementById('calc-out').innerHTML='Connect: $'+per+'/seat + $'+base+' base = <strong>$'+mo.toLocaleString()+'/mo</strong> monthly, or ~$'+Math.round(mo*0.85).toLocaleString()+'/mo on annual (15% off). Illustrative — final terms confirmed with you.';
+}
+calcPrice();
+</script>
   </div>
 </section>
 
@@ -245,13 +259,16 @@
         <a href="https://tetherconnect.app">tetherconnect.app</a>
         <a href="https://ai-security.app">ai-security.app</a>
       </div>
+      <p style="margin-top:14px;"><a href="contact.html" style="font-family:var(--mono);font-size:11px;letter-spacing:0.04em;color:var(--red);text-decoration:underline;text-underline-offset:3px;">Book a 30-min walkthrough ↗</a></p>
     </div>
     <div class="footer-col"><div class="footer-col-title">Product</div><ul>
       <li><a href="how-it-works.html">How it works</a></li>
-      <li><a href="controls.html">Controls</a></li>
+      <li><a href="controls.html">Platform</a></li>
       <li><a href="integrations.html">Integrations</a></li>
-      <li><a href="security.html">Security</a></li>
+      <li><a href="pilot.html">Pilot</a></li>
       <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="security.html">Security</a></li>
+      <li><a href="demo.html">Demo</a></li>
     </ul></div>
     <div class="footer-col"><div class="footer-col-title">Open source</div><ul>
       <li><a href="https://github.com/arich2day/project-tether/tree/master/docs" target="_blank" rel="noopener">Docs ↗</a></li>
@@ -261,8 +278,12 @@
     </ul></div>
     <div class="footer-col"><div class="footer-col-title">Company</div><ul>
       <li><a href="about.html">About</a></li>
-      <li><a href="pilot.html">Pilot</a></li>
+      <li><a href="use-cases.html">Use cases</a></li>
+      <li><a href="compare.html">Compare</a></li>
+      <li><a href="changelog.html">Changelog</a></li>
+      <li><a href="investors.html">Investors</a></li>
       <li><a href="contact.html">Contact</a></li>
+      <li><a href="mailto:security@tetherconnect.app">security@tetherconnect.app</a></li>
       <li><a href="security.html#disclosures">Security disclosures</a></li>
     </ul></div>
   </div>
