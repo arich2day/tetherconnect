@@ -40,6 +40,12 @@
       .fit-cell, .fit-cell:nth-last-child(-n+3) { border-right: none; border-bottom: 1px solid var(--border); }
       .fit-cell:last-child { border-bottom: none; }
     }
+    /* "How Tether fits" — native accordion inside each category cell */
+    .fit-cell details > summary { cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .fit-cell details > summary::-webkit-details-marker { display: none; }
+    .fit-cell details > summary::after { content: '+'; color: var(--red); font-family: var(--mono); font-size: 15px; line-height: 1; }
+    .fit-cell details[open] > summary::after { content: '\2013'; }
+    .fit-cell details[open] > summary { margin-bottom: 12px; }
   </style>
 </head>
 <body>
@@ -56,14 +62,15 @@
     <svg class="icon-close" aria-hidden="true" focusable="false" viewBox="0 0 18 18"><path d="M3 3l12 12M15 3L3 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
   </button>
 <ul class="nav-links" id="nav-links">
-    <li><a href="how-it-works.html" class="active">How it works</a></li>
-    <li><a href="controls.html">Controls</a></li>
-    <li><a href="integrations.html">Integrations</a></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="how-it-works.html">How it works</a></li>
+    <li><a href="controls.html">Platform</a></li>
     <li><a href="pilot.html">Pilot</a></li>
-    <li><a href="demo.html">Demo</a></li>
-    <li><a href="security.html">Security</a></li>
     <li><a href="pricing.html">Pricing</a></li>
-    <li class="nav-cta-li"><a href="contact.html" class="nav-cta">Book a 30-min walkthrough</a></li>
+    <li><a href="security.html">Security</a></li>
+    <li><a href="use-cases.html">Use cases</a></li>
+    <li><a href="demo.html">Demo</a></li>
+    <li class="nav-cta-li"><a href="pilot.html" class="nav-cta">Get pilot - free 25 seats</a></li>
   </ul>
 </nav>
 
@@ -78,6 +85,45 @@
     <p class="page-hero-sub">You see what your developers send to AI tools, block the risky moments, and keep proof your auditor can check — all in your own cloud. Most requests pass without anyone noticing. Only a genuinely risky one ever stops for approval. Three pieces make that work: a small proxy on the machine, a control plane in your cloud, and a record your auditor can verify.</p>
   </div>
 </div>
+
+<!-- ARCHITECTURE (value-level, on-brand) -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">How it fits</div>
+    <h2 class="section-title">One hop — and it never<br/>leaves your cloud.</h2>
+    <p class="section-sub">Your developer's AI tool reaches the model through Tether, running in your own cloud account. Tether sees the request, applies your policy, and records it. Nothing routes through us.</p>
+    <div style="border:1px solid var(--border-dk); background:var(--surface); overflow-x:auto; -webkit-overflow-scrolling:touch; margin-top:8px;">
+      <svg viewBox="0 0 820 250" style="display:block; width:100%; min-width:680px; height:auto; font-family:var(--mono);" role="img" aria-label="A developer's AI coding tool reaches the AI model API through Tether, which runs inside your own cloud account, applies signed policy, and streams to your SIEM. Nothing transits Tether's servers.">
+        <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" style="fill:var(--ink)"/></marker></defs>
+        <rect x="24" y="36" width="212" height="70" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.4"/>
+        <text x="130" y="68" text-anchor="middle" style="fill:var(--ink);font-size:13px;font-weight:600">Developer machine</text>
+        <text x="130" y="88" text-anchor="middle" style="fill:var(--muted);font-size:11px">Claude Code · Cursor · Copilot</text>
+        <rect x="304" y="36" width="212" height="70" style="fill:var(--red-bg);stroke:var(--red);stroke-width:1.6"/>
+        <text x="410" y="68" text-anchor="middle" style="fill:var(--ink);font-size:13px;font-weight:600">Tether</text>
+        <text x="410" y="88" text-anchor="middle" style="fill:var(--muted);font-size:11px">in your cloud · no root cert</text>
+        <rect x="584" y="36" width="212" height="70" style="fill:var(--surface);stroke:var(--ink);stroke-width:1.4"/>
+        <text x="690" y="68" text-anchor="middle" style="fill:var(--ink);font-size:13px;font-weight:600">AI model API</text>
+        <text x="690" y="88" text-anchor="middle" style="fill:var(--muted);font-size:11px">api.anthropic.com · openai.com</text>
+        <line x1="236" y1="71" x2="300" y2="71" style="stroke:var(--ink);stroke-width:1.4" marker-end="url(#ar)"/>
+        <line x1="516" y1="71" x2="580" y2="71" style="stroke:var(--ink);stroke-width:1.4" marker-end="url(#ar)"/>
+        <line x1="410" y1="106" x2="410" y2="162" style="stroke:var(--green);stroke-width:1.4;stroke-dasharray:5 4"/>
+        <rect x="140" y="164" width="540" height="64" style="fill:var(--green-bg);stroke:var(--green);stroke-width:1.5"/>
+        <text x="410" y="191" text-anchor="middle" style="fill:var(--ink);font-size:12.5px;font-weight:600">Your cloud · Overwatch console</text>
+        <text x="410" y="211" text-anchor="middle" style="fill:var(--ink2);font-size:10.5px">Signed policy, ~10s to the fleet · streams to your SIEM · reads your IdP · nothing transits Tether</text>
+      </svg>
+    </div>
+    <p style="font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:0.03em;margin-top:12px;">No Tether-hosted transit. Policy verified offline. No root certificate on the laptop.</p>
+  </div>
+</section>
+
+<!-- COVERAGE SCOPE — honest framing box, up top -->
+<section style="border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div style="border:1px solid var(--border);background:var(--surface);padding:20px;max-width:860px;">
+      <p style="font-size:13.5px;color:var(--ink2);font-weight:300;line-height:1.7;margin:0;"><strong style="color:var(--ink);font-weight:500;">How much it sees depends on the tool.</strong> For the CLI agents and editors your developers live in — Claude Code, Codex CLI, Aider, Zed, Continue — Tether reads the full prompt and response and enforces against it. For tools with an opaque path — Copilot chat, Cursor's default flow on unmanaged devices — it attributes the activity to a person and a vendor and can block the destination, but it won't claim to read prompt content it can't see. "See what your developers send" means full content on the tools that route through the proxy, attribution-level coverage on the rest. The <a href="controls.html#coverage" style="color:var(--red);font-weight:500;">per-tool reality is on Controls</a>.</p>
+    </div>
+  </div>
+</section>
 
 <!-- WHY ON THE MACHINE — outcome framing -->
 <section style="border-bottom:1px solid var(--border);" data-reveal>
@@ -114,8 +160,7 @@
         <p>Every decision carries the policy version that made it, and streams to the SIEM you already run. When an auditor asks what your developers sent to AI tools and under which policy, you hand them a record they verify offline — without taking Tether's word for any of it.</p>
       </div>
     </div>
-    <p style="font-size:13.5px;color:var(--ink2);font-weight:300;line-height:1.7;margin-top:32px;max-width:820px;border-left:2px solid var(--red);padding-left:14px;"><strong style="color:var(--ink);font-weight:500;">How much it sees depends on the tool.</strong> For the CLI agents and editors your developers live in — Claude Code, Codex CLI, Aider, Zed, Continue — Tether reads the full prompt and response and enforces against it. For tools with an opaque path — Copilot chat, Cursor's default flow on unmanaged devices — it attributes the activity to a person and a vendor and can block the destination, but it won't claim to read prompt content it can't see. "See what your developers send" means full content on the tools that route through the proxy, attribution-level coverage on the rest. The <a href="controls.html#coverage" style="color:var(--red);font-weight:500;">per-tool reality is on Controls</a>.</p>
-    <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:24px;max-width:780px;">Want the architecture diagram, the exact request path, and the three enforcement tiers? <a href="technical-brief.html" style="color:var(--ink);font-weight:500;">Read the technical brief →</a></p>
+    <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:32px;max-width:780px;">Want the architecture diagram, the exact request path, and the three enforcement tiers? <a href="technical-brief.html" style="color:var(--ink);font-weight:500;">Read the technical brief →</a></p>
   </div>
 </section>
 
@@ -153,40 +198,52 @@
     <p class="section-sub" style="max-width:760px;">Six categories cover most security stacks. Each does its job well. And each stops short of the same place — not because the vendor fell short, but because of where the traffic goes: the direct API call a coding agent makes from the machine to its AI vendor. Tether adds to what you have. It covers that one call and feeds what it sees back to the tools you already run.</p>
     <div class="fit-grid" data-reveal-group>
       <div class="fit-cell">
-        <div class="fit-tag">Network / SWG / SASE</div>
+        <details>
+        <summary class="fit-tag">Network / SWG / SASE</summary>
         <h3>The agent call never enters the tunnel.</h3>
         <p><strong>Does its job:</strong> governs traffic at the network egress, and governs the AI your people use in a browser — SaaS AI apps, web uploads, the paths it terminates.</p>
         <p><strong>The gap at the developer machine:</strong> a coding agent calls its vendor's API directly. That call doesn't go through a browser, and it may never traverse the tunnel at all — off-VPN, or on a BYO machine. Reading prompt content on the wire at that layer generally requires a TLS-interception certificate. Tether governs the same request at the loopback boundary on the machine itself, attributed to the specific agent, with no root CA installed.</p>
+        </details>
       </div>
       <div class="fit-cell">
-        <div class="fit-tag">Software supply chain</div>
+        <details>
+        <summary class="fit-tag">Software supply chain</summary>
         <h3>The gate is at install. The risk is at runtime.</h3>
         <p><strong>Does its job:</strong> vets what comes in — extensions, packages, models — and catches the malicious extension at install time. Supply-chain gateways such as Koi do that job well.</p>
         <p><strong>The gap at the developer machine:</strong> the trusted extension that goes rogue in an update, and exfiltrates through the AI tool it's allowed to talk to, was already inside the gate. Tether governs the runtime egress — the moment the agent tries to send something — so the two controls bracket the same risk from opposite ends.</p>
+        </details>
       </div>
       <div class="fit-cell">
-        <div class="fit-tag">EDR / Endpoint</div>
+        <details>
+        <summary class="fit-tag">EDR / Endpoint</summary>
         <h3>It sees the connection, not the prompt.</h3>
         <p><strong>Does its job:</strong> endpoint malware and behavioral threat detection — the process, the binary, the network connection. It runs on the machine and keeps doing exactly that alongside Tether.</p>
         <p><strong>The gap at the developer machine:</strong> it sees that a coding agent opened a TLS connection to its vendor; it does not read the JSON body of the prompt inside that tunnel. Tether reads and enforces on that content, for the tools that route through the proxy.</p>
+        </details>
       </div>
       <div class="fit-cell">
-        <div class="fit-tag">CASB</div>
+        <details>
+        <summary class="fit-tag">CASB</summary>
         <h3>An approved host, contents unknown.</h3>
         <p><strong>Does its job:</strong> SaaS shadow-IT discovery and posture — which sanctioned and unsanctioned apps your org touches, and how they're configured.</p>
         <p><strong>The gap at the developer machine:</strong> a coding agent's call to api.anthropic.com is just another approved SaaS host, and classifying what's inside the prompt typically requires interception. Tether classifies it at the source instead — before it leaves the machine.</p>
+        </details>
       </div>
       <div class="fit-cell">
-        <div class="fit-tag">DLP</div>
+        <details>
+        <summary class="fit-tag">DLP</summary>
         <h3>Patterns don't fire on paraphrase.</h3>
         <p><strong>Does its job:</strong> org-wide content classification — files at rest, mail, the known patterns it watches at the perimeter.</p>
         <p><strong>The gap at the developer machine:</strong> a developer paraphrases a customer record into a prompt and the patterns never fire — pattern-matching wasn't built for generative, in-flight AI content. Tether applies the deterministic patterns you name at the moment of egress, and pauses the ambiguous case for a human.</p>
+        </details>
       </div>
       <div class="fit-cell">
-        <div class="fit-tag">IdP / SSO</div>
+        <details>
+        <summary class="fit-tag">IdP / SSO</summary>
         <h3>Sign-in governance ends at sign-in.</h3>
         <p><strong>Does its job:</strong> owns identity — who signs in, to what, under which policy. Tether reads from it (SSO, SCIM, device posture) and doesn't replace it.</p>
         <p><strong>The gap at the developer machine:</strong> what a developer sends after they've authenticated is outside the IdP's frame. Tether attributes that traffic to the IdP identity you already manage — so the record carries a name, not just a host.</p>
+        </details>
       </div>
     </div>
 
@@ -221,6 +278,46 @@
   </div>
 </section>
 
+<!-- INTEGRATIONS SUMMARY -->
+<section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
+  <div class="wrap section-pad">
+    <div class="section-label">Integrations</div>
+    <h2 class="section-title">Everything it sees lands in the tools<br/>your team already runs.</h2>
+    <p class="section-sub" style="max-width:760px;">Tether adds to your stack instead of replacing it. Every adapter below is in production today — it streams to your SIEM, reads your identity provider, writes device posture your conditional-access policy already reads, and keeps an audit trail your auditor can pull.</p>
+    <div style="border:1px solid var(--border);background:var(--surface);margin-top:8px;">
+      <div style="display:flex;align-items:baseline;gap:16px;padding:22px 24px;border-bottom:1px solid var(--border);flex-wrap:wrap;">
+        <div style="min-width:180px;display:flex;align-items:center;gap:10px;">
+          <span style="font-family:var(--cond);font-weight:700;font-size:16px;text-transform:uppercase;">SIEM</span>
+          <span style="display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:0.08em;background:var(--green-bg);color:var(--green);padding:2px 8px;">Shipped</span>
+        </div>
+        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;flex:1;min-width:280px;margin:0;">Splunk / Sentinel / syslog — your SOC sees AI-tool attempts in the same dashboard as your EDR alerts.</p>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:16px;padding:22px 24px;border-bottom:1px solid var(--border);flex-wrap:wrap;">
+        <div style="min-width:180px;display:flex;align-items:center;gap:10px;">
+          <span style="font-family:var(--cond);font-weight:700;font-size:16px;text-transform:uppercase;">Identity</span>
+          <span style="display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:0.08em;background:var(--green-bg);color:var(--green);padding:2px 8px;">Shipped</span>
+        </div>
+        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;flex:1;min-width:280px;margin:0;">SSO / SCIM — operators sign in with your existing IdP, and a deprovision in your directory cuts their access here automatically.</p>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:16px;padding:22px 24px;border-bottom:1px solid var(--border);flex-wrap:wrap;">
+        <div style="min-width:180px;display:flex;align-items:center;gap:10px;">
+          <span style="font-family:var(--cond);font-weight:700;font-size:16px;text-transform:uppercase;">Device posture</span>
+          <span style="display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:0.08em;background:var(--green-bg);color:var(--green);padding:2px 8px;">Shipped</span>
+        </div>
+        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;flex:1;min-width:280px;margin:0;">Okta / Entra / CSV export — a machine that's drifted off policy drops out of device trust on its own.</p>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:16px;padding:22px 24px;flex-wrap:wrap;">
+        <div style="min-width:180px;display:flex;align-items:center;gap:10px;">
+          <span style="font-family:var(--cond);font-weight:700;font-size:16px;text-transform:uppercase;">Audit export</span>
+          <span style="display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:0.08em;background:var(--green-bg);color:var(--green);padding:2px 8px;">Shipped</span>
+        </div>
+        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;flex:1;min-width:280px;margin:0;">Append-only policy audit — every publish, revert, and fleet acknowledgement is ready for your auditor to pull on a schedule.</p>
+      </div>
+    </div>
+    <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;margin-top:18px;max-width:780px;"><a href="integrations.html" style="color:var(--red);font-weight:500;">Full integration detail →</a></p>
+  </div>
+</section>
+
 <!-- CTA -->
 <div style="background:var(--ink);color:var(--surface);border-top:1px solid var(--border);">
   <div style="max-width:1200px;margin:0 auto;padding:64px 40px;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;">
@@ -244,13 +341,16 @@
         <a href="https://tetherconnect.app">tetherconnect.app</a>
         <a href="https://ai-security.app">ai-security.app</a>
       </div>
+      <p style="margin-top:14px;"><a href="contact.html" style="font-family:var(--mono);font-size:11px;letter-spacing:0.04em;color:var(--red);text-decoration:underline;text-underline-offset:3px;">Book a 30-min walkthrough ↗</a></p>
     </div>
     <div class="footer-col"><div class="footer-col-title">Product</div><ul>
       <li><a href="how-it-works.html">How it works</a></li>
-      <li><a href="controls.html">Controls</a></li>
+      <li><a href="controls.html">Platform</a></li>
       <li><a href="integrations.html">Integrations</a></li>
-      <li><a href="security.html">Security</a></li>
+      <li><a href="pilot.html">Pilot</a></li>
       <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="security.html">Security</a></li>
+      <li><a href="demo.html">Demo</a></li>
     </ul></div>
     <div class="footer-col"><div class="footer-col-title">Open source</div><ul>
       <li><a href="https://github.com/arich2day/project-tether/tree/master/docs" target="_blank" rel="noopener">Docs ↗</a></li>
@@ -260,8 +360,12 @@
     </ul></div>
     <div class="footer-col"><div class="footer-col-title">Company</div><ul>
       <li><a href="about.html">About</a></li>
-      <li><a href="pilot.html">Pilot</a></li>
+      <li><a href="use-cases.html">Use cases</a></li>
+      <li><a href="compare.html">Compare</a></li>
+      <li><a href="changelog.html">Changelog</a></li>
+      <li><a href="investors.html">Investors</a></li>
       <li><a href="contact.html">Contact</a></li>
+      <li><a href="mailto:security@tetherconnect.app">security@tetherconnect.app</a></li>
       <li><a href="security.html#disclosures">Security disclosures</a></li>
     </ul></div>
   </div>
