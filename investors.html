@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Investors | Tether Connect</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .inv-hero {
+      padding: 120px 40px 80px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .inv-hero h1 {
+      font-family: var(--cond);
+      font-size: 64px;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+      color: var(--ink);
+    }
+    .inv-hero p {
+      font-size: 24px;
+      font-weight: 300;
+      line-height: 1.4;
+      color: var(--ink2);
+      max-width: 800px;
+    }
+    .gap-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      padding: 80px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+    @media (max-width: 800px) {
+      .gap-section {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+    .gap-block h3 {
+      font-family: var(--cond);
+      font-size: 24px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      color: var(--ink);
+    }
+    .gap-block p {
+      font-size: 16px;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--ink2);
+      margin-bottom: 24px;
+    }
+    .status-banner {
+      background: var(--ink);
+      color: var(--surface);
+      padding: 60px 40px;
+      text-align: center;
+    }
+    .status-banner h2 {
+      font-family: var(--cond);
+      font-size: 32px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+    }
+    .status-banner p {
+      font-size: 18px;
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto 32px;
+      color: #9a9088;
+    }
+  </style>
+</head>
+<body>
+
+<header class="tc-header">
+  <div class="tc-logo"><a href="index.html">Tether<span>Connect</span></a></div>
+  <nav class="tc-nav">
+    <a href="how-it-works.html">How it works</a>
+    <a href="controls.html">Controls</a>
+    <a href="integrations.html">Integrations</a>
+    <a href="security.html">Security</a>
+    <a href="pricing.html">Pricing</a>
+  </nav>
+  <div class="tc-actions">
+    <a href="about.html" class="nav-secondary">About</a>
+    <a href="investors.html" class="nav-secondary" style="color:var(--red);">Investors</a>
+    <a href="contact.html" class="btn-primary">Walkthrough ↗</a>
+  </div>
+</header>
+
+<main>
+
+<section class="inv-hero" data-reveal>
+  <h1>The Enterprise AI Blindspot.</h1>
+  <p>AI adoption is outpacing security. Enterprises are flying blind on what their developers send to AI tools. We built the endpoint-native cryptographically signed audit trail that CISOs need to stop the bleeding.</p>
+</section>
+
+<section class="gap-section" data-reveal>
+  <div class="gap-block">
+    <div class="section-label">The Market Gap</div>
+    <h3>CISOs have a binary choice: Block AI or Pray.</h3>
+    <p>Right now, if a developer pastes customer PII or proprietary code into an AI chat, the enterprise has no record. Existing security tools wave it through as normal web traffic. The only log lives on the AI vendor's servers. When an incident happens or an auditor asks for evidence of AI governance, the CISO has nothing to show. Their current options are blocking AI entirely (which developers bypass) or hoping for the best.</p>
+    <p>We are replacing "hope" with undeniable, cryptographically signed proof that lives in the company's own SIEM.</p>
+  </div>
+  <div class="gap-block">
+    <div class="section-label">The Moat</div>
+    <h3>Architecture is the advantage.</h3>
+    <p>We didn't build another dashboard that asks the customer to trust us. Tether Connect sits at the endpoint. It watches the AI channel without breaking TLS for normal traffic. Every decision it makes is signed with an Ed25519 key, tying the action directly to the policy in force at that millisecond.</p>
+    <p>The moat isn't just the code; it's the fact that our customers can hand an auditor a cryptographically verifiable record without ever giving them access to Tether's systems. It’s built for compliance, from the ground up.</p>
+  </div>
+</section>
+
+<section class="gap-section" style="border-bottom:none;background:var(--bg);" data-reveal>
+  <div class="gap-block" style="grid-column: 1 / -1; max-width: 800px; margin: 0 auto; text-align: center;">
+    <div class="section-label">Current Stage</div>
+    <h3 style="font-size:32px;">Built, tested, and in active development.</h3>
+    <p style="font-size: 18px;">We aren't selling a slide deck. The core loopback proxy, cryptographic policy receipts, and SIEM integrations are built. The workspace daemon is in production. We are actively finalizing the managed VSCodium artifact pipeline and durable stores. We have a working product that we can deploy into a customer's environment today for a two-week pilot.</p>
+  </div>
+</section>
+
+<div class="status-banner" data-reveal>
+  <h2>We are having conversations.</h2>
+  <p>If you see the massive gap in enterprise AI security and understand why an endpoint-native, cryptographically verifiable approach is the only way to close it, let's talk.</p>
+  <a href="contact.html" class="btn-primary-inv">Contact the founders ↗</a>
+</div>
+
+</main>
+
+<footer class="tc-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-name">Tether<span>Connect</span></div>
+      <p>See and control what your developers send to AI tools.</p>
+      <div class="footer-domains">
+        <a href="https://tetherconnect.app">tetherconnect.app</a>
+        <a href="https://ai-security.app">ai-security.app</a>
+      </div>
+    </div>
+    <div class="footer-col"><div class="footer-col-title">Product</div><ul>
+      <li><a href="how-it-works.html">How it works</a></li>
+      <li><a href="controls.html">Controls</a></li>
+      <li><a href="integrations.html">Integrations</a></li>
+      <li><a href="security.html">Security</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+    </ul></div>
+    <div class="footer-col"><div class="footer-col-title">Open source</div><ul>
+      <li><a href="https://github.com/arich2day/project-tether/tree/master/docs" target="_blank" rel="noopener">Docs ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether" target="_blank" rel="noopener">GitHub ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether/blob/master/docs/reviews/SUMMARY.md" target="_blank" rel="noopener">Review verdict ↗</a></li>
+      <li><a href="https://github.com/arich2day/project-tether/blob/master/docs/DEFENSIVE_PUBLICATION_GOVPROXY.md" target="_blank" rel="noopener">Defensive publication ↗</a></li>
+    </ul></div>
+    <div class="footer-col"><div class="footer-col-title">Company</div><ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="pilot.html">Pilot</a></li>
+      <li><a href="investors.html">Investors</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Tether Connect. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="security.html#disclosures">Security</a>
+    </div>
+  </div>
+</footer>
+<script src="motion.js" defer></script>
+</body>
+</html>

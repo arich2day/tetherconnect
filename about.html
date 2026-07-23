@@ -55,6 +55,7 @@
     <li><a href="demo.html">Demo</a></li>
     <li><a href="security.html">Security</a></li>
     <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="investors.html">Investors</a></li>
     <li class="nav-cta-li"><a href="contact.html" class="nav-cta">Book a 30-min walkthrough</a></li>
   </ul>
 </nav>
@@ -66,20 +67,20 @@
   <canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas>
   <div class="page-hero-inner tc-hero-in">
     <div class="page-hero-eyebrow">About</div>
-    <h1>Why we built Tether.</h1>
-    <p class="page-hero-sub">The problem we set out to close, why the controls you already own don't reach it, and what we're building over the next 90 to 180 days.</p>
+    <h1>The AI security mandate.</h1>
+    <p class="page-hero-sub">We built Tether because existing DLP tools are fundamentally incompatible with developer AI workflows. Here is the problem we are solving, and our technical roadmap to enforce it.</p>
   </div>
 </div>
 
 <!-- THE PROBLEM SHAPE -->
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label red">The harder problem</div>
-    <h2 class="section-title">You can't write a rule<br/>for a paraphrase.</h2>
+    <div class="section-label red">The structural gap</div>
+    <h2 class="section-title">Network DLP is blind to context.</h2>
 
     <div class="moment-box">
-      <p>Seeing the traffic is only half of it. The harder half: you can't write a rule for what a developer types into an AI tool. Regex DLP, allowlists, signature scanners — they were built for a world you could list out. Developers don't paste a literal <code>SECRET_KEY=</code>. They paraphrase, refactor, and think out loud. There's no regex for "is this an exfil attempt?"</p>
-      <p>So we work on the developer's machine, where the request still carries the full prompt and the identity of who sent it. A cloud proxy a developer can route around is just a policy document with a certificate attached.</p>
+      <p>Traditional data loss prevention (DLP) relies on scanning files and network traffic for static patterns at the perimeter. Developer AI tools bypass this entirely. They communicate over encrypted TLS tunnels directly to AI APIs, often paraphrasing proprietary concepts rather than copying literal strings.</p>
+      <p>Tether shifts enforcement to the endpoint. By inspecting the prompt before it enters the TLS tunnel, we restore visibility and deterministic control without breaking encryption.</p>
     </div>
   </div>
 </section>
@@ -111,14 +112,14 @@
 <!-- WHAT WE BELIEVE -->
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label">What we believe</div>
-    <h2 class="section-title">Four positions we are willing to defend.</h2>
+    <div class="section-label">Engineering principles</div>
+    <h2 class="section-title">Architecture dictates outcome.</h2>
     <div style="max-width:840px;">
       <div class="belief">
         <div class="belief-num">01</div>
         <div>
-          <h3>The moat is execution and integration depth — not patents.</h3>
-          <p>The internal patent review concluded that "the earlier 'highly likely to be patentable' framing does not hold" — streaming-guardrail prior art (Judgment-to-Interference, SentGuard, Streaming-VR, WitnessAI, Solo.io agentgateway, Protecto) densely occupies the space. The real moat is the working loopback proxy with cryptographic policy receipts, the local-judge hardware ladder, the per-tenant deploy, and the SIEM/SCIM/posture-export depth a CISO can put into an existing stack in an afternoon. <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/docs/reviews/SUMMARY.md" target="_blank" rel="noopener">docs/reviews/SUMMARY.md</a></p>
+          <h3>The moat is execution and integration depth.</h3>
+          <p>The real moat isn't abstract algorithmic claims. It is a working loopback proxy that generates cryptographically verifiable policy receipts. It is the ability to deploy single-tenant control planes. It is the deep integrations into existing SIEM and SCIM workflows that a CISO can operationalize in an afternoon. <a class="cite" href="https://github.com/arich2day/project-tether/blob/master/docs/reviews/SUMMARY.md" target="_blank" rel="noopener">docs/reviews/SUMMARY.md</a></p>
         </div>
       </div>
       <div class="belief">
@@ -180,7 +181,7 @@
 <section style="border-bottom:1px solid var(--border);">
   <div class="wrap section-pad">
     <div class="section-label">Investors · press</div>
-    <p style="font-size:15px;color:var(--ink2);font-weight:300;line-height:1.75;max-width:680px;">For investor inquiries or press: <a href="mailto:contact@tetherconnect.app" style="color:var(--ink);">contact@tetherconnect.app</a>. We do not have a deck on this page. We have a 30-minute conversation, the read-only architecture review on master, and a working pilot we will stand up in your environment.</p>
+    <p style="font-size:15px;color:var(--ink2);font-weight:300;line-height:1.75;max-width:680px;">For investor inquiries or press: <a href="investors.html" style="color:var(--red);text-decoration:underline;text-underline-offset:3px;">View our investor page</a> or email <a href="mailto:contact@tetherconnect.app" style="color:var(--ink);">contact@tetherconnect.app</a>. We have a 30-minute conversation, the read-only architecture review, and a working pilot.</p>
   </div>
 </section>
 
@@ -223,6 +224,7 @@
     <div class="footer-col"><div class="footer-col-title">Company</div><ul>
       <li><a href="about.html">About</a></li>
       <li><a href="pilot.html">Pilot</a></li>
+      <li><a href="investors.html">Investors</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li><a href="security.html#disclosures">Security disclosures</a></li>
     </ul></div>
