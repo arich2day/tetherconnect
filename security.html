@@ -61,9 +61,9 @@
 <div class="page-hero">
   <canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas>
   <div class="page-hero-inner tc-hero-in">
-    <div class="page-hero-eyebrow">How Tether keeps your data safe</div>
-    <h1>One control you can<br/>audit. <em>No certificate on laptops.</em><br/>Your data stays in your cloud.</h1>
-    <p class="page-hero-sub">Tether runs in your own cloud, so your data never lands on our side. It installs no certificate that can decrypt your developers' traffic. And every decision it makes is signed, so your auditor can check it offline. The full threat model — what Tether covers and what it doesn't — is at the bottom of this page.</p>
+    <div class="page-hero-eyebrow">Security & Trust</div>
+    <h1>We cannot see your data.</h1>
+    <p class="page-hero-sub">Tether's architecture is designed around a single constraint: the vendor must not be a liability. The control plane lives in your tenant, the proxy installs no MITM root certificate, and every policy decision is cryptographically signed for offline verification.</p>
   </div>
 </div>
 
@@ -75,28 +75,28 @@
 <!-- DESIGN PRINCIPLES (ported from current security.html:121-141, paired with citations) -->
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label">Design principles</div>
-    <h2 class="section-title">Four rules we build<br/>every decision on.</h2>
+    <div class="section-label">Design Constraints</div>
+    <h2 class="section-title">Security controls must be verifiable.</h2>
     <div class="principle-grid" data-reveal-group>
       <div class="principle-card">
-        <div class="principle-num">Principle 01</div>
-        <h3>Fail closed</h3>
-        <p>If the agent can't confirm it's running a current, valid policy, it blocks. That can happen when the network drops, a signature doesn't match, or a synchronous judge check times out. A control that fails open isn't a control.</p>
+        <div class="principle-num">01</div>
+        <h3>Default Deny on Failure</h3>
+        <p>If the endpoint agent cannot verify the cryptographic signature of the active policy, it blocks traffic. If a synchronous approval request times out, it blocks traffic. A security tool that fails open is a liability.</p>
       </div>
       <div class="principle-card">
-        <div class="principle-num">Principle 02</div>
-        <h3>No trust without verification</h3>
-        <p>A policy only takes effect after the agent verifies its signature against your tenant's own key, pinned the first time it sees it. Fail that check and the policy is thrown out — the agent keeps enforcing the last good one, or blocks egress outright. The signatures are Ed25519.</p>
+        <div class="principle-num">02</div>
+        <h3>Cryptographic Policy Verification</h3>
+        <p>Policies are signed at the control plane using an Ed25519 key pair owned by your tenant. The endpoint agent verifies the signature before applying the rules. Downgrade attacks and forged policies are mathematically impossible.</p>
       </div>
       <div class="principle-card">
-        <div class="principle-num">Principle 03</div>
-        <h3>Your prompts don't leave for analysis</h3>
-        <p>The pattern checks and, when you turn it on, the judge both run against the prompt right on the machine. Point the judge at a cloud vendor and those calls go to the model vendor you chose — never to anything Tether hosts. Point it at a local model and every decision stays on the device.</p>
+        <div class="principle-num">03</div>
+        <h3>Zero Vendor Data Access</h3>
+        <p>The control plane is deployed in your AWS or GCP environment. Data evaluation happens locally on the endpoint. Event telemetry streams directly to your SIEM. We have no access to your prompts, your policies, or your audit trail.</p>
       </div>
       <div class="principle-card">
-        <div class="principle-num">Principle 04</div>
-        <h3>Defense in depth</h3>
-        <p>Several independent layers, each able to catch what the others miss: a deterministic pattern floor, an optional synchronous check, an advisory background review, signed policy delivery, and a console that logs everything. When the background review flags something new, you can promote it into the floor so it blocks next time.</p>
+        <div class="principle-num">04</div>
+        <h3>No TLS Interception</h3>
+        <p>We do not require installing a MITM root certificate on developer machines. The proxy binds to the local loopback and evaluates the prompt before it enters the TLS tunnel. Personal and non-AI corporate traffic remains untouched and unreadable by Tether.</p>
       </div>
     </div>
   </div>
@@ -105,18 +105,17 @@
 <!-- NO MITM ROOT CA -->
 <section style="background:var(--surface);border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label red">No certificate that can decrypt traffic</div>
-    <h2 class="section-title">Tether never<br/>decrypts your traffic.</h2>
+    <div class="section-label red">Zero TLS Interception</div>
+    <h2 class="section-title">We do not break TLS.</h2>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:8px;">
       <div>
-        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:16px;"><strong style="color:var(--ink);font-weight:500;">The Connect proxy runs on loopback only and never intercepts TLS.</strong> It copies encrypted tunnels straight through, byte for byte. It reads the destination host to decide what to allow, and it reads the request body only when an agent is pointed at the configured-upstream HTTP route (Tier B in the coverage taxonomy).</p>
-        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:16px;">Nothing installs a root certificate on the developer's machine. A certificate that can decrypt a Cursor call can just as easily decrypt someone's banking session. Tether never puts one in play.</p>
-        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;">The one place Tether does terminate TLS is the Workspace tier, and that's still coming: an opt-in certificate on a managed VSCodium build, on a managed device — never quietly pushed to every developer's laptop.</p>
+        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:16px;"><strong style="color:var(--ink);font-weight:500;">The Connect proxy operates exclusively on the loopback interface.</strong> It routes encrypted tunnels straight through. It evaluates the request body only when developer AI tools are explicitly configured to route HTTP traffic through the local proxy.</p>
+        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:16px;">We refuse to install a MITM root certificate. Tools that require a custom CA to inspect AI traffic introduce severe risk because they can intercept all TLS traffic on the machine, including personal banking.</p>
+        <p style="font-size:14.5px;color:var(--ink2);font-weight:300;line-height:1.75;">Tether provides visibility and enforcement without introducing a new vector for systemic interception.</p>
       </div>
       <div style="background:var(--bg);border:1px solid var(--border-dk);padding:28px;">
-        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);margin-bottom:12px;">Why this matters to you</div>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">You get the control without the thing developers and privacy teams push back on hardest: a corporate certificate that can decrypt anything on the machine. Tether doesn't create one, install one, or read inside encrypted tunnels.</p>
-        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;">You can check this yourself. Open the trust store on any laptop and there's no Tether certificate to find. The source comment and the host-classification path are in the <a href="technical-brief.html#scope" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);margin-bottom:12px;">Auditable Proof</div>
+        <p style="font-size:14px;color:var(--ink2);font-weight:300;line-height:1.75;margin-bottom:14px;">You can verify this claim immediately. Deploy Tether, open the operating system's trust store, and confirm there is no Tether certificate installed. The exact host-classification path is documented in the <a href="technical-brief.html#scope" style="color:var(--ink);font-weight:500;">technical brief →</a></p>
       </div>
     </div>
   </div>

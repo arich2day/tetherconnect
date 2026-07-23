@@ -42,9 +42,9 @@
 <div class="page-hero">
   <canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas>
   <div class="page-hero-inner tc-hero-in">
-    <div class="page-hero-eyebrow">What you control</div>
-    <h1>You decide what can't leave for an AI tool.<br/>Tether enforces it the same way<br/><em>on every machine.</em></h1>
-    <p class="page-hero-sub">You decide what's never allowed to leave for an AI tool. Tether enforces that on every developer machine, and keeps proof your auditor can check. You see prompts and replies tied to a person, an agent, and a machine. You block the patterns you can name. And later, you can show exactly which rule decided each request.</p>
+    <div class="page-hero-eyebrow">Controls</div>
+    <h1>Stop the bleeding. Prove the fix.</h1>
+    <p class="page-hero-sub">You define the boundaries for AI data egress. Tether enforces them deterministically at the endpoint and generates cryptographically signed proof for every decision.</p>
   </div>
 </div>
 
@@ -63,24 +63,24 @@
 <!-- THE SPEC -->
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label red">The spec</div>
-    <h2 class="section-title">A control worth trusting does three things at once.</h2>
-    <p class="section-sub">A vendor who sells you one of the three is selling you part of an answer.</p>
+    <div class="section-label red">The standard</div>
+    <h2 class="section-title">Built for compliance.</h2>
+    <p class="section-sub">A security control is only as good as the evidence it provides. We built Tether for the auditor.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);background:var(--surface);">
       <div style="padding:32px 28px;border-right:1px solid var(--border);">
         <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--red);margin-bottom:14px;">01 · VISIBILITY</div>
-        <h3 style="font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;">Prompt + completion + identity</h3>
-        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">You need to see the request body, who sent it, which agent sent it, which host it left, and which policy version it was decided under.</p>
+        <h3 style="font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;">Full payload and attribution</h3>
+        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">Capture the prompt, the response, the exact identity of the sender, the specific developer tool used, and the host machine—all pushed to your SIEM.</p>
       </div>
       <div style="padding:32px 28px;border-right:1px solid var(--border);">
         <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--red);margin-bottom:14px;">02 · ENFORCEMENT</div>
-        <h3 style="font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;">Deterministic on patterns you can name</h3>
-        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">A regulated buyer needs a layer that blocks by policy alone — no model in the path, no opinion. The judge is an extra layer on top, not the guarantee.</p>
+        <h3 style="font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;">Deterministic rule execution</h3>
+        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">We do not rely on probabilistic models to block traffic. Enforcement is based on strict, deterministic regex and YARA signatures that you define.</p>
       </div>
       <div style="padding:32px 28px;">
         <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--red);margin-bottom:14px;">03 · EVIDENCE</div>
-        <h3 style="font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;">Cryptographic, exportable, offline-verifiable</h3>
-        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">An auditor needs to prove, after the fact, which signed policy decided each request — without re-running Tether or trusting Tether to vouch for itself.</p>
+        <h3 style="font-family:var(--cond);font-weight:700;font-size:17px;text-transform:uppercase;margin-bottom:10px;">Offline verifiable proof</h3>
+        <p style="font-size:13.5px;color:var(--muted);font-weight:300;line-height:1.7;">Every decision is cryptographically signed using an Ed25519 key, tied to the exact policy version in force. Hand the bundle to an auditor to verify offline.</p>
       </div>
     </div>
   </div>
@@ -89,9 +89,9 @@
 <!-- BUILT CAPABILITIES — WHAT IT DOES TODAY / WHY IT MATTERS -->
 <section style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label">What you get</div>
-    <h2 class="section-title">Eight capabilities.<br/>Why each one matters — then how it works.</h2>
-    <p class="section-sub">Why it matters first, mechanism second. The exact code behind every claim is in the <a href="technical-brief.html" style="color:var(--ink);">technical brief</a> for anyone who has to check it.</p>
+    <div class="section-label">Capabilities</div>
+    <h2 class="section-title">Mechanisms, not promises.</h2>
+    <p class="section-sub">The concrete features that deliver control. For implementation details, refer to the <a href="technical-brief.html" style="color:var(--ink);">technical brief</a>.</p>
 
     <div style="margin-top:8px;">
       <details open id="cap-no-surveillance" class="capability-row">

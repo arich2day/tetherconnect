@@ -80,9 +80,9 @@
 <div class="page-hero">
   <canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas>
   <div class="page-hero-inner tc-hero-in">
-    <div class="page-hero-eyebrow">Technical brief · for the engineer who vets it</div>
-    <h1>The plumbing,<br/>in full. <em>Verify it yourself.</em></h1>
-    <p class="page-hero-sub">The marketing pages sell the outcome. This page is the receipt. Every mechanism behind those claims is here — ports, flags, timeouts, the three enforcement tiers, the signing and verification chain, the SIEM/SCIM/posture wiring, and where the limits are — each pinned to a line on <code>master</code>. Bring it to your security review and check the code against the claim.</p>
+    <div class="page-hero-eyebrow">Technical Architecture</div>
+    <h1>Open specification for security teams.</h1>
+    <p class="page-hero-sub">Trust requires verification. This document details the exact implementation of the loopback proxy, cryptographic policy signing, SIEM pipelines, and the system threat model. It is built for the engineers responsible for evaluating this control.</p>
   </div>
 </div>
 
@@ -108,9 +108,9 @@
 <!-- 01 ARCHITECTURE -->
 <section id="architecture" style="border-bottom:1px solid var(--border);" data-reveal>
   <div class="wrap section-pad">
-    <div class="section-label">01 · Architecture</div>
-    <h2 class="section-title">Three runtimes. Two trust boundaries.<br/>One signed policy bundle.</h2>
-    <p class="section-sub">A loopback Connect proxy and a workspace daemon on the developer machine; a single-tenant Overwatch control plane in the customer's own cloud account. Policy flows one way, signed; events and ACKs flow back.</p>
+    <div class="section-label">01 · System Architecture</div>
+    <h2 class="section-title">Distributed Enforcement, Centralized Policy.</h2>
+    <p class="section-sub">The system operates across three core runtimes separated by explicit trust boundaries: the endpoint proxy, the local daemon, and the single-tenant control plane.</p>
     <div class="arch-scroll">
     <div class="arch-diagram">
       <svg viewBox="0 0 1200 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tether architecture diagram">
