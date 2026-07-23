@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Terms of Service — Tether Connect</title>
+  <title>Changelog — Tether Connect</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Sans+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="shared.css"/>
@@ -45,45 +45,30 @@
 
 <main id="main">
 
-<div class="page-hero"><canvas class="wave-canvas" data-waves data-density="17000" aria-hidden="true"></canvas><div class="page-hero-inner tc-hero-in"><div class="page-hero-eyebrow">Legal</div><h1>Terms of Service</h1></div></div>
-<section style="border-bottom:1px solid var(--border);">
-  <div class="wrap section-pad">
-    <div class="legal-layout">
-      <p class="legal-meta">Effective date: January 1, 2026 · Last updated: May 2026</p>
-      <div class="legal-notice"><strong>Note:</strong> These website terms govern your use of tetherconnect.app and ai-security.app. Commercial software licensing terms are contained in separate agreements between Tether Connect and licensee organizations. If you are evaluating or using the Tether software under a license agreement, the terms of that agreement govern your use of the software.</div>
-      <div class="legal-section">
-        <h2>Website Use</h2>
-        <p>These terms govern your use of the Tether Connect websites (tetherconnect.app, ai-security.app) and any information or materials made available through them. By accessing the website, you agree to these terms.</p>
-        <p>The website is provided for informational purposes. Content may change without notice. We make no warranties about the accuracy or completeness of information presented.</p>
-      </div>
-      <div class="legal-section">
-        <h2>Intellectual Property</h2>
-        <p>All content on this website — including text, graphics, logos, and design — is the property of Tether Connect or its licensors and is protected by applicable intellectual property law. You may not reproduce, distribute, or create derivative works from website content without written permission.</p>
-        <p>The Tether Connect name and logo are trademarks of Tether Connect. Use of our trademarks requires prior written approval.</p>
-      </div>
-      <div class="legal-section">
-        <h2>Limitation of Liability</h2>
-        <p>To the maximum extent permitted by applicable law, Tether Connect shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of this website or reliance on information presented here.</p>
-      </div>
-      <div class="legal-section">
-        <h2>External Links</h2>
-        <p>This website may contain links to third-party sites. We do not control and are not responsible for the content, privacy practices, or terms of those sites.</p>
-      </div>
-      <div class="legal-section">
-        <h2>Changes to Terms</h2>
-        <p>We may update these terms from time to time. Continued use of the website after changes constitutes acceptance of the updated terms. Material changes will be reflected in the "last updated" date above.</p>
-      </div>
-      <div class="legal-section">
-        <h2>Governing Law</h2>
-        <p>These terms are governed by applicable law. Disputes shall be resolved in the jurisdiction of Tether Connect's principal place of business.</p>
-      </div>
-      <div class="legal-section">
-        <h2>Contact</h2>
-        <p>Legal inquiries: <a href="mailto:alvin@tetherconnect.app" style="color:var(--ink);">alvin@tetherconnect.app</a></p>
-      </div>
-    </div>
-  </div>
-</section>
+<div class="page-hero"><canvas class="wave-canvas" data-waves data-density="16000" aria-hidden="true"></canvas><div class="page-hero-inner tc-hero-in"><div class="page-hero-eyebrow">Changelog</div><h1>Changelog.</h1></div></div>
+<section style="border-bottom:1px solid var(--border);" data-reveal><div class="wrap section-pad">
+<div class="section-label red">Changelog</div>
+<h2 class="section-title">What's shipped.</h2>
+<p style="font-size:15px;color:var(--ink2);font-weight:300;line-height:1.75;max-width:800px;margin-bottom:14px;">Recent capabilities, most recent first. This list reflects shipped functionality; roadmap items are called out as such elsewhere on the site.</p>
+</div></section>
+<section style="border-bottom:1px solid var(--border);" data-reveal><div class="wrap section-pad">
+<div class="section-label">Recent</div>
+<h3 style="font-family:var(--cond);font-weight:700;font-size:19px;text-transform:uppercase;margin:26px 0 8px;letter-spacing:-0.01em;">SIEM adapters &amp; offline verifier</h3>
+<ul style="margin:0 0 16px 0;padding-left:20px;color:var(--ink2);font-weight:300;line-height:1.85;font-size:14.5px;max-width:800px;">
+<li>SIEM adapters shipped: Splunk HEC, Microsoft Sentinel, and syslog (RFC 5424).</li>
+<li>Offline attestation verifier — <code>tools/verify-attestation.js</code>, zero dependencies, re-checks any decision without trusting us.</li>
+</ul>
+<h3 style="font-family:var(--cond);font-weight:700;font-size:19px;text-transform:uppercase;margin:26px 0 8px;letter-spacing:-0.01em;">Identity &amp; device posture</h3>
+<ul style="margin:0 0 16px 0;padding-left:20px;color:var(--ink2);font-weight:300;line-height:1.85;font-size:14.5px;max-width:800px;">
+<li>SCIM provisioning via Jackson, with role-from-groups mapping and full audit of adds and removals.</li>
+<li>Device-posture export to Okta Device Trust, Microsoft Graph managed-device, and CSV.</li>
+</ul>
+<h3 style="font-family:var(--cond);font-weight:700;font-size:19px;text-transform:uppercase;margin:26px 0 8px;letter-spacing:-0.01em;">Enforcement &amp; policy core</h3>
+<ul style="margin:0 0 16px 0;padding-left:20px;color:var(--ink2);font-weight:300;line-height:1.85;font-size:14.5px;max-width:800px;">
+<li>Deterministic pattern floor, just-in-time approval queue, and an append-only audit log.</li>
+<li>Signed policy distribution — Ed25519, roughly ten seconds to reach the fleet.</li>
+</ul>
+</div></section>
 </main>
 
 <footer class="tc-footer">
